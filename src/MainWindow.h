@@ -7,16 +7,22 @@ namespace Ui {
 class MainWindow;
 }
 
+class QGraphicsScene;
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    explicit MainWindow(QWidget* parent = 0);
     ~MainWindow();
 
+private slots:
+    void onCanvasMouseReleaseEvent(QPointF point);
+
 private:
-    Ui::MainWindow *ui;
+    Ui::MainWindow* mUi;
+    QGraphicsScene* mScene;
 };
 
 #endif // MAINWINDOW_H
