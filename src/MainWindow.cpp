@@ -5,6 +5,7 @@
 #include <QDebug>
 
 #include "CanvasView.h"
+#include "model/SketchItemBezier.h"
 
 MainWindow::MainWindow(QWidget* parent) :
     QMainWindow(parent),
@@ -17,6 +18,8 @@ MainWindow::MainWindow(QWidget* parent) :
     mUi->canvas->setScene(mScene);
     connect(mUi->canvas, &CanvasView::signalMouseReleaseEvent, this, &MainWindow::onCanvasMouseReleaseEvent);
     initToolbar();
+    SketchItemBezier* item = new SketchItemBezier();
+    mScene->addItem(item->getGraphicsItem());
 }
 
 MainWindow::~MainWindow()
@@ -61,6 +64,9 @@ void MainWindow::setTool(Tool::Type toolType)
 
 void MainWindow::onCanvasMouseReleaseEvent(QPointF point)
 {
-    mScene->addEllipse(point.x(), point.y(), 50, 50);
+//    QPainterPath path(point);
+//    path.cubicTo(QPointF(0, 0), QPointF(100, 100), point);
+//    QGraphicsPathItem* item = new QGraphicsPathItem(path);
+//    mScene->addItem(item);
 }
 
