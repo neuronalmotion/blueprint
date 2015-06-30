@@ -9,7 +9,7 @@ public:
 
     enum Type {
         SELECTION,
-        CIRCLE,
+        ELLIPSE,
         LINE,
         RECTANGLE
     };
