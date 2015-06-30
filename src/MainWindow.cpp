@@ -19,6 +19,7 @@ MainWindow::MainWindow(QWidget* parent) :
     connect(mUi->canvas, &CanvasView::signalMouseReleaseEvent, this, &MainWindow::onCanvasMouseReleaseEvent);
     initToolbar();
     SketchItemBezier* item = new SketchItemBezier();
+    item->addPath(QPointF(10, 10), QPointF(50, 100), QPointF(100, 100));
     mScene->addItem(item->getGraphicsItem());
 }
 
