@@ -5,44 +5,24 @@
 #include <QPen>
 #include <QPointF>
 
-#include "BezierControlPoint.h"
+#include "BezierPath.h"
 
 SketchItemBezier::SketchItemBezier()
     : SketchItem(),
       mItem(new QGraphicsPathItem),
       mPath(),
-      mStartPoint(new QGraphicsEllipseItem(mItem)),
-      mEndPoint(new QGraphicsEllipseItem(mItem)),
-      mControl1(new BezierControlPoint(this, 0)),
-      mControl2(new BezierControlPoint(this, 1))
+      mPathes()
 {
-//    int circleSize = 10;
-//    QPointF start = QPointF(50, 50);
-//    QPointF end = QPointF(300, 100);
-//    mItem->setPos(start);
-
-//    mStartPoint->setRect(-circleSize/2, -circleSize/2, circleSize, circleSize);
-//    mEndPoint->setRect(-circleSize/2, -circleSize/2, circleSize, circleSize);
-//    QPen pen = QColor::fromRgb(255, 0, 0);
-//    mStartPoint->setPen(pen);
-
-//    mEndPoint->setPen(pen);
-//    mEndPoint->setPos(end);
-
-//    mControl1->setPos(100, 0);
-//    mControl2->setPos(end - QPointF(0, 100));
-
-//    QPointF c1 = mControl1->pos();
-//    QPointF cscene1 = mControl1->scenePos();
-
-//    QPainterPath path(QPointF(0, 0));
-//    path.cubicTo(mControl1->pos(), mControl2->pos(), mEndPoint->pos());
-//    mItem->setPath(path);
 }
 
 SketchItemBezier::~SketchItemBezier()
 {
     delete mItem;
+    for (auto p : mPathes) {
+        delete p;
+        p = nullptr;
+    }
+    mPathes.clear();
 }
 
 QGraphicsItem* SketchItemBezier::getGraphicsItem()
@@ -62,6 +42,8 @@ void SketchItemBezier::addPath(const QPointF& c1, const QPointF& c2, const QPoin
          QPainterPath::Element element = mPath.elementAt(i);
          qDebug() << element << element.type;
     }
+    BezierPath* p = new BezierPath(this, currentElement);
+    mPathes.append(p);
     mItem->setPath(mPath);
 }
 

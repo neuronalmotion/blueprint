@@ -4,9 +4,10 @@
 
 #include "SketchItemBezier.h"
 
-BezierPoint::BezierPoint(SketchItemBezier* item)
+BezierPoint::BezierPoint(SketchItemBezier* item, const int index)
     : QGraphicsEllipseItem(item->getGraphicsItem()),
-    mItem(item)
+    mItem(item),
+    mIndex(index)
 {
     setPen(QPen(Qt::red));
 }

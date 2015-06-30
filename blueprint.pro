@@ -14,7 +14,8 @@ SOURCES += src/main.cpp\
     src/model/SketchItem.cpp \
     src/model/SketchItemBezier.cpp \
     src/model/BezierControlPoint.cpp \
-    src/model/BezierPoint.cpp
+    src/model/BezierPoint.cpp \
+    src/model/BezierPath.cpp
 
 HEADERS  += src/MainWindow.h \
     src/CanvasView.h \
@@ -22,6 +23,7 @@ HEADERS  += src/MainWindow.h \
     src/model/SketchItem.h \
     src/model/SketchItemBezier.h \
     src/model/BezierControlPoint.h \
-    src/model/BezierPoint.h
+    src/model/BezierPoint.h \
+    src/model/BezierPath.h
 
 FORMS    += src/MainWindow.ui

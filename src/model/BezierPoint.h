@@ -10,13 +10,12 @@ class SketchItemBezier;
 class BezierPoint : public QGraphicsEllipseItem
 {
 public:
-    BezierPoint(SketchItemBezier* item);
+    BezierPoint(SketchItemBezier* item, const int index);
     ~BezierPoint();
 
 private:
     SketchItemBezier* mItem;
-//    BezierControlPoint mControl1;
-//    BezierControlPoint mControl2;
+    int mIndex;
 };
 
 #endif // BEZIERPOINT_H
