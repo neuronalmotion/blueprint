@@ -68,7 +68,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Circle</string>
+    <string>Ellipse</string>
    </property>
   </action>
   <action name="actionRectangle">
