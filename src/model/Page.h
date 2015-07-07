@@ -11,6 +11,8 @@ public:
     Page();
     ~Page();
 
+   void addSketch(Sketch* sketch);
+
 private:
     QList<Sketch*> mSketches;
 };

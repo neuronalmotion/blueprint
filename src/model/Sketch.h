@@ -11,6 +11,8 @@ public:
     Sketch();
     ~Sketch();
 
+    void addSketchItem(SketchItem* item);
+
 private:
     QList<SketchItem*> mItems;
 };
