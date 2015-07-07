@@ -5,11 +5,12 @@
 #include "BezierControlPoint.h"
 
 class SketchItemBezier;
+class QPainterPath;
 
 class BezierPath
 {
 public:
-    BezierPath(SketchItemBezier* item, const int elementStartIndex);
+    BezierPath(SketchItemBezier* item, const QPainterPath* path, const int elementStartIndex);
     ~BezierPath();
 
 private:

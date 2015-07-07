@@ -36,13 +36,13 @@ void SketchItemBezier::addPath(const QPointF& c1, const QPointF& c2, const QPoin
              << "=>" << endPos
              << "[c1" << c1
              << "c2" << c2 << "]";
-    int currentElement = mPath.elementCount() - 1;
+    int startElementIndex = mPath.elementCount() <= 0 ? 0 : mPath.elementCount() - 1;
     mPath.cubicTo(c1, c2, endPos);
     for (int i = 0; i < mPath.elementCount(); ++i) {
          QPainterPath::Element element = mPath.elementAt(i);
-         qDebug() << element << element.type;
+         qDebug() << "Element:" << element << element.type;
     }
-    BezierPath* p = new BezierPath(this, currentElement);
+    BezierPath* p = new BezierPath(this, &mPath, startElementIndex);
     mPathes.append(p);
     mItem->setPath(mPath);
 }
