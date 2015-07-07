@@ -11,6 +11,9 @@ BezierControlPoint::BezierControlPoint(SketchItemBezier* item, int index)
 {
     setFlag(QGraphicsItem::ItemIsMovable);
     setFlag(QGraphicsItem::ItemSendsGeometryChanges);
+    setFlag(QGraphicsItem::ItemIsSelectable);
+    setFlag(QGraphicsItem::ItemIsFocusable);
+    setAcceptHoverEvents(true);
     QPen pen = QPen(Qt::green);
     setPen(pen);
 

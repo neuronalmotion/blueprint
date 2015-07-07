@@ -11,6 +11,7 @@ public:
     BezierControlPoint(SketchItemBezier* item, const int index);
     ~BezierControlPoint();
 
+protected:
     QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
 private:
