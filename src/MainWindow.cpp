@@ -10,6 +10,7 @@
 #include "model/Page.h"
 #include "model/Sketch.h"
 #include "model/SketchItemBezier.h"
+#include "model/SketchItemEllipse.h"
 
 MainWindow::MainWindow(QWidget* parent) :
     QMainWindow(parent),
@@ -40,6 +41,9 @@ MainWindow::MainWindow(QWidget* parent) :
     mCurrentBlueprint->addPage(p);
 
     mScene->addItem(item->getGraphicsItem());
+
+    SketchItemEllipse* itemEllipse = new SketchItemEllipse();
+    mScene->addItem(itemEllipse->getGraphicsItem());
 }
 
 MainWindow::~MainWindow()
