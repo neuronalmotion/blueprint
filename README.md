@@ -10,3 +10,12 @@ A crossplatform mockup designer based on C++/Qt5.
 * Project contain multi page
 * Button can link to another page
 * Can be export as .png ?
+* 
+
+## FAQ
+
+Qt Creator display "cannot find -lGL" on compilation
+You should install libgl-dev
+```
+sudo apt-get install libgl-dev
+```
