@@ -2,9 +2,12 @@
 #define SKETCHITEMBEZIER_H
 
 #include "SketchItem.h"
+#include <QList>
 #include <QGraphicsPathItem>
 #include <QGraphicsEllipseItem>
-#include <QGraphicsRectItem>
+
+class QPointF;
+class BezierPath;
 
 class SketchItemBezier : public SketchItem
 {
@@ -12,13 +15,13 @@ public:
     SketchItemBezier();
     ~SketchItemBezier();
     virtual QGraphicsItem* getGraphicsItem();
+    void addPath(const QPointF& c1, const QPointF& c2, const QPointF& endPos);
+    void updateElement(int index, const QPointF& pos);
 
 private:
     QGraphicsPathItem* mItem;
-    QGraphicsEllipseItem* mStartPoint;
-    QGraphicsEllipseItem* mEndPoint;
-    QGraphicsRectItem* mControl1;
-    QGraphicsRectItem* mControl2;
+    QPainterPath mPath;
+    QList<BezierPath*> mPathes;
 };
 
 #endif // SKETCHITEMBEZIER_H
