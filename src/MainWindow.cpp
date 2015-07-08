@@ -5,11 +5,15 @@
 #include <QDebug>
 
 #include "CanvasView.h"
+#include "model/Blueprint.h"
+#include "model/Page.h"
+#include "model/Sketch.h"
 #include "model/SketchItemBezier.h"
 
 MainWindow::MainWindow(QWidget* parent) :
     QMainWindow(parent),
     mUi(new Ui::MainWindow),
+    mCurrentBlueprint(nullptr),
     mCurrentTool(nullptr)
 {
     mUi->setupUi(this);
@@ -18,14 +22,28 @@ MainWindow::MainWindow(QWidget* parent) :
     mUi->canvas->setScene(mScene);
     connect(mUi->canvas, &CanvasView::signalMouseReleaseEvent, this, &MainWindow::onCanvasMouseReleaseEvent);
     initToolbar();
+
     SketchItemBezier* item = new SketchItemBezier();
     item->addPath(QPointF(10, 10), QPointF(50, 100), QPointF(100, 100));
+
+    Sketch* sketch = new Sketch();
+    sketch->addSketchItem(item);
+    Page* p = new Page();
+    p->addSketch(sketch);
+
+    mCurrentBlueprint = new Blueprint();
+    mCurrentBlueprint->addPage(p);
+
     mScene->addItem(item->getGraphicsItem());
 }
 
 MainWindow::~MainWindow()
 {
     delete mUi;
+    if (mCurrentBlueprint) {
+        delete mCurrentBlueprint;
+    }
+    mCurrentBlueprint = nullptr;
     mCurrentTool = nullptr;
     for(auto tool : mTools) {
         delete tool;

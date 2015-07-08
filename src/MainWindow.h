@@ -10,6 +10,7 @@ class MainWindow;
 }
 
 class QGraphicsScene;
+class Blueprint;
 
 class MainWindow : public QMainWindow
 {
@@ -31,6 +32,7 @@ private:
 private:
     Ui::MainWindow* mUi;
     QGraphicsScene* mScene;
+    Blueprint* mCurrentBlueprint;
     Tool* mCurrentTool;
     QList<Tool*> mTools;
 };
