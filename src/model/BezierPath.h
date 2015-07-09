@@ -17,10 +17,9 @@ private:
     SketchItemBezier* mItem;
     int mElementStartIndex;
     BezierPoint* mStartPoint;
-    BezierPoint* mEndPoint;
     BezierControlPoint* mControl1;
     BezierControlPoint* mControl2;
-
+    BezierPoint* mEndPoint;
 };
 
 #endif // BEZIERPATH_H
