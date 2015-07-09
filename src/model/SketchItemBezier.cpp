@@ -16,7 +16,8 @@ SketchItemBezier::SketchItemBezier()
       mElements(),
       mIsPathClosed(false)
 {
-
+    mItem->setPen(QPen(QColor(79, 106, 25), 1, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
+    mItem->setBrush(QBrush(QColor(122, 163, 39)));
 }
 
 SketchItemBezier::~SketchItemBezier()
