@@ -18,7 +18,8 @@ SOURCES += src/main.cpp\
     src/model/Page.cpp \
     src/model/Sketch.cpp \
     src/model/Blueprint.cpp \
-    src/model/BezierElement.cpp
+    src/model/BezierElement.cpp \
+    src/model/SketchItemRectangle.cpp
 
 HEADERS  += src/MainWindow.h \
     src/CanvasView.h \
@@ -30,6 +31,7 @@ HEADERS  += src/MainWindow.h \
     src/model/Page.h \
     src/model/Sketch.h \
     src/model/Blueprint.h \
-    src/model/BezierElement.h
+    src/model/BezierElement.h \
+    src/model/SketchItemRectangle.h
 
 FORMS    += src/MainWindow.ui

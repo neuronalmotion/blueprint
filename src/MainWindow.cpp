@@ -10,6 +10,7 @@
 #include "model/Page.h"
 #include "model/Sketch.h"
 #include "model/SketchItemBezier.h"
+#include "model/SketchItemRectangle.h"
 
 MainWindow::MainWindow(QWidget* parent) :
     QMainWindow(parent),
@@ -24,22 +25,17 @@ MainWindow::MainWindow(QWidget* parent) :
     connect(mUi->canvas, &CanvasView::signalMouseReleaseEvent, this, &MainWindow::onCanvasMouseReleaseEvent);
     initToolbar();
 
-    SketchItemBezier* item = new SketchItemBezier();
-    item->addPath(QPointF(30, 0), QPointF(50, 20), QPointF(50, 50));
-    item->addPath(QPointF(50, 80), QPointF(30, 100), QPointF(0, 100));
-    item->addPath(QPointF(-30, 100), QPointF(-40, 80), QPointF(-40, 50));
-    item->addPath(QPointF(-40, 20), QPointF(-30, 0), QPointF(0, 0));
-    item->closePath();
+    SketchItemRectangle* rect = new SketchItemRectangle();
 
     Sketch* sketch = new Sketch();
-    sketch->addSketchItem(item);
+    sketch->addSketchItem(rect);
     Page* p = new Page();
     p->addSketch(sketch);
 
     mCurrentBlueprint = new Blueprint();
     mCurrentBlueprint->addPage(p);
 
-    mScene->addItem(item->getGraphicsItem());
+    mScene->addItem(rect->getGraphicsItem());
 }
 
 MainWindow::~MainWindow()
