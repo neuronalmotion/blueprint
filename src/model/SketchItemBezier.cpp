@@ -16,6 +16,7 @@ SketchItemBezier::SketchItemBezier()
       mElements(),
       mIsPathClosed(false)
 {
+
 }
 
 SketchItemBezier::~SketchItemBezier()

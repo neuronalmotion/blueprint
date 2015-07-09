@@ -25,25 +25,23 @@ MainWindow::MainWindow(QWidget* parent) :
     connect(mUi->canvas, &CanvasView::signalMouseReleaseEvent, this, &MainWindow::onCanvasMouseReleaseEvent);
     initToolbar();
 
-    SketchItemBezier* item = new SketchItemBezier();
-    item->addPath(QPointF(30, 0), QPointF(50, 20), QPointF(50, 50));
-    item->addPath(QPointF(50, 80), QPointF(30, 100), QPointF(0, 100));
-    item->addPath(QPointF(-30, 100), QPointF(-40, 80), QPointF(-40, 50));
-    item->addPath(QPointF(-40, 20), QPointF(-30, 0), QPointF(0, 0));
-    item->closePath();
+//    SketchItemBezier* item = new SketchItemBezier();
+//    item->addPath(QPointF(30, 0), QPointF(50, 20), QPointF(50, 50));
+//    item->addPath(QPointF(50, 80), QPointF(30, 100), QPointF(0, 100));
+//    item->addPath(QPointF(-30, 100), QPointF(-40, 80), QPointF(-40, 50));
+//    item->addPath(QPointF(-40, 20), QPointF(-30, 0), QPointF(0, 0));
+//    item->closePath();
+//    mScene->addItem(item->getGraphicsItem());
 
     Sketch* sketch = new Sketch();
-    sketch->addSketchItem(item);
+    //sketch->addSketchItem(item);
     Page* p = new Page();
     p->addSketch(sketch);
 
     mCurrentBlueprint = new Blueprint();
     mCurrentBlueprint->addPage(p);
 
-    mScene->addItem(item->getGraphicsItem());
 
-    SketchItemEllipse* itemEllipse = new SketchItemEllipse();
-    mScene->addItem(itemEllipse->getGraphicsItem());
 }
 
 MainWindow::~MainWindow()
@@ -92,6 +90,11 @@ void MainWindow::setTool(Tool::Type toolType)
 
 void MainWindow::onCanvasMouseReleaseEvent(QPointF point)
 {
+    if (mCurrentTool->getType() == Tool::Type::ELLIPSE) {
+        SketchItemEllipse* sketchItem = new SketchItemEllipse();
+        mScene->addItem(sketchItem->getGraphicsItem());
+    }
+
 //    QPainterPath path(point);
 //    path.cubicTo(QPointF(0, 0), QPointF(100, 100), point);
 //    QGraphicsPathItem* item = new QGraphicsPathItem(path);

@@ -1,19 +1,15 @@
 #ifndef SKETCHITEMCIRCLE_H
 #define SKETCHITEMCIRCLE_H
 
-#include "SketchItem.h"
-#include <QGraphicsItemGroup>
+#include "SketchItemBezier.h"
 
 
-class SketchItemEllipse : public SketchItem
+class SketchItemEllipse : public SketchItemBezier
 {
 public:
     SketchItemEllipse();
-    ~SketchItemEllipse();
-    virtual QGraphicsItem* getGraphicsItem();
+    //~SketchItemEllipse();
 
-private:
-    QGraphicsItemGroup* mItem;
 };
 
 #endif // SKETCHITEMCIRCLE_H
