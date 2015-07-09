@@ -20,10 +20,10 @@ public:
     void addPath(const QPointF& c1, const QPointF& c2, const QPointF& endPos);
     void updateElement(BezierElement* bezierElement, const QPointF& pos);
 
+    QPainterPath mPath;
 private:
     QGraphicsPathItem* mItem;
-    QPainterPath mPath;
-    QList<BezierPath*> mPathes;
+    QList<BezierElement*> mElements;
 };
 
 #endif // SKETCHITEMBEZIER_H

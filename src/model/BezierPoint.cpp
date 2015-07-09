@@ -2,9 +2,9 @@
 
 #include <QPen>
 
-#include "BezierPath.h"
+#include "SketchItemBezier.h"
 
-BezierPoint::BezierPoint(BezierPath* parent, const int index)
+BezierPoint::BezierPoint(SketchItemBezier* parent, const int index)
     : BezierElement(ElementType::POINT, parent, index),
     QGraphicsEllipseItem(parent->getGraphicsItem())
 {
@@ -26,6 +26,16 @@ BezierPoint::~BezierPoint()
 QPointF BezierPoint::getPos()
 {
     return QGraphicsItem::pos();
+}
+
+void BezierPoint::setPos(QPointF pos)
+{
+    QGraphicsItem::setPos(pos);
+}
+
+void BezierPoint::moveBy(QPointF delta)
+{
+    QGraphicsItem::moveBy(delta.x(), delta.y());
 }
 
 QVariant BezierPoint::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant& value)

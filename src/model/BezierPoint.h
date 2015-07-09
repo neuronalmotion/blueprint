@@ -10,10 +10,12 @@ class SketchItemBezier;
 class BezierPoint : public BezierElement, public QGraphicsEllipseItem
 {
 public:
-    BezierPoint(BezierPath* parent, const int index);
+    BezierPoint(SketchItemBezier* parent, const int index);
     ~BezierPoint();
 
     QPointF getPos();
+    void setPos(QPointF pos);
+    void moveBy(QPointF delta);
 
 protected:
     QVariant itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant& value);

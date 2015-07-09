@@ -2,9 +2,9 @@
 
 #include <QPen>
 
-#include "BezierPath.h"
+#include "SketchItemBezier.h"
 
-BezierControlPoint::BezierControlPoint(BezierPath* parent, int index)
+BezierControlPoint::BezierControlPoint(SketchItemBezier* parent, int index)
     : BezierElement(ElementType::CONTROL_POINT, parent, index),
     QGraphicsRectItem(parent->getGraphicsItem())
 {
@@ -28,6 +28,16 @@ BezierControlPoint::~BezierControlPoint()
 QPointF BezierControlPoint::getPos()
 {
     return QGraphicsItem::pos();
+}
+
+void BezierControlPoint::setPos(QPointF pos)
+{
+    QGraphicsItem::setPos(pos);
+}
+
+void BezierControlPoint::moveBy(QPointF delta)
+{
+    QGraphicsItem::moveBy(delta.x(), delta.y());
 }
 
 QVariant BezierControlPoint::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant& value)

@@ -2,9 +2,9 @@
 
 #include <QGraphicsItem>
 
-#include "BezierPath.h"
+#include "SketchItemBezier.h"
 
-BezierElement::BezierElement(ElementType elementType, BezierPath* parent, const int index)
+BezierElement::BezierElement(ElementType elementType, SketchItemBezier* parent, const int index)
     : mElementType(elementType),
     mParent(parent),
     mIndex(index)

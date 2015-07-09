@@ -26,7 +26,8 @@ MainWindow::MainWindow(QWidget* parent) :
     SketchItemBezier* item = new SketchItemBezier();
     item->addPath(QPointF(10, 10), QPointF(50, 100), QPointF(100, 100));
     item->addPath(QPointF(120, 100), QPointF(200, 120), QPointF(200, 200));
-    item->addPath(QPointF(250, 210), QPointF(300, 310), QPointF(300, 300));
+//    item->addPath(QPointF(250, 210), QPointF(300, 310), QPointF(300, 300));
+//    item->mPath.closeSubpath();
 
     Sketch* sketch = new Sketch();
     sketch->addSketchItem(item);
