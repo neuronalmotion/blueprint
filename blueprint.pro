@@ -18,7 +18,8 @@ SOURCES += src/main.cpp\
     src/model/BezierPath.cpp \
     src/model/Page.cpp \
     src/model/Sketch.cpp \
-    src/model/Blueprint.cpp
+    src/model/Blueprint.cpp \
+    src/model/BezierElement.cpp
 
 HEADERS  += src/MainWindow.h \
     src/CanvasView.h \
@@ -30,6 +31,7 @@ HEADERS  += src/MainWindow.h \
     src/model/BezierPath.h \
     src/model/Page.h \
     src/model/Sketch.h \
-    src/model/Blueprint.h
+    src/model/Blueprint.h \
+    src/model/BezierElement.h
 
 FORMS    += src/MainWindow.ui

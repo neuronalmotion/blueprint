@@ -5,9 +5,8 @@
 #include "SketchItemBezier.h"
 
 BezierPoint::BezierPoint(SketchItemBezier* item, const int index)
-    : QGraphicsEllipseItem(item->getGraphicsItem()),
-    mItem(item),
-    mIndex(index)
+    : BezierElement(item, index),
+    QGraphicsEllipseItem(item->getGraphicsItem())
 {
     setFlag(QGraphicsItem::ItemIsMovable);
     setFlag(QGraphicsItem::ItemSendsGeometryChanges);
@@ -24,12 +23,9 @@ BezierPoint::~BezierPoint()
 
 }
 
-
 QVariant BezierPoint::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant& value)
 {
-    if (change == ItemPositionChange) {
-         mItem->updateElement(mIndex, value.toPointF());
-    }
-    return QGraphicsEllipseItem::itemChange(change, value);
+    propagateItemChange(change, value);
+    return QGraphicsItem::itemChange(change, value);
 }
 

@@ -49,6 +49,8 @@ void SketchItemBezier::addPath(const QPointF& c1, const QPointF& c2, const QPoin
 
 void SketchItemBezier::updateElement(int index, const QPointF& pos)
 {
+    QPainterPath::Element element = mPath.elementAt(index);
+
     mPath.setElementPositionAt(index, pos.x(), pos.y());
     mItem->setPath(mPath);
 }

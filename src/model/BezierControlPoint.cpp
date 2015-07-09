@@ -5,9 +5,8 @@
 #include "SketchItemBezier.h"
 
 BezierControlPoint::BezierControlPoint(SketchItemBezier* item, int index)
-    : QGraphicsRectItem(item->getGraphicsItem()),
-      mItem(item),
-      mIndex(index)
+    : BezierElement(item, index),
+    QGraphicsRectItem(item->getGraphicsItem())
 {
     setFlag(QGraphicsItem::ItemIsMovable);
     setFlag(QGraphicsItem::ItemSendsGeometryChanges);
@@ -28,10 +27,8 @@ BezierControlPoint::~BezierControlPoint()
 
 QVariant BezierControlPoint::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant& value)
 {
-    if (change == ItemPositionChange) {
-         mItem->updateElement(mIndex, value.toPointF());
-    }
-    return QGraphicsRectItem::itemChange(change, value);
+    propagateItemChange(change, value);
+    return QGraphicsItem::itemChange(change, value);
 }
 
 
