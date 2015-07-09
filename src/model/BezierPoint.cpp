@@ -2,11 +2,11 @@
 
 #include <QPen>
 
-#include "SketchItemBezier.h"
+#include "BezierPath.h"
 
-BezierPoint::BezierPoint(SketchItemBezier* item, const int index)
-    : BezierElement(item, index),
-    QGraphicsEllipseItem(item->getGraphicsItem())
+BezierPoint::BezierPoint(BezierPath* parent, const int index)
+    : BezierElement(ElementType::POINT, parent, index),
+    QGraphicsEllipseItem(parent->getGraphicsItem())
 {
     setFlag(QGraphicsItem::ItemIsMovable);
     setFlag(QGraphicsItem::ItemSendsGeometryChanges);
@@ -21,6 +21,11 @@ BezierPoint::BezierPoint(SketchItemBezier* item, const int index)
 BezierPoint::~BezierPoint()
 {
 
+}
+
+QPointF BezierPoint::getPos()
+{
+    return QGraphicsItem::pos();
 }
 
 QVariant BezierPoint::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant& value)

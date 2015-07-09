@@ -2,11 +2,11 @@
 
 #include <QPen>
 
-#include "SketchItemBezier.h"
+#include "BezierPath.h"
 
-BezierControlPoint::BezierControlPoint(SketchItemBezier* item, int index)
-    : BezierElement(item, index),
-    QGraphicsRectItem(item->getGraphicsItem())
+BezierControlPoint::BezierControlPoint(BezierPath* parent, int index)
+    : BezierElement(ElementType::CONTROL_POINT, parent, index),
+    QGraphicsRectItem(parent->getGraphicsItem())
 {
     setFlag(QGraphicsItem::ItemIsMovable);
     setFlag(QGraphicsItem::ItemSendsGeometryChanges);
@@ -23,6 +23,11 @@ BezierControlPoint::BezierControlPoint(SketchItemBezier* item, int index)
 BezierControlPoint::~BezierControlPoint()
 {
 
+}
+
+QPointF BezierControlPoint::getPos()
+{
+    return QGraphicsItem::pos();
 }
 
 QVariant BezierControlPoint::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant& value)

@@ -6,6 +6,7 @@
 #include <QPointF>
 
 #include "BezierPath.h"
+#include "BezierElement.h"
 
 SketchItemBezier::SketchItemBezier()
     : SketchItem(),
@@ -43,15 +44,16 @@ void SketchItemBezier::addPath(const QPointF& c1, const QPointF& c2, const QPoin
          qDebug() << "Element:" << element << element.type;
     }
     BezierPath* p = new BezierPath(this, &mPath, startElementIndex);
+    if (!mPathes.empty()) {
+        BezierPath* const lastPath = mPathes.last();
+        lastPath->setNextPath(p);
+    }
     mPathes.append(p);
     mItem->setPath(mPath);
 }
 
-void SketchItemBezier::updateElement(int index, const QPointF& pos)
+void SketchItemBezier::updateElement(BezierElement* bezierElement, const QPointF& pos)
 {
-    QPainterPath::Element element = mPath.elementAt(index);
-
-    mPath.setElementPositionAt(index, pos.x(), pos.y());
+    mPath.setElementPositionAt(bezierElement->getIndex(), pos.x(), pos.y());
     mItem->setPath(mPath);
 }
-

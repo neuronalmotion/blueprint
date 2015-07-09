@@ -4,20 +4,31 @@
 #include <QVariant>
 #include <QGraphicsItem>
 
-class SketchItemBezier;
+class BezierPath;
 
 class BezierElement
 {
-
 public:
-    BezierElement(SketchItemBezier* item, const int index);
+
+    enum ElementType {
+        POINT,
+        CONTROL_POINT
+    };
+
+    BezierElement(ElementType elementType, BezierPath* parent, const int index);
     virtual ~BezierElement();
+
+    virtual QPointF getPos() = 0;
+
+    inline ElementType getElementType() const { return mElementType; }
+    inline int getIndex() const { return mIndex; }
 
 protected:
     void propagateItemChange(QGraphicsItem::GraphicsItemChange change, const QVariant& value);
 
 protected:
-    SketchItemBezier* mSketchItem;
+    ElementType mElementType;
+    BezierPath* mParent;
     int mIndex;
 };
 

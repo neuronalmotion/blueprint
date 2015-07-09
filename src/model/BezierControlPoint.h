@@ -11,8 +11,10 @@ class SketchItemBezier;
 class BezierControlPoint : public BezierElement, public QGraphicsRectItem
 {
 public:
-    BezierControlPoint(SketchItemBezier* item, const int index);
+    BezierControlPoint(BezierPath* parent, const int index);
     ~BezierControlPoint();
+
+    QPointF getPos();
 
 protected:
     QVariant itemChange(GraphicsItemChange change, const QVariant &value);
