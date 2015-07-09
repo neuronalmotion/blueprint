@@ -11,6 +11,7 @@
 #include "model/Sketch.h"
 #include "model/SketchItemBezier.h"
 #include "model/SketchItemRectangle.h"
+#include "model/SketchItemEllipse.h"
 
 MainWindow::MainWindow(QWidget* parent) :
     QMainWindow(parent),
@@ -84,9 +85,9 @@ void MainWindow::setTool(Tool::Type toolType)
 
 void MainWindow::onCanvasMouseReleaseEvent(QPointF point)
 {
-//    QPainterPath path(point);
-//    path.cubicTo(QPointF(0, 0), QPointF(100, 100), point);
-//    QGraphicsPathItem* item = new QGraphicsPathItem(path);
-//    mScene->addItem(item);
+    if (mCurrentTool->getType() == Tool::Type::ELLIPSE) {
+        SketchItemEllipse* sketchItem = new SketchItemEllipse();
+        mScene->addItem(sketchItem->getGraphicsItem());
+    }
 }
 

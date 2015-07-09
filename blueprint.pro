@@ -13,6 +13,7 @@ SOURCES += src/main.cpp\
     src/Tool.cpp \
     src/model/SketchItem.cpp \
     src/model/SketchItemBezier.cpp \
+    src/model/SketchItemEllipse.cpp \
     src/model/BezierControlPoint.cpp \
     src/model/BezierPoint.cpp \
     src/model/Page.cpp \
@@ -26,6 +27,7 @@ HEADERS  += src/MainWindow.h \
     src/Tool.h \
     src/model/SketchItem.h \
     src/model/SketchItemBezier.h \
+    src/model/SketchItemEllipse.h \
     src/model/BezierControlPoint.h \
     src/model/BezierPoint.h \
     src/model/Page.h \
