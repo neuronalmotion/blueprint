@@ -13,7 +13,8 @@ SketchItemBezier::SketchItemBezier()
     : SketchItem(),
       mItem(new QGraphicsPathItem),
       mPath(),
-      mElements()
+      mElements(),
+      mIsPathClosed(false)
 {
 }
 
@@ -63,18 +64,35 @@ void SketchItemBezier::addPath(const QPointF& c1, const QPointF& c2, const QPoin
     mItem->setPath(mPath);
 }
 
+void SketchItemBezier::closePath()
+{
+    qDebug() << "Closing path";
+    mIsPathClosed = true;
+    mPath.closeSubpath();
+}
+
 void SketchItemBezier::updateElement(BezierElement* bezierElement, const QPointF& pos)
 {
     int listIndex = mElements.indexOf(bezierElement);
 
-    if(listIndex >= 0 && bezierElement->getElementType() == BezierElement::POINT) {
+    // test listIndex positive as a fuse on the setPos
+    // called in addPath
+    if(listIndex >= 0
+            && bezierElement->getElementType() == BezierElement::POINT) {
         QPointF delta = pos - bezierElement->getPos();
 
-        if (bezierElement == mElements[0]) {
+        if (bezierElement == mElements.first()) {
             mElements[listIndex + 1]->moveBy(delta);
+//            if (mIsPathClosed) {
+//                mElements.last()->moveBy(delta);
+//            }
 
         } else if (bezierElement == mElements.last()) {
             mElements[listIndex - 1]->moveBy(delta);
+            if (mIsPathClosed) {
+                mElements.first()->moveBy(delta);
+                mPath.setElementPositionAt(mElements.length(), pos.x(), pos.y());
+            }
 
         } else {
             mElements[listIndex - 1]->moveBy(delta);

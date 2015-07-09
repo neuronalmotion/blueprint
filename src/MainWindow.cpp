@@ -3,6 +3,7 @@
 
 #include <QGraphicsScene>
 #include <QDebug>
+#include <QPainter>
 
 #include "CanvasView.h"
 #include "model/Blueprint.h"
@@ -24,10 +25,11 @@ MainWindow::MainWindow(QWidget* parent) :
     initToolbar();
 
     SketchItemBezier* item = new SketchItemBezier();
-    item->addPath(QPointF(10, 10), QPointF(50, 100), QPointF(100, 100));
-    item->addPath(QPointF(120, 100), QPointF(200, 120), QPointF(200, 200));
-//    item->addPath(QPointF(250, 210), QPointF(300, 310), QPointF(300, 300));
-//    item->mPath.closeSubpath();
+    item->addPath(QPointF(30, 0), QPointF(50, 20), QPointF(50, 50));
+    item->addPath(QPointF(50, 80), QPointF(30, 100), QPointF(0, 100));
+    item->addPath(QPointF(-30, 100), QPointF(-40, 80), QPointF(-40, 50));
+    item->addPath(QPointF(-40, 20), QPointF(-30, 0), QPointF(0, 0));
+    item->closePath();
 
     Sketch* sketch = new Sketch();
     sketch->addSketchItem(item);
