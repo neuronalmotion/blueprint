@@ -24,9 +24,11 @@ MainWindow::MainWindow(QWidget* parent) :
 
     mUi->canvas->setScene(mScene);
     connect(mUi->canvas, &CanvasView::signalMouseReleaseEvent, this, &MainWindow::onCanvasMouseReleaseEvent);
+    connect(mScene, &QGraphicsScene::focusItemChanged, this, &MainWindow::onFocusItemChanged);
     initToolbar();
 
     SketchItemRectangle* rect = new SketchItemRectangle();
+    rect->name = "Rectangle";
 
     Sketch* sketch = new Sketch();
     sketch->addSketchItem(rect);
@@ -87,7 +89,17 @@ void MainWindow::onCanvasMouseReleaseEvent(QPointF point)
 {
     if (mCurrentTool->getType() == Tool::Type::ELLIPSE) {
         SketchItemEllipse* sketchItem = new SketchItemEllipse();
+        sketchItem->name = "Ellipse";
         mScene->addItem(sketchItem->getGraphicsItem());
+    }
+}
+
+void MainWindow::onFocusItemChanged(QGraphicsItem* newFocusItem, QGraphicsItem* oldFocusItem, Qt::FocusReason reason)
+{
+    QVariant itemVariant = newFocusItem->data(0);
+    SketchItem* item = static_cast<SketchItem*>(itemVariant.value<void *>());
+    if (item != nullptr){
+        qDebug() << "Focus item is now " << item->name;
     }
 }
 

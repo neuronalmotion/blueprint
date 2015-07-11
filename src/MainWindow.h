@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 #include <QList>
+#include <QGraphicsItem>
+
 #include "Tool.h"
 
 namespace Ui {
@@ -25,6 +27,7 @@ public slots:
 
 private slots:
     void onCanvasMouseReleaseEvent(QPointF point);
+    void onFocusItemChanged(QGraphicsItem* newFocusItem, QGraphicsItem* oldFocusItem, Qt::FocusReason reason);
 
 private:
     void initToolbar();

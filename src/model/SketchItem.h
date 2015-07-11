@@ -10,6 +10,8 @@ public:
     virtual ~SketchItem();
     virtual QGraphicsItem* getGraphicsItem() = 0;
 
+    QString name;
+
 };
 
 #endif // SKETCHITEM_H

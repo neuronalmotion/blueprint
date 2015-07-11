@@ -18,6 +18,13 @@ SketchItemBezier::SketchItemBezier()
 {
     mItem->setPen(QPen(QColor(79, 106, 25), 1, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
     mItem->setBrush(QBrush(QColor(122, 163, 39)));
+
+    mItem->setFlag(QGraphicsItem::ItemIsMovable);
+    mItem->setFlag(QGraphicsItem::ItemSendsGeometryChanges);
+    mItem->setFlag(QGraphicsItem::ItemIsSelectable);
+    mItem->setFlag(QGraphicsItem::ItemIsFocusable);
+
+    mItem->setData(0, qVariantFromValue(static_cast<void *>(this)));
 }
 
 SketchItemBezier::~SketchItemBezier()
