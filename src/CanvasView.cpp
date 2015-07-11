@@ -15,6 +15,8 @@ CanvasView::~CanvasView()
 
 void CanvasView::mouseReleaseEvent(QMouseEvent *event)
 {
+    QGraphicsView::mouseReleaseEvent(event);
+
     QPointF localPos = QGraphicsView::mapToScene(event->pos());
     emit signalMouseReleaseEvent(localPos);
 }
