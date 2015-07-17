@@ -7,7 +7,7 @@
 class SketchItemRectangle : public SketchItemBezier
 {
 public:
-    SketchItemRectangle();
+    SketchItemRectangle(qreal x, qreal y);
 };
 
 #endif // SKETCHITEMRECTANGLE_H

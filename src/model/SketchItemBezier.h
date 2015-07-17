@@ -14,7 +14,7 @@ class BezierElement;
 class SketchItemBezier : public SketchItem
 {
 public:
-    SketchItemBezier();
+    SketchItemBezier(qreal x, qreal y);
     ~SketchItemBezier();
     virtual QGraphicsItem* getGraphicsItem();
     void addPath(const QPointF& c1, const QPointF& c2, const QPointF& endPos);

@@ -7,7 +7,7 @@
 class SketchItemEllipse : public SketchItemBezier
 {
 public:
-    SketchItemEllipse();
+    SketchItemEllipse(qreal x, qreal y);
     //~SketchItemEllipse();
 
 };

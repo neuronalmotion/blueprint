@@ -13,8 +13,13 @@ public:
 signals:
     void signalMouseReleaseEvent(QPointF point);
 
-protected:
+protected: // from QGraphicsView
     void mouseReleaseEvent(QMouseEvent* event);
+    void resizeEvent(QResizeEvent *event);
+    void showEvent(QShowEvent *event);
+
+protected:
+    void fitView();
 };
 
 #endif // CANVASVIEW_H

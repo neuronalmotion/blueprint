@@ -21,4 +21,21 @@ void CanvasView::mouseReleaseEvent(QMouseEvent *event)
     emit signalMouseReleaseEvent(localPos);
 }
 
+void CanvasView::resizeEvent(QResizeEvent* event)
+{
+    fitView();
+}
+
+void CanvasView::showEvent(QShowEvent* event)
+{
+    fitView();
+}
+
+void CanvasView::fitView()
+{
+    const QRectF rect = QRectF(0,0, this->width(), this->height());
+    fitInView(rect, Qt::KeepAspectRatio);
+    setSceneRect(rect);
+}
+
 
