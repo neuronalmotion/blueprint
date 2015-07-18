@@ -2,8 +2,8 @@
 
 #include <QGraphicsEllipseItem>
 
-SketchItemEllipse::SketchItemEllipse()
-    : SketchItemBezier()
+SketchItemEllipse::SketchItemEllipse(qreal x, qreal y)
+    : SketchItemBezier(x, y)
 {
     addPath(QPointF(30, 0), QPointF(50, 20), QPointF(50, 50));
     addPath(QPointF(50, 80), QPointF(30, 100), QPointF(0, 100));

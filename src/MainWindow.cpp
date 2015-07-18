@@ -20,25 +20,21 @@ MainWindow::MainWindow(QWidget* parent) :
     mCurrentTool(nullptr)
 {
     mUi->setupUi(this);
-    mScene = new QGraphicsScene(this);
 
+    mScene = new QGraphicsScene(this);
     mUi->canvas->setScene(mScene);
+
     connect(mUi->canvas, &CanvasView::signalMouseReleaseEvent, this, &MainWindow::onCanvasMouseReleaseEvent);
     connect(mScene, &QGraphicsScene::focusItemChanged, this, &MainWindow::onFocusItemChanged);
+
     initToolbar();
 
-    SketchItemRectangle* rect = new SketchItemRectangle();
-    rect->name = "Rectangle";
-
     Sketch* sketch = new Sketch();
-    sketch->addSketchItem(rect);
     Page* p = new Page();
     p->addSketch(sketch);
 
     mCurrentBlueprint = new Blueprint();
     mCurrentBlueprint->addPage(p);
-
-    mScene->addItem(rect->getGraphicsItem());
 }
 
 MainWindow::~MainWindow()
@@ -87,9 +83,16 @@ void MainWindow::setTool(Tool::Type toolType)
 
 void MainWindow::onCanvasMouseReleaseEvent(QPointF point)
 {
+    static uint id = 0;
+
     if (mCurrentTool->getType() == Tool::Type::ELLIPSE) {
-        SketchItemEllipse* sketchItem = new SketchItemEllipse();
-        sketchItem->name = "Ellipse";
+        SketchItemEllipse* sketchItem = new SketchItemEllipse(point.x(), point.y());
+        sketchItem->name = QString("Ellipse #%1").arg(id++);
+        mScene->addItem(sketchItem->getGraphicsItem());
+
+    } else if (mCurrentTool->getType() == Tool::Type::RECTANGLE) {
+        SketchItemRectangle* sketchItem = new SketchItemRectangle(point.x(), point.y());
+        sketchItem->name = QString("Rectangle #%1").arg(id++);
         mScene->addItem(sketchItem->getGraphicsItem());
     }
 }

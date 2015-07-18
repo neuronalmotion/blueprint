@@ -1,7 +1,7 @@
 #include "SketchItemRectangle.h"
 
-SketchItemRectangle::SketchItemRectangle()
-    : SketchItemBezier()
+SketchItemRectangle::SketchItemRectangle(qreal x, qreal y)
+    : SketchItemBezier(x, y)
 {
     addPath(QPointF(40, 0), QPointF(60, 0), QPointF(100, 0));
     addPath(QPointF(100, 20), QPointF(100, 40), QPointF(100, 50));

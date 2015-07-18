@@ -9,7 +9,7 @@
 #include "BezierControlPoint.h"
 #include "BezierPoint.h"
 
-SketchItemBezier::SketchItemBezier()
+SketchItemBezier::SketchItemBezier(qreal x, qreal y)
     : SketchItem(),
       mItem(new QGraphicsPathItem),
       mPath(),
@@ -25,6 +25,7 @@ SketchItemBezier::SketchItemBezier()
     mItem->setFlag(QGraphicsItem::ItemIsFocusable);
 
     mItem->setData(0, qVariantFromValue(static_cast<void *>(this)));
+    mItem->setPos(x, y);
 }
 
 SketchItemBezier::~SketchItemBezier()
