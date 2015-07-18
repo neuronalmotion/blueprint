@@ -8,5 +8,6 @@ SketchItemRectangle::SketchItemRectangle(qreal x, qreal y)
     addPath(QPointF(60, 50), QPointF(40, 50), QPointF(0, 50));
     addPath(QPointF(0, 40), QPointF(0, 20), QPointF(0, 0));
     closePath();
+    mBoundingBox->updateRect();
 }
 
