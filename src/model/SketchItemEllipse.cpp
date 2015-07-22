@@ -12,3 +12,13 @@ SketchItemEllipse::SketchItemEllipse(qreal x, qreal y)
     closePath();
 }
 
+SketchItemEllipse::~SketchItemEllipse()
+{
+
+}
+
+void SketchItemEllipse::boundBoxPointMoved(BoundingBoxPoint::TranslationDirection direction, QPointF delta)
+{
+
+}
+

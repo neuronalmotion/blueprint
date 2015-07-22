@@ -2,17 +2,16 @@
 
 #include <QBrush>
 #include <QDebug>
-#include <QGraphicsSceneDragDropEvent>
 
-BoundingBoxPoint::BoundingBoxPoint(QGraphicsItem* parent)
-    : QGraphicsRectItem(parent)
+#include "model/BoundingBox.h"
+
+BoundingBoxPoint::BoundingBoxPoint(BoundingBox* parent, TranslationDirection direction)
+    : QGraphicsRectItem(parent),
+      mParentBoundingBox(parent),
+      mTranslationDirection(direction)
 {
     setFlag(QGraphicsItem::ItemIsMovable);
     setFlag(QGraphicsItem::ItemSendsGeometryChanges);
-    setFlag(QGraphicsItem::ItemIsSelectable);
-    setFlag(QGraphicsItem::ItemIsFocusable);
-    setAcceptHoverEvents(true);
-    setAcceptDrops(true);
     setBrush(QBrush(Qt::blue));
 }
 
@@ -21,9 +20,17 @@ BoundingBoxPoint::~BoundingBoxPoint()
 
 }
 
-void BoundingBoxPoint::dragMoveEvent(QGraphicsSceneDragDropEvent* event)
+BoundingBoxPoint::TranslationDirection BoundingBoxPoint::getTranslationDirection() const
 {
-    QGraphicsRectItem::dragMoveEvent(event);
-    qDebug() << "Moving bounding box point" << event->pos();
+    return mTranslationDirection;
+}
+
+QVariant BoundingBoxPoint::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value)
+{
+    if (change == ItemPositionChange) {
+        QPointF delta = value.toPointF() - pos();
+        mParentBoundingBox->boundingBoxPointMoved(mTranslationDirection, delta);
+    }
+    return QGraphicsItem::itemChange(change, value);
 }
 

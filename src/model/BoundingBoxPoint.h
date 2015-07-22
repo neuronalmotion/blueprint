@@ -3,16 +3,34 @@
 
 #include <QGraphicsRectItem>
 
-class QGraphicsSceneDragDropEvent;
+class BoundingBox;
 
 class BoundingBoxPoint : public QGraphicsRectItem
 {
 public:
-    BoundingBoxPoint(QGraphicsItem* parent=0);
+
+    enum TranslationDirection {
+        TOP_LEFT,
+        TOP,
+        TOP_RIGHT,
+        RIGHT,
+        BOTTOM_RIGHT,
+        BOTTOM,
+        BOTTOM_LEFT,
+        LEFT,
+    };
+
+    BoundingBoxPoint(BoundingBox* parent, TranslationDirection direction);
     ~BoundingBoxPoint();
 
+    TranslationDirection getTranslationDirection() const;
+
 protected:
-    virtual void dragMoveEvent(QGraphicsSceneDragDropEvent* event);
+    QVariant itemChange(GraphicsItemChange change, const QVariant &value);
+
+private:
+    BoundingBox* mParentBoundingBox;
+    TranslationDirection mTranslationDirection;
 };
 
 #endif // BOUNDINGBOXPOINT_H

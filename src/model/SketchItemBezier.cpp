@@ -5,7 +5,6 @@
 #include <QPen>
 #include <QPointF>
 
-#include "BezierElement.h"
 #include "BezierControlPoint.h"
 #include "BezierPoint.h"
 

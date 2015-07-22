@@ -16,14 +16,19 @@ public:
     ~BoundingBox();
 
     void updateRect();
-
-signals:
-    void resized(QPointF top, QPointF right, QPointF bottom, QPointF left);
+    void boundingBoxPointMoved(BoundingBoxPoint::TranslationDirection direction, QPointF delta);
 
 private:
     SketchItem* mParentSketchItem;
 
+    BoundingBoxPoint mTopLeftHandle;
     BoundingBoxPoint mTopHandle;
+    BoundingBoxPoint mTopRightHandle;
+    BoundingBoxPoint mRightHandle;
+    BoundingBoxPoint mBottomRight;
+    BoundingBoxPoint mBottom;
+    BoundingBoxPoint mBottomLeft;
+    BoundingBoxPoint mLeft;
 
 };
 

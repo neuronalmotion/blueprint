@@ -7,11 +7,11 @@
 #include <QGraphicsPathItem>
 #include <QGraphicsEllipseItem>
 
+#include "BezierElement.h"
 #include "BoundingBox.h"
 
 class QPointF;
 class BezierPath;
-class BezierElement;
 
 class SketchItemBezier : public SketchItem
 {
