@@ -45,6 +45,31 @@ void BoundingBox::updateRect()
     x = boundingRect.x() + boundingRect.width() - halfSize;
     y = boundingRect.y() - halfSize;
     mTopRightHandle.setRect(x, y, HANDLE_SIZE, HANDLE_SIZE);
+
+    // position right handle
+    x = boundingRect.x() + boundingRect.width() - halfSize;
+    y = boundingRect.y() + (boundingRect.height() / 2) - halfSize;
+    mRightHandle.setRect(x, y, HANDLE_SIZE, HANDLE_SIZE);
+
+    // position bottom right handle
+    x = boundingRect.x() + boundingRect.width() - halfSize;
+    y = boundingRect.y() + boundingRect.height() - halfSize;
+    mBottomRight.setRect(x, y, HANDLE_SIZE, HANDLE_SIZE);
+
+    // position bottom handle
+    x = boundingRect.x() + (boundingRect.width() / 2) - halfSize;
+    y = boundingRect.y() + boundingRect.height() - halfSize;
+    mBottom.setRect(x, y, HANDLE_SIZE, HANDLE_SIZE);
+
+    // position bottom left handle
+    x = boundingRect.x() - halfSize;
+    y = boundingRect.y() + boundingRect.height() - halfSize;
+    mBottomLeft.setRect(x, y, HANDLE_SIZE, HANDLE_SIZE);
+
+    // position left handle
+    x = boundingRect.x() - halfSize;
+    y = boundingRect.y() + (boundingRect.height() / 2) - halfSize;
+    mLeft.setRect(x, y, HANDLE_SIZE, HANDLE_SIZE);
 }
 
 void BoundingBox::boundingBoxPointMoved(BoundingBoxPoint::TranslationDirection direction, QPointF delta)
