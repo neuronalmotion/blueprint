@@ -20,7 +20,7 @@ BoundingBox::~BoundingBox()
 {
 }
 
-void BoundingBox::updateRect()
+void BoundingBox::updateRect(BoundingBoxPoint::TranslationDirection ignoredDirection)
 {
     QRectF boundingRect = mParentSketchItem->getGraphicsItem()->boundingRect();
     qreal marginAdjust = 10;
@@ -32,44 +32,60 @@ void BoundingBox::updateRect()
     qreal halfSize = HANDLE_SIZE / 2.0f;
 
     // position top left handle
-    x = boundingRect.x() - halfSize;
-    y = boundingRect.y() - halfSize;
-    mTopLeftHandle.setRect(x, y, HANDLE_SIZE, HANDLE_SIZE);
+    if (ignoredDirection != BoundingBoxPoint::TOP_LEFT) {
+        x = boundingRect.x() - halfSize;
+        y = boundingRect.y() - halfSize;
+        mTopLeftHandle.setRect(x, y, HANDLE_SIZE, HANDLE_SIZE);
+    }
 
     // position top handle
-    x = boundingRect.x() + (boundingRect.width() / 2) - halfSize;
-    y = boundingRect.y() - halfSize;
-    mTopHandle.setRect(x, y, HANDLE_SIZE, HANDLE_SIZE);
+    if (ignoredDirection != BoundingBoxPoint::TOP) {
+        x = boundingRect.x() + (boundingRect.width() / 2) - halfSize;
+        y = boundingRect.y() - halfSize;
+        mTopHandle.setRect(x, y, HANDLE_SIZE, HANDLE_SIZE);
+    }
 
     // position top right handle
-    x = boundingRect.x() + boundingRect.width() - halfSize;
-    y = boundingRect.y() - halfSize;
-    mTopRightHandle.setRect(x, y, HANDLE_SIZE, HANDLE_SIZE);
+    if (ignoredDirection != BoundingBoxPoint::TOP_RIGHT) {
+        x = boundingRect.x() + boundingRect.width() - halfSize;
+        y = boundingRect.y() - halfSize;
+        mTopRightHandle.setRect(x, y, HANDLE_SIZE, HANDLE_SIZE);
+    }
 
     // position right handle
-    x = boundingRect.x() + boundingRect.width() - halfSize;
-    y = boundingRect.y() + (boundingRect.height() / 2) - halfSize;
-    mRightHandle.setRect(x, y, HANDLE_SIZE, HANDLE_SIZE);
+    if (ignoredDirection != BoundingBoxPoint::RIGHT) {
+        x = boundingRect.x() + boundingRect.width() - halfSize;
+        y = boundingRect.y() + (boundingRect.height() / 2) - halfSize;
+        mRightHandle.setRect(x, y, HANDLE_SIZE, HANDLE_SIZE);
+    }
 
     // position bottom right handle
-    x = boundingRect.x() + boundingRect.width() - halfSize;
-    y = boundingRect.y() + boundingRect.height() - halfSize;
-    mBottomRight.setRect(x, y, HANDLE_SIZE, HANDLE_SIZE);
+    if (ignoredDirection != BoundingBoxPoint::BOTTOM_RIGHT) {
+        x = boundingRect.x() + boundingRect.width() - halfSize;
+        y = boundingRect.y() + boundingRect.height() - halfSize;
+        mBottomRight.setRect(x, y, HANDLE_SIZE, HANDLE_SIZE);
+    }
 
     // position bottom handle
-    x = boundingRect.x() + (boundingRect.width() / 2) - halfSize;
-    y = boundingRect.y() + boundingRect.height() - halfSize;
-    mBottom.setRect(x, y, HANDLE_SIZE, HANDLE_SIZE);
+    if (ignoredDirection != BoundingBoxPoint::BOTTOM) {
+        x = boundingRect.x() + (boundingRect.width() / 2) - halfSize;
+        y = boundingRect.y() + boundingRect.height() - halfSize;
+        mBottom.setRect(x, y, HANDLE_SIZE, HANDLE_SIZE);
+    }
 
     // position bottom left handle
-    x = boundingRect.x() - halfSize;
-    y = boundingRect.y() + boundingRect.height() - halfSize;
-    mBottomLeft.setRect(x, y, HANDLE_SIZE, HANDLE_SIZE);
+    if (ignoredDirection != BoundingBoxPoint::BOTTOM_LEFT) {
+        x = boundingRect.x() - halfSize;
+        y = boundingRect.y() + boundingRect.height() - halfSize;
+        mBottomLeft.setRect(x, y, HANDLE_SIZE, HANDLE_SIZE);
+    }
 
     // position left handle
-    x = boundingRect.x() - halfSize;
-    y = boundingRect.y() + (boundingRect.height() / 2) - halfSize;
-    mLeft.setRect(x, y, HANDLE_SIZE, HANDLE_SIZE);
+    if (ignoredDirection != BoundingBoxPoint::LEFT) {
+        x = boundingRect.x() - halfSize;
+        y = boundingRect.y() + (boundingRect.height() / 2) - halfSize;
+        mLeft.setRect(x, y, HANDLE_SIZE, HANDLE_SIZE);
+    }
 }
 
 void BoundingBox::boundingBoxPointMoved(BoundingBoxPoint::TranslationDirection direction, QPointF delta)

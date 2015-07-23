@@ -15,7 +15,7 @@ public:
     BoundingBox(SketchItem* parentSketchItem);
     ~BoundingBox();
 
-    void updateRect();
+    void updateRect(BoundingBoxPoint::TranslationDirection ignoredDirection = BoundingBoxPoint::NONE);
     void boundingBoxPointMoved(BoundingBoxPoint::TranslationDirection direction, QPointF delta);
 
 private:

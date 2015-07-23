@@ -10,6 +10,7 @@ class BoundingBoxPoint : public QGraphicsRectItem
 public:
 
     enum TranslationDirection {
+        NONE,
         TOP_LEFT,
         TOP,
         TOP_RIGHT,
@@ -27,6 +28,9 @@ public:
 
 protected:
     QVariant itemChange(GraphicsItemChange change, const QVariant &value);
+
+private:
+    QPointF restrictPosition(const QPointF& newPosition);
 
 private:
     BoundingBox* mParentBoundingBox;

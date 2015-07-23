@@ -34,6 +34,7 @@ void SketchItemRectangle::boundBoxPointMoved(BoundingBoxPoint::TranslationDirect
         mElements.last()->moveBy(QPointF(0, delta.y())); // top left
         mElements[6]->moveBy(QPointF(delta.x(), 0)); // bottom right
         break;
+
     default:
         break;
     }
@@ -41,6 +42,6 @@ void SketchItemRectangle::boundBoxPointMoved(BoundingBoxPoint::TranslationDirect
     for (auto e : elementsToMove) {
         e->moveBy(delta);
     }
-    mBoundingBox->updateRect();
+    mBoundingBox->updateRect(direction);
 }
 
