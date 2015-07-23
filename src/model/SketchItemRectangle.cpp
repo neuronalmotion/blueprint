@@ -44,7 +44,29 @@ void SketchItemRectangle::boundBoxPointMoved(BoundingBoxPoint::TranslationDirect
 
         case BoundingBoxPoint::RIGHT:
             mElements[TOP_RIGHT_INDEX]->moveBy(delta);
+            mElements[BOTTOM_RIGHT_INDEX]->moveBy(delta);
+            break;
+
+        case BoundingBoxPoint::BOTTOM_RIGHT:
+            mElements[BOTTOM_RIGHT_INDEX]->moveBy(delta);
+            mElements[TOP_RIGHT_INDEX]->moveBy(QPointF(delta.x(), 0));
+            mElements[BOTTOM_LEFT_INDEX]->moveBy(QPointF(0, delta.y()));
+            break;
+
+        case BoundingBoxPoint::BOTTOM:
+            mElements[BOTTOM_LEFT_INDEX]->moveBy(delta);
+            mElements[BOTTOM_RIGHT_INDEX]->moveBy(delta);
+            break;
+
+        case BoundingBoxPoint::BOTTOM_LEFT:
+            mElements[BOTTOM_LEFT_INDEX]->moveBy(delta);
+            mElements[TOP_LEFT_INDEX]->moveBy(QPointF(delta.x(), 0));
+            mElements[BOTTOM_RIGHT_INDEX]->moveBy(QPointF(0, delta.y()));
+            break;
+
+        case BoundingBoxPoint::LEFT:
             mElements[TOP_LEFT_INDEX]->moveBy(delta);
+            mElements[BOTTOM_LEFT_INDEX]->moveBy(delta);
             break;
 
         default:
