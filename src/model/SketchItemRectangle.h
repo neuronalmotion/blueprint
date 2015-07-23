@@ -10,6 +10,7 @@ public:
     SketchItemRectangle(qreal x, qreal y);
 
     virtual void boundBoxPointMoved(BoundingBoxPoint::TranslationDirection direction, QPointF delta);
+
 };
 
 #endif // SKETCHITEMRECTANGLE_H
