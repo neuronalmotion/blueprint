@@ -15,32 +15,27 @@ SketchItemRectangle::SketchItemRectangle(qreal x, qreal y)
 
 void SketchItemRectangle::boundBoxPointMoved(BoundingBoxPoint::TranslationDirection direction, QPointF delta)
 {
-    QList<BezierElement*> elementsToMove;
     // because the path is closed, we don't have to
     // move the first item, the last is enough
     switch (direction) {
     case BoundingBoxPoint::TOP_LEFT:
-        elementsToMove.append(mElements.last()); // top left
+        mElements.last()->moveBy(delta); // top left
         mElements[3]->moveBy(QPointF(0, delta.y())); // top right
         mElements[9]->moveBy(QPointF(delta.x(), 0)); // bottom left
         break;
     case BoundingBoxPoint::TOP:
-        elementsToMove.append(mElements[3]); // top right
-        elementsToMove.append(mElements.last()); // top left
+        mElements[3]->moveBy(delta); // top right
+        mElements.last()->moveBy(delta); // top left
         break;
 
     case BoundingBoxPoint::TOP_RIGHT:
-        elementsToMove.append(mElements[3]); // top right
+        mElements[3]->moveBy(delta); // top right
         mElements.last()->moveBy(QPointF(0, delta.y())); // top left
         mElements[6]->moveBy(QPointF(delta.x(), 0)); // bottom right
         break;
 
     default:
         break;
-    }
-
-    for (auto e : elementsToMove) {
-        e->moveBy(delta);
     }
     mBoundingBox->updateRect(direction);
 }

@@ -1,5 +1,7 @@
 #include "BoundingBox.h"
 
+#include <QDebug>
+
 #include "SketchItem.h"
 
 BoundingBox::BoundingBox(SketchItem* parentSketchItem)
