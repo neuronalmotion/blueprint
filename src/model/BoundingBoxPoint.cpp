@@ -12,7 +12,7 @@ BoundingBoxPoint::BoundingBoxPoint(BoundingBox* parent, TranslationDirection dir
 {
     setFlag(QGraphicsItem::ItemIsMovable);
     setFlag(QGraphicsItem::ItemSendsGeometryChanges);
-    setBrush(QBrush(Qt::blue));
+    setBrush(QBrush(Qt::lightGray));
 }
 
 BoundingBoxPoint::~BoundingBoxPoint()
@@ -27,10 +27,39 @@ BoundingBoxPoint::TranslationDirection BoundingBoxPoint::getTranslationDirection
 
 QVariant BoundingBoxPoint::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value)
 {
+    QVariant retVal = value;
     if (change == ItemPositionChange) {
-        QPointF delta = value.toPointF() - pos();
+        retVal = restrictPosition(value.toPointF());
+        QPointF delta = retVal.toPointF() - pos();
         mParentBoundingBox->boundingBoxPointMoved(mTranslationDirection, delta);
     }
-    return QGraphicsItem::itemChange(change, value);
+    return retVal;
+}
+
+QPointF BoundingBoxPoint::restrictPosition(const QPointF& newPosition)
+{
+    QPointF retVal = pos();
+
+    switch (mTranslationDirection) {
+    case TOP:
+    case BOTTOM:
+        retVal.setY(newPosition.y());
+        break;
+
+    case RIGHT:
+    case LEFT:
+        retVal.setX(newPosition.x());
+        break;
+
+    case TOP_LEFT:
+    case TOP_RIGHT:
+    case BOTTOM_RIGHT:
+    case BOTTOM_LEFT:
+        retVal = newPosition;
+        break;
+    default:
+        break;
+    }
+    return retVal;
 }
 
