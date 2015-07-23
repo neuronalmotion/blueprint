@@ -25,15 +25,13 @@ BoundingBoxPoint::TranslationDirection BoundingBoxPoint::getTranslationDirection
     return mTranslationDirection;
 }
 
-QVariant BoundingBoxPoint::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant &value)
+void BoundingBoxPoint::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
 {
-    QVariant retVal = value;
-    if (change == ItemPositionChange) {
-        retVal = restrictPosition(value.toPointF());
-        QPointF delta = retVal.toPointF() - pos();
+    if (event->buttons() & Qt::LeftButton == Qt::LeftButton)
+    {
+        QPointF delta = restrictPosition(event->pos() - event->lastPos());
         mParentBoundingBox->boundingBoxPointMoved(mTranslationDirection, delta);
     }
-    return retVal;
 }
 
 QPointF BoundingBoxPoint::restrictPosition(const QPointF& newPosition)

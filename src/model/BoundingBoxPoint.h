@@ -2,6 +2,7 @@
 #define BOUNDINGBOXPOINT_H
 
 #include <QGraphicsRectItem>
+#include <QGraphicsSceneMouseEvent>
 
 class BoundingBox;
 
@@ -27,7 +28,7 @@ public:
     TranslationDirection getTranslationDirection() const;
 
 protected:
-    QVariant itemChange(GraphicsItemChange change, const QVariant &value);
+    void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
 
 private:
     QPointF restrictPosition(const QPointF& newPosition);

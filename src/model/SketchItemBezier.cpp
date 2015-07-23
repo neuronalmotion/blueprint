@@ -111,4 +111,8 @@ void SketchItemBezier::updateElement(BezierElement* bezierElement, const QPointF
     }
     mPath.setElementPositionAt(bezierElement->getIndex(), pos.x(), pos.y());
     mItem->setPath(mPath);
+
+    // Update bounding box and handles positions
+    mBoundingBox->updateRect();
+
 }
