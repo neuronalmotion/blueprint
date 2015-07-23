@@ -7,9 +7,11 @@
 #include <QGraphicsPathItem>
 #include <QGraphicsEllipseItem>
 
+#include "BezierElement.h"
+#include "BoundingBox.h"
+
 class QPointF;
 class BezierPath;
-class BezierElement;
 
 class SketchItemBezier : public SketchItem
 {
@@ -21,10 +23,12 @@ public:
     void closePath();
     void updateElement(BezierElement* bezierElement, const QPointF& pos);
 
-    QPainterPath mPath;
-private:
+protected:
     QGraphicsPathItem* mItem;
+    QPainterPath mPath;
     QList<BezierElement*> mElements;
+    BoundingBox* mBoundingBox;
+
     bool mIsPathClosed;
 };
 

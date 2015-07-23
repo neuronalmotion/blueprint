@@ -5,7 +5,6 @@
 #include <QPen>
 #include <QPointF>
 
-#include "BezierElement.h"
 #include "BezierControlPoint.h"
 #include "BezierPoint.h"
 
@@ -14,6 +13,7 @@ SketchItemBezier::SketchItemBezier(qreal x, qreal y)
       mItem(new QGraphicsPathItem),
       mPath(),
       mElements(),
+      mBoundingBox(new BoundingBox(this)),
       mIsPathClosed(false)
 {
     mItem->setPen(QPen(QColor(79, 106, 25), 1, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));

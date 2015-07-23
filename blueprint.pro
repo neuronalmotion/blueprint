@@ -20,7 +20,9 @@ SOURCES += src/main.cpp\
     src/model/Sketch.cpp \
     src/model/Blueprint.cpp \
     src/model/BezierElement.cpp \
-    src/model/SketchItemRectangle.cpp
+    src/model/SketchItemRectangle.cpp \
+    src/model/BoundingBox.cpp \
+    src/model/BoundingBoxPoint.cpp
 
 HEADERS  += src/MainWindow.h \
     src/CanvasView.h \
@@ -34,6 +36,8 @@ HEADERS  += src/MainWindow.h \
     src/model/Sketch.h \
     src/model/Blueprint.h \
     src/model/BezierElement.h \
-    src/model/SketchItemRectangle.h
+    src/model/SketchItemRectangle.h \
+    src/model/BoundingBox.h \
+    src/model/BoundingBoxPoint.h
 
 FORMS    += src/MainWindow.ui
