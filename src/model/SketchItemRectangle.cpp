@@ -2,6 +2,12 @@
 
 #include <QDebug>
 
+// Constants
+static const uint TOP_LEFT_INDEX        = 12;
+static const uint TOP_RIGHT_INDEX       = 3;
+static const uint BOTTOM_RIGHT_INDEX    = 6;
+static const uint BOTTOM_LEFT_INDEX     = 9;
+
 SketchItemRectangle::SketchItemRectangle(qreal x, qreal y)
     : SketchItemBezier(x, y)
 {
@@ -18,24 +24,54 @@ void SketchItemRectangle::boundBoxPointMoved(BoundingBoxPoint::TranslationDirect
     // because the path is closed, we don't have to
     // move the first item, the last is enough
     switch (direction) {
-    case BoundingBoxPoint::TOP_LEFT:
-        mElements.last()->moveBy(delta); // top left
-        mElements[3]->moveBy(QPointF(0, delta.y())); // top right
-        mElements[9]->moveBy(QPointF(delta.x(), 0)); // bottom left
-        break;
-    case BoundingBoxPoint::TOP:
-        mElements[3]->moveBy(delta); // top right
-        mElements.last()->moveBy(delta); // top left
-        break;
 
-    case BoundingBoxPoint::TOP_RIGHT:
-        mElements[3]->moveBy(delta); // top right
-        mElements.last()->moveBy(QPointF(0, delta.y())); // top left
-        mElements[6]->moveBy(QPointF(delta.x(), 0)); // bottom right
-        break;
+        case BoundingBoxPoint::TOP_LEFT:
+            mElements[TOP_LEFT_INDEX]->moveBy(delta);
+            mElements[TOP_RIGHT_INDEX]->moveBy(QPointF(0, delta.y()));
+            mElements[BOTTOM_LEFT_INDEX]->moveBy(QPointF(delta.x(), 0));
+            break;
 
-    default:
-        break;
+        case BoundingBoxPoint::TOP:
+            mElements[TOP_RIGHT_INDEX]->moveBy(delta);
+            mElements[TOP_LEFT_INDEX]->moveBy(delta);
+            break;
+
+        case BoundingBoxPoint::TOP_RIGHT:
+            mElements[TOP_RIGHT_INDEX]->moveBy(delta);
+            mElements[TOP_LEFT_INDEX]->moveBy(QPointF(0, delta.y()));
+            mElements[BOTTOM_RIGHT_INDEX]->moveBy(QPointF(delta.x(), 0));
+            break;
+
+        case BoundingBoxPoint::RIGHT:
+            mElements[TOP_RIGHT_INDEX]->moveBy(delta);
+            mElements[BOTTOM_RIGHT_INDEX]->moveBy(delta);
+            break;
+
+        case BoundingBoxPoint::BOTTOM_RIGHT:
+            mElements[BOTTOM_RIGHT_INDEX]->moveBy(delta);
+            mElements[TOP_RIGHT_INDEX]->moveBy(QPointF(delta.x(), 0));
+            mElements[BOTTOM_LEFT_INDEX]->moveBy(QPointF(0, delta.y()));
+            break;
+
+        case BoundingBoxPoint::BOTTOM:
+            mElements[BOTTOM_LEFT_INDEX]->moveBy(delta);
+            mElements[BOTTOM_RIGHT_INDEX]->moveBy(delta);
+            break;
+
+        case BoundingBoxPoint::BOTTOM_LEFT:
+            mElements[BOTTOM_LEFT_INDEX]->moveBy(delta);
+            mElements[TOP_LEFT_INDEX]->moveBy(QPointF(delta.x(), 0));
+            mElements[BOTTOM_RIGHT_INDEX]->moveBy(QPointF(0, delta.y()));
+            break;
+
+        case BoundingBoxPoint::LEFT:
+            mElements[TOP_LEFT_INDEX]->moveBy(delta);
+            mElements[BOTTOM_LEFT_INDEX]->moveBy(delta);
+            break;
+
+        default:
+            qErrnoWarning("Unexpected TranslationDirection!");
+            break;
     }
     mBoundingBox->updateRect(direction);
 }
