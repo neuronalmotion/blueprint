@@ -17,13 +17,16 @@ MainWindow::MainWindow(QWidget* parent) :
     QMainWindow(parent),
     mUi(new Ui::MainWindow),
     mCurrentBlueprint(nullptr),
-    mCurrentTool(nullptr)
+    mCurrentTool(nullptr),
+    mCreatingItem(nullptr)
 {
     mUi->setupUi(this);
 
     mScene = new QGraphicsScene(this);
     mUi->canvas->setScene(mScene);
 
+    connect(mUi->canvas, &CanvasView::signalMousePressEvent, this, &MainWindow::onCanvasMousePressEvent);
+    connect(mUi->canvas, &CanvasView::signalMouseMoveEvent, this, &MainWindow::onCanvasMouseMoveEvent);
     connect(mUi->canvas, &CanvasView::signalMouseReleaseEvent, this, &MainWindow::onCanvasMouseReleaseEvent);
     connect(mScene, &QGraphicsScene::focusItemChanged, this, &MainWindow::onFocusItemChanged);
 
@@ -81,20 +84,46 @@ void MainWindow::setTool(Tool::Type toolType)
     }
 }
 
-void MainWindow::onCanvasMouseReleaseEvent(QPointF point)
+void MainWindow::onCanvasMousePressEvent(QPointF point)
 {
     static uint id = 0;
 
-    if (mCurrentTool->getType() == Tool::Type::ELLIPSE) {
-        SketchItemEllipse* sketchItem = new SketchItemEllipse(point.x(), point.y());
-        sketchItem->name = QString("Ellipse #%1").arg(id++);
-        mScene->addItem(sketchItem->getGraphicsItem());
-
-    } else if (mCurrentTool->getType() == Tool::Type::RECTANGLE) {
+    if (mCurrentTool->getType() == Tool::Type::RECTANGLE) {
         SketchItemRectangle* sketchItem = new SketchItemRectangle(point.x(), point.y());
+        sketchItem->boundBoxPointMoved(BoundingBoxPoint::BOTTOM_RIGHT, QPointF(-100.0f, -50.0f));
         sketchItem->name = QString("Rectangle #%1").arg(id++);
+
         mScene->addItem(sketchItem->getGraphicsItem());
+        mCreatingItem = sketchItem;
+        mCreatingLastPosition = point;
+
+    } else  if (mCurrentTool->getType() == Tool::Type::ELLIPSE) {
+        SketchItemEllipse* sketchItem = new SketchItemEllipse(point.x(), point.y());
+        sketchItem->boundBoxPointMoved(BoundingBoxPoint::BOTTOM, QPointF(0.0f, -100.0f));
+        sketchItem->boundBoxPointMoved(BoundingBoxPoint::RIGHT, QPointF(-50.0f, 0.0f));
+        sketchItem->boundBoxPointMoved(BoundingBoxPoint::LEFT, QPointF(50.0f, 0.0f));
+        sketchItem->name = QString("Ellipse #%1").arg(id++);
+
+        mScene->addItem(sketchItem->getGraphicsItem());
+        mCreatingItem = sketchItem;
+        mCreatingLastPosition = point;
     }
+
+}
+
+void MainWindow::onCanvasMouseMoveEvent(QPointF point)
+{
+    if (mCreatingItem != nullptr) {
+        QPointF delta = point - mCreatingLastPosition;
+        mCreatingLastPosition = point;
+        mCreatingItem->boundBoxPointMoved(BoundingBoxPoint::BOTTOM_RIGHT, delta);
+    }
+}
+
+void MainWindow::onCanvasMouseReleaseEvent(QPointF point)
+{
+    mCreatingItem = nullptr;
+    mCreatingLastPosition = QPointF(0.0f, 0.0f);
 }
 
 void MainWindow::onFocusItemChanged(QGraphicsItem* newFocusItem, QGraphicsItem* oldFocusItem, Qt::FocusReason reason)

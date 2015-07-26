@@ -11,9 +11,13 @@ public:
     ~CanvasView();
 
 signals:
+    void signalMousePressEvent(QPointF point);
+    void signalMouseMoveEvent(QPointF point);
     void signalMouseReleaseEvent(QPointF point);
 
 protected: // from QGraphicsView
+    void mousePressEvent(QMouseEvent *event);
+    void mouseMoveEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent* event);
     void resizeEvent(QResizeEvent *event);
     void showEvent(QShowEvent *event);

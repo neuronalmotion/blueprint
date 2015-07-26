@@ -27,7 +27,7 @@ BoundingBoxPoint::TranslationDirection BoundingBoxPoint::getTranslationDirection
 
 void BoundingBoxPoint::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
 {
-    if (event->buttons() & Qt::LeftButton == Qt::LeftButton)
+    if ((event->buttons() & Qt::LeftButton) == Qt::LeftButton)
     {
         QPointF delta = restrictPosition(event->pos() - event->lastPos());
         mParentBoundingBox->boundingBoxPointMoved(mTranslationDirection, delta);
