@@ -5,6 +5,7 @@
 #include <QList>
 #include <QGraphicsItem>
 
+#include "model/SketchItem.h"
 #include "Tool.h"
 
 namespace Ui {
@@ -26,6 +27,8 @@ public slots:
     void setTool(Tool::Type toolType);
 
 private slots:
+    void onCanvasMousePressEvent(QPointF point);
+    void onCanvasMouseMoveEvent(QPointF point);
     void onCanvasMouseReleaseEvent(QPointF point);
     void onFocusItemChanged(QGraphicsItem* newFocusItem, QGraphicsItem* oldFocusItem, Qt::FocusReason reason);
 
@@ -38,6 +41,8 @@ private:
     Blueprint* mCurrentBlueprint;
     Tool* mCurrentTool;
     QList<Tool*> mTools;
+    SketchItem* mCreatingItem;
+    QPointF mCreatingLastPosition;
 };
 
 #endif // MAINWINDOW_H
