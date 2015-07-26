@@ -10,6 +10,8 @@ BoundingBoxPoint::BoundingBoxPoint(BoundingBox* parent, TranslationDirection dir
       mParentBoundingBox(parent),
       mTranslationDirection(direction)
 {
+    setFlag(QGraphicsItem::ItemIsSelectable);
+    setFlag(QGraphicsItem::ItemIsFocusable);
     setFlag(QGraphicsItem::ItemIsMovable);
     setFlag(QGraphicsItem::ItemSendsGeometryChanges);
     setBrush(QBrush(Qt::lightGray));
