@@ -22,6 +22,8 @@ public:
         LEFT,
     };
 
+    const int HANDLE_SIZE = 10;
+
     BoundingBoxPoint(BoundingBox* parent, TranslationDirection direction);
     ~BoundingBoxPoint();
 

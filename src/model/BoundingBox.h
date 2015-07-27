@@ -3,15 +3,22 @@
 
 #include <QGraphicsRectItem>
 #include <QPointF>
+#include <QHash>
 
 #include "BoundingBoxPoint.h"
 
 class SketchItem;
 
+struct BoundingBoxEvent
+{
+    QPointF origin;
+    QPointF delta;
+    QPointF scale;
+};
+
 class BoundingBox : public QGraphicsRectItem
 {
 public:
-    const int HANDLE_SIZE = 10;
     BoundingBox(SketchItem* parentSketchItem);
     ~BoundingBox();
 
@@ -20,15 +27,9 @@ public:
 
 private:
     SketchItem* mParentSketchItem;
+    BoundingBoxEvent mBoundingBoxEvent;
 
-    BoundingBoxPoint mTopLeftHandle;
-    BoundingBoxPoint mTopHandle;
-    BoundingBoxPoint mTopRightHandle;
-    BoundingBoxPoint mRightHandle;
-    BoundingBoxPoint mBottomRight;
-    BoundingBoxPoint mBottom;
-    BoundingBoxPoint mBottomLeft;
-    BoundingBoxPoint mLeft;
+    QHash<BoundingBoxPoint::TranslationDirection, BoundingBoxPoint*> mHashBoundingBoxPoints;
 
 };
 

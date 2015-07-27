@@ -90,7 +90,7 @@ void MainWindow::onCanvasMousePressEvent(QPointF point)
 
     if (mCurrentTool->getType() == Tool::Type::RECTANGLE) {
         SketchItemRectangle* sketchItem = new SketchItemRectangle(point.x(), point.y());
-        sketchItem->boundBoxPointMoved(BoundingBoxPoint::BOTTOM_RIGHT, QPointF(-100.0f, -50.0f));
+        //sketchItem->boundBoxPointMoved(BoundingBoxPoint::BOTTOM_RIGHT, QPointF(-100.0f, -50.0f));
         sketchItem->name = QString("Rectangle #%1").arg(id++);
 
         mScene->addItem(sketchItem->getGraphicsItem());
@@ -99,9 +99,9 @@ void MainWindow::onCanvasMousePressEvent(QPointF point)
 
     } else  if (mCurrentTool->getType() == Tool::Type::ELLIPSE) {
         SketchItemEllipse* sketchItem = new SketchItemEllipse(point.x(), point.y());
-        sketchItem->boundBoxPointMoved(BoundingBoxPoint::BOTTOM, QPointF(0.0f, -100.0f));
-        sketchItem->boundBoxPointMoved(BoundingBoxPoint::RIGHT, QPointF(-50.0f, 0.0f));
-        sketchItem->boundBoxPointMoved(BoundingBoxPoint::LEFT, QPointF(50.0f, 0.0f));
+        //sketchItem->boundBoxPointMoved(BoundingBoxPoint::BOTTOM, QPointF(0.0f, -100.0f));
+        //sketchItem->boundBoxPointMoved(BoundingBoxPoint::RIGHT, QPointF(-50.0f, 0.0f));
+        //sketchItem->boundBoxPointMoved(BoundingBoxPoint::LEFT, QPointF(50.0f, 0.0f));
         sketchItem->name = QString("Ellipse #%1").arg(id++);
 
         mScene->addItem(sketchItem->getGraphicsItem());
@@ -116,7 +116,7 @@ void MainWindow::onCanvasMouseMoveEvent(QPointF point)
     if (mCreatingItem != nullptr) {
         QPointF delta = point - mCreatingLastPosition;
         mCreatingLastPosition = point;
-        mCreatingItem->boundBoxPointMoved(BoundingBoxPoint::BOTTOM_RIGHT, delta);
+        //mCreatingItem->boundBoxPointMoved(BoundingBoxPoint::BOTTOM_RIGHT, delta);
     }
 }
 

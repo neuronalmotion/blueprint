@@ -10,7 +10,6 @@ public:
     SketchItemEllipse(qreal x, qreal y);
     ~SketchItemEllipse();
 
-    virtual void boundBoxPointMoved(BoundingBoxPoint::TranslationDirection direction, QPointF delta);
 };
 
 #endif // SKETCHITEMCIRCLE_H

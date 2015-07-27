@@ -22,6 +22,7 @@ public:
     void addPath(const QPointF& c1, const QPointF& c2, const QPointF& endPos);
     void closePath();
     void updateElement(BezierElement* bezierElement, const QPointF& pos);
+    void boundingBoxEvent(const BoundingBoxEvent& event);
 
 protected:
     QGraphicsPathItem* mItem;

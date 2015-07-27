@@ -15,6 +15,9 @@ BoundingBoxPoint::BoundingBoxPoint(BoundingBox* parent, TranslationDirection dir
     setFlag(QGraphicsItem::ItemIsMovable);
     setFlag(QGraphicsItem::ItemSendsGeometryChanges);
     setBrush(QBrush(Qt::lightGray));
+
+    qreal halfSize = HANDLE_SIZE / 2.0f;
+    setRect(-halfSize, -halfSize, HANDLE_SIZE, HANDLE_SIZE);
 }
 
 BoundingBoxPoint::~BoundingBoxPoint()
@@ -32,6 +35,7 @@ void BoundingBoxPoint::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
     if ((event->buttons() & Qt::LeftButton) == Qt::LeftButton)
     {
         QPointF delta = restrictPosition(event->pos() - event->lastPos());
+        //QPointF delta = restrictPosition(event->pos() - pos());
         mParentBoundingBox->boundingBoxPointMoved(mTranslationDirection, delta);
     }
 }

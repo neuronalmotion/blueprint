@@ -84,35 +84,59 @@ void SketchItemBezier::closePath()
 void SketchItemBezier::updateElement(BezierElement* bezierElement, const QPointF& pos)
 {
     int listIndex = mElements.indexOf(bezierElement);
+    QPointF delta = pos - bezierElement->getPos();
 
-    // test listIndex positive as a fuse on the setPos
-    // called in addPath
+    // Move control points associated to the bezier point
     if(listIndex >= 0
-            && bezierElement->getElementType() == BezierElement::POINT) {
-        QPointF delta = pos - bezierElement->getPos();
+            && bezierElement->getElementType() == BezierElement::POINT
+            && mEditMode == EditMode::BEZIER) {
 
         if (bezierElement == mElements.first()) {
             mElements[listIndex + 1]->moveBy(delta);
-//            if (mIsPathClosed) {
-//                mElements.last()->moveBy(delta);
-//            }
 
         } else if (bezierElement == mElements.last()) {
             mElements[listIndex - 1]->moveBy(delta);
-            if (mIsPathClosed) {
-                mElements.first()->moveBy(delta);
-                mPath.setElementPositionAt(mElements.length(), pos.x(), pos.y());
-            }
 
         } else {
             mElements[listIndex - 1]->moveBy(delta);
             mElements[listIndex + 1]->moveBy(delta);
         }
     }
+
+    // Moving link between the first and the last element
+    if (bezierElement == mElements.last() && mIsPathClosed) {
+        mElements.first()->moveBy(delta);
+        mPath.setElementPositionAt(mElements.length(), pos.x(), pos.y());
+    }
+
+    // Move the current element
     mPath.setElementPositionAt(bezierElement->getIndex(), pos.x(), pos.y());
     mItem->setPath(mPath);
 
     // Update bounding box and handles positions
     mBoundingBox->updateRect();
+}
 
+void SketchItemBezier::boundingBoxEvent(const BoundingBoxEvent& event)
+{
+    for (int i = 1; i < mElements.length(); i++) {
+        BezierElement* element = mElements[i];
+
+        if (element->getElementType() == BezierElement::CONTROL_POINT) {
+            //continue;
+        }
+
+        // Move to bounding box origin
+        // FIXME: p1 is not (0, 0) for the unmoved item !!
+        QPointF p1 = element->getPos() - event.origin;
+
+        // Apply scale factor
+        p1.setX(p1.x() * event.scale.x());
+        p1.setY(p1.y() * event.scale.y());
+
+        // Move back to correct referential
+        p1 += event.origin;
+
+        element->setPos(p1);
+    }
 }
