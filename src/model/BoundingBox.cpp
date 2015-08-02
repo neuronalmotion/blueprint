@@ -167,19 +167,24 @@ void BoundingBox::boundingBoxPointMoved(BoundingBoxPoint::TranslationDirection d
     QPointF scaleBase = handlePoint - origin;
 
     // Clamp it!
-    if (scaleBase.x() == 0){
+    if (scaleBase.x() == 0) {
         scaleBase.setX(scaleAim.x());
     }
 
-    if (scaleBase.y() == 0){
+    if (scaleBase.y() == 0) {
         scaleBase.setY(scaleAim.y());
     }
+
+    // Fix case of scaleBase.n == scaleBase.n == 0
+    QPointF finalScale;
+    finalScale.setX(scaleAim.x() == scaleBase.x() ? 1.0f : scaleAim.x() / scaleBase.x());
+    finalScale.setY(scaleAim.y() == scaleBase.y() ? 1.0f : scaleAim.y() / scaleBase.y());
 
     // Set the final values
     mBoundingBoxEvent.origin = origin;
     mBoundingBoxEvent.delta = delta;
-    mBoundingBoxEvent.scale.setX( scaleAim.x() / scaleBase.x());
-    mBoundingBoxEvent.scale.setY( scaleAim.y() / scaleBase.y());
+    mBoundingBoxEvent.scale.setX(finalScale.x());
+    mBoundingBoxEvent.scale.setY(finalScale.y());
 
     mParentSketchItem->boundingBoxEvent(mBoundingBoxEvent);
 }
