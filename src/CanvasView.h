@@ -14,6 +14,8 @@ signals:
     void signalMousePressEvent(QPointF point);
     void signalMouseMoveEvent(QPointF point);
     void signalMouseReleaseEvent(QPointF point);
+    void signalKeyPressEvent(QKeyEvent *event);
+    void signalKeyReleaseEvent(QKeyEvent *event);
 
 protected: // from QGraphicsView
     void mousePressEvent(QMouseEvent *event);
@@ -22,6 +24,8 @@ protected: // from QGraphicsView
     void wheelEvent(QWheelEvent *event);
     void resizeEvent(QResizeEvent *event);
     void showEvent(QShowEvent *event);
+    void keyPressEvent(QKeyEvent *event);
+    void keyReleaseEvent(QKeyEvent *event);
 
 protected:
     void fitView();

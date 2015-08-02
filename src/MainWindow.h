@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QList>
 #include <QGraphicsItem>
+#include <QKeyEvent>
 
 #include "model/SketchItem.h"
 #include "Tool.h"
@@ -31,6 +32,8 @@ private slots:
     void onCanvasMouseMoveEvent(QPointF point);
     void onCanvasMouseReleaseEvent(QPointF point);
     void onFocusItemChanged(QGraphicsItem* newFocusItem, QGraphicsItem* oldFocusItem, Qt::FocusReason reason);
+    void onCanvasKeyPressEvent(QKeyEvent *event);
+    void onCanvasKeyReleaseEvent(QKeyEvent *event);
 
 private:
     void initToolbar();

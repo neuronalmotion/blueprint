@@ -17,6 +17,7 @@ BezierPoint::BezierPoint(SketchItemBezier* parent, const int index)
     int rectSize = 10;
     setRect(-rectSize/2, -rectSize/2, rectSize, rectSize);
     setVisible(false);
+    setData(SketchItem::Type::BEZIER_POINT, qVariantFromValue(static_cast<void *>(this)));
 }
 
 BezierPoint::~BezierPoint()
@@ -37,6 +38,11 @@ void BezierPoint::setPos(QPointF pos)
 void BezierPoint::moveBy(QPointF delta)
 {
     QGraphicsItem::moveBy(delta.x(), delta.y());
+}
+
+void BezierPoint::setVisible(bool isVisible)
+{
+    QGraphicsItem::setVisible(isVisible);
 }
 
 QVariant BezierPoint::itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant& value)

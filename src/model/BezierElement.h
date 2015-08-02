@@ -21,9 +21,11 @@ public:
     virtual QPointF getPos() = 0;
     virtual void setPos(QPointF pos) = 0;
     virtual void moveBy(QPointF delta) = 0;
+    virtual void setVisible(bool isVisible) = 0;
 
     inline ElementType getElementType() const { return mElementType; }
     inline int getIndex() const { return mIndex; }
+    inline SketchItemBezier* getParentSketchItemBezier(){ return mParent; }
 
 protected:
     void propagateItemChange(QGraphicsItem::GraphicsItemChange change, const QVariant& value);
