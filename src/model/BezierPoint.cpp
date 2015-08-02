@@ -16,6 +16,7 @@ BezierPoint::BezierPoint(SketchItemBezier* parent, const int index)
     setBrush(QBrush(Qt::red));
     int rectSize = 10;
     setRect(-rectSize/2, -rectSize/2, rectSize, rectSize);
+    setVisible(false);
 }
 
 BezierPoint::~BezierPoint()

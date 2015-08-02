@@ -43,6 +43,7 @@ private:
     QList<Tool*> mTools;
     SketchItem* mCreatingItem;
     QPointF mCreatingLastPosition;
+    SketchItem* mSelectedSketchItem;
 };
 
 #endif // MAINWINDOW_H

@@ -18,6 +18,7 @@ public:
     SketchItem();
     virtual ~SketchItem();
     virtual QGraphicsItem* getGraphicsItem() = 0;
+    virtual void setIsSelected(bool isSelected) { }
 
     virtual void boundingBoxEvent(const BoundingBoxEvent& event) = 0;
 

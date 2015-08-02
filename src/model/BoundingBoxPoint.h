@@ -28,6 +28,7 @@ public:
     ~BoundingBoxPoint();
 
     TranslationDirection getTranslationDirection() const;
+    inline BoundingBox* getParentBoundingBox() const { return mParentBoundingBox; }
 
 protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent* event);

@@ -23,6 +23,8 @@ public:
     void closePath();
     void updateElement(BezierElement* bezierElement, const QPointF& pos);
     void boundingBoxEvent(const BoundingBoxEvent& event);
+    void setIsSelected(bool isSelected);
+
 
 protected:
     QGraphicsPathItem* mItem;

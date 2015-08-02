@@ -18,7 +18,8 @@ MainWindow::MainWindow(QWidget* parent) :
     mUi(new Ui::MainWindow),
     mCurrentBlueprint(nullptr),
     mCurrentTool(nullptr),
-    mCreatingItem(nullptr)
+    mCreatingItem(nullptr),
+    mSelectedSketchItem(nullptr)
 {
     mUi->setupUi(this);
 
@@ -128,10 +129,30 @@ void MainWindow::onCanvasMouseReleaseEvent(QPointF point)
 
 void MainWindow::onFocusItemChanged(QGraphicsItem* newFocusItem, QGraphicsItem* oldFocusItem, Qt::FocusReason reason)
 {
-    QVariant itemVariant = newFocusItem->data(0);
-    SketchItem* item = static_cast<SketchItem*>(itemVariant.value<void *>());
-    if (item != nullptr){
-        qDebug() << "Focus item is now " << item->name;
+    QVariant itemVariant;
+
+    qDebug() << "\n onFocusItemChanged()";
+
+
+    if (mSelectedSketchItem != nullptr){
+        mSelectedSketchItem->setIsSelected(false);
+    }
+
+    itemVariant = newFocusItem->data(0);
+    SketchItemBezier* sketchItemBezier = static_cast<SketchItemBezier*>(itemVariant.value<void *>());
+    if (sketchItemBezier != nullptr){
+        mSelectedSketchItem = sketchItemBezier;
+
+        mSelectedSketchItem->setIsSelected(true);
+        qDebug() << "Focus item is now " << mSelectedSketchItem->name;
+    }
+
+    itemVariant = newFocusItem->data(1);
+    BoundingBoxPoint* boundingBoxPoint = static_cast<BoundingBoxPoint*>(itemVariant.value<void *>());
+    if (boundingBoxPoint != nullptr){
+        mSelectedSketchItem = boundingBoxPoint->getParentBoundingBox()->getParentSketchItem();
+        mSelectedSketchItem->getGraphicsItem()->setFocus();
+        qDebug() << "Focus item is now " << mSelectedSketchItem->name << " (from boundingBoxPoint)";
     }
 }
 

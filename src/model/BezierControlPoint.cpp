@@ -18,6 +18,7 @@ BezierControlPoint::BezierControlPoint(SketchItemBezier* parent, int index)
 
     int rectSize = 10;
     setRect(-rectSize/2, -rectSize/2, rectSize, rectSize);
+    setVisible(false);
 }
 
 BezierControlPoint::~BezierControlPoint()

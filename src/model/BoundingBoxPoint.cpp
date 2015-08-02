@@ -10,7 +10,7 @@ BoundingBoxPoint::BoundingBoxPoint(BoundingBox* parent, TranslationDirection dir
       mParentBoundingBox(parent),
       mTranslationDirection(direction)
 {
-    setFlag(QGraphicsItem::ItemIsSelectable);
+    //setFlag(QGraphicsItem::ItemIsSelectable);
     setFlag(QGraphicsItem::ItemIsFocusable);
     setFlag(QGraphicsItem::ItemIsMovable);
     setFlag(QGraphicsItem::ItemSendsGeometryChanges);
@@ -18,6 +18,8 @@ BoundingBoxPoint::BoundingBoxPoint(BoundingBox* parent, TranslationDirection dir
 
     qreal halfSize = HANDLE_SIZE / 2.0f;
     setRect(-halfSize, -halfSize, HANDLE_SIZE, HANDLE_SIZE);
+
+    setData(1, qVariantFromValue(static_cast<void *>(this)));
 }
 
 BoundingBoxPoint::~BoundingBoxPoint()

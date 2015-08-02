@@ -24,6 +24,7 @@ public:
 
     void updateRect(BoundingBoxPoint::TranslationDirection ignoredDirection = BoundingBoxPoint::NONE);
     void boundingBoxPointMoved(BoundingBoxPoint::TranslationDirection direction, QPointF delta);
+    SketchItem* getParentSketchItem() const { return mParentSketchItem; }
 
 private:
     SketchItem* mParentSketchItem;

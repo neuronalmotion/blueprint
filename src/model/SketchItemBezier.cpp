@@ -26,6 +26,10 @@ SketchItemBezier::SketchItemBezier(qreal x, qreal y)
 
     mItem->setData(0, qVariantFromValue(static_cast<void *>(this)));
     mItem->setPos(x, y);
+
+    mBoundingBox->setVisible(false);
+
+
 }
 
 SketchItemBezier::~SketchItemBezier()
@@ -139,4 +143,9 @@ void SketchItemBezier::boundingBoxEvent(const BoundingBoxEvent& event)
 
         element->setPos(p1);
     }
+}
+
+void SketchItemBezier::setIsSelected(bool isSelected)
+{
+    mBoundingBox->setVisible(isSelected);
 }
