@@ -14,7 +14,8 @@ SketchItemBezier::SketchItemBezier(qreal x, qreal y)
       mPath(),
       mElements(),
       mBoundingBox(new BoundingBox(this)),
-      mIsPathClosed(false)
+      mIsPathClosed(false),
+      mIsSelected(false)
 {
     mItem->setPen(QPen(QColor(79, 106, 25), 1, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
     mItem->setBrush(QBrush(QColor(122, 163, 39)));
@@ -24,8 +25,12 @@ SketchItemBezier::SketchItemBezier(qreal x, qreal y)
     mItem->setFlag(QGraphicsItem::ItemIsSelectable);
     mItem->setFlag(QGraphicsItem::ItemIsFocusable);
 
-    mItem->setData(0, qVariantFromValue(static_cast<void *>(this)));
+    mItem->setData(SketchItem::Type::SKETCH_ITEM_BEZIER, qVariantFromValue(static_cast<void *>(this)));
     mItem->setPos(x, y);
+
+    mBoundingBox->setVisible(false);
+
+
 }
 
 SketchItemBezier::~SketchItemBezier()
@@ -138,5 +143,36 @@ void SketchItemBezier::boundingBoxEvent(const BoundingBoxEvent& event)
         p1 += event.origin;
 
         element->setPos(p1);
+    }
+}
+
+void SketchItemBezier::setIsSelected(bool isSelected)
+{
+    mIsSelected = isSelected;
+    qDebug() << "mIsSelected : " << mIsSelected;
+
+    updateBoundingBoxBezierVisibility();
+}
+
+void SketchItemBezier::setEditMode(EditMode mode)
+{
+    mEditMode = mode;
+    qDebug() << "mEditMode : " << mEditMode;
+
+    updateBoundingBoxBezierVisibility();
+}
+
+void SketchItemBezier::updateBoundingBoxBezierVisibility()
+{
+    // Update bounding box visibility
+    bool boundingboxVisibility = mIsSelected && mEditMode == EditMode::BOUNDING_BOX;
+    qDebug() << "boundingboxVisibility : " << boundingboxVisibility;
+    mBoundingBox->setVisible(boundingboxVisibility);
+
+    // Update bezier points visibility
+    bool bezierVisibility = mIsSelected && mEditMode == EditMode::BEZIER;
+    qDebug() << "bezierVisibility : " << bezierVisibility;
+    for (auto p : mElements) {
+        p->setVisible(bezierVisibility);
     }
 }

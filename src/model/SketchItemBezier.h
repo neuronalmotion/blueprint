@@ -23,14 +23,20 @@ public:
     void closePath();
     void updateElement(BezierElement* bezierElement, const QPointF& pos);
     void boundingBoxEvent(const BoundingBoxEvent& event);
+    void setIsSelected(bool isSelected);
+    void setEditMode(EditMode mode);
+
 
 protected:
+    void updateBoundingBoxBezierVisibility();
+
     QGraphicsPathItem* mItem;
     QPainterPath mPath;
     QList<BezierElement*> mElements;
     BoundingBox* mBoundingBox;
 
     bool mIsPathClosed;
+    bool mIsSelected;
 };
 
 #endif // SKETCHITEMBEZIER_H

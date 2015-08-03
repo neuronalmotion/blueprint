@@ -56,6 +56,24 @@ void CanvasView::showEvent(QShowEvent* event)
     fitView();
 }
 
+void CanvasView::keyPressEvent(QKeyEvent *event)
+{
+    if (!event->isAutoRepeat()) {
+        emit signalKeyPressEvent(event);
+    }
+
+    return QGraphicsView::keyPressEvent(event);
+}
+
+void CanvasView::keyReleaseEvent(QKeyEvent *event)
+{
+    if (!event->isAutoRepeat()) {
+        emit signalKeyReleaseEvent(event);
+    }
+
+    return QGraphicsView::keyReleaseEvent(event);
+}
+
 void CanvasView::fitView()
 {
     float viewWidth = this->width() * mZoomfactor;

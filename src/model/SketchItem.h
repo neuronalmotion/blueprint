@@ -10,6 +10,13 @@ class SketchItem
 {
 public:
 
+    enum Type {
+        SKETCH_ITEM_BEZIER,
+        BOUNDING_BOX_POINT,
+        BEZIER_POINT,
+        BEZIER_CONTROL_POINT
+    };
+
     enum EditMode {
         BOUNDING_BOX,
         BEZIER
@@ -17,8 +24,10 @@ public:
 
     SketchItem();
     virtual ~SketchItem();
-    virtual QGraphicsItem* getGraphicsItem() = 0;
 
+    virtual QGraphicsItem* getGraphicsItem() = 0;
+    virtual void setIsSelected(bool isSelected) { }
+    virtual void setEditMode(EditMode mode);
     virtual void boundingBoxEvent(const BoundingBoxEvent& event) = 0;
 
     QString name;
