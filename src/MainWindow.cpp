@@ -14,6 +14,8 @@
 #include "model/SketchItemEllipse.h"
 #include "model/BezierPoint.h"
 #include "model/BezierControlPoint.h"
+#include "model/GraphicalItem.h"
+#include "model/GraphicalModel.h"
 
 MainWindow::MainWindow(QWidget* parent) :
     QMainWindow(parent),
@@ -43,6 +45,25 @@ MainWindow::MainWindow(QWidget* parent) :
 
     mCurrentBlueprint = new Blueprint();
     mCurrentBlueprint->addPage(p);
+
+    // FIXME this is only a test
+    GraphicalItem* root = new GraphicalItem();
+    root->setName("Blueprint");
+
+    GraphicalItem* p1 = new GraphicalItem(QPointF(), root);
+    p1->setName("Page 1");
+    root->appendChild(p1);
+
+    GraphicalItem* s1 = new GraphicalItem(QPointF(), p1);
+    s1->setName("Sketch 1");
+    p1->appendChild(s1);
+
+    GraphicalItem* p2 = new GraphicalItem(QPointF(), root);
+    p2->setName("Page 2");
+    root->appendChild(p2);
+
+    GraphicalModel* model = new GraphicalModel(root, this);
+    mUi->treeView->setModel(model);
 }
 
 MainWindow::~MainWindow()
