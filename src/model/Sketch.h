@@ -3,18 +3,16 @@
 
 #include <QList>
 
+#include "model/GraphicalItem.h"
+
 class SketchItem;
 
-class Sketch
+class Sketch : public GraphicalItem
 {
 public:
-    Sketch();
+    Sketch(GraphicalItem* parentItem = 0);
     ~Sketch();
 
-    void addSketchItem(SketchItem* item);
-
-private:
-    QList<SketchItem*> mItems;
 };
 
 #endif // SKETCH_H

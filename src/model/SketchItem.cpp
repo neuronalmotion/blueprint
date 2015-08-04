@@ -2,8 +2,9 @@
 
 #include <QDebug>
 
-SketchItem::SketchItem()
-    : mEditMode(EditMode::BOUNDING_BOX)
+SketchItem::SketchItem(GraphicalItem* parentItem)
+    : GraphicalItem(parentItem),
+    mEditMode(EditMode::BOUNDING_BOX)
 {
 
 }

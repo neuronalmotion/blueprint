@@ -8,7 +8,7 @@
 class GraphicalItem
 {
 public:
-    explicit GraphicalItem(const QPointF& position = QPointF(), GraphicalItem* parentItem = 0);
+    explicit GraphicalItem(GraphicalItem* parentItem = 0);
     ~GraphicalItem();
 
     void appendChild(GraphicalItem* child);
@@ -22,8 +22,9 @@ public:
     QString name() const;
     void setName(const QString& name);
 
-private:
-    QPointF mPos;
+    void setParent(GraphicalItem* parentItem);
+
+protected:
     QString mName;
     QList<GraphicalItem*> mChildItems;
     GraphicalItem* mParentItem;

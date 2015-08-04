@@ -3,18 +3,16 @@
 
 #include <QList>
 
+#include "model/GraphicalItem.h"
+
 class Sketch;
 
-class Page
+class Page : public GraphicalItem
 {
 public:
-    Page();
+    Page(GraphicalItem* parentItem = 0);
     ~Page();
 
-   void addSketch(Sketch* sketch);
-
-private:
-    QList<Sketch*> mSketches;
 };
 
 #endif // PAGE_H

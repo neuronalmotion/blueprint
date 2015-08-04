@@ -2,9 +2,8 @@
 
 #include <QString>
 
-GraphicalItem::GraphicalItem(const QPointF& position, GraphicalItem* parentItem)
-    : mPos(position),
-      mParentItem(parentItem)
+GraphicalItem::GraphicalItem(GraphicalItem* parentItem)
+    : mParentItem(parentItem)
 {
     static int id = 1;
     mName = QString("GraphicalItem #%1").arg(id++);
@@ -56,5 +55,10 @@ QString GraphicalItem::name() const
 void GraphicalItem::setName(const QString& name)
 {
     mName = name;
+}
+
+void GraphicalItem::setParent(GraphicalItem* parentItem)
+{
+    mParentItem = parentItem;
 }
 

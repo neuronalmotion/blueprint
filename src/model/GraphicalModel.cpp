@@ -18,6 +18,7 @@ void GraphicalModel::addGraphicalItem(GraphicalItem* item, GraphicalItem* parent
     if (!parent) {
         parent = mRootItem;
     }
+    item->setParent(parent);
     parent->appendChild(item);
 }
 

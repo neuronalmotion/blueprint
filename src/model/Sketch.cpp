@@ -2,7 +2,8 @@
 
 #include "SketchItem.h"
 
-Sketch::Sketch()
+Sketch::Sketch(GraphicalItem* parentItem)
+    : GraphicalItem(parentItem)
 {
 
 }
@@ -11,9 +12,3 @@ Sketch::~Sketch()
 {
 
 }
-
-void Sketch::addSketchItem(SketchItem* item)
-{
-    mItems.append(item);
-}
-

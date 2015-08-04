@@ -3,21 +3,12 @@
 #include "model/Page.h"
 
 Blueprint::Blueprint()
+    : GraphicalItem()
 {
 
 }
 
 Blueprint::~Blueprint()
 {
-    for (auto p : mPages)  {
-        delete p;
-        p = nullptr;
-    }
-    mPages.clear();
-}
-
-void Blueprint::addPage(Page *page)
-{
-    mPages.append(page);
 }
 
