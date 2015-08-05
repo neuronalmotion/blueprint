@@ -15,6 +15,8 @@ class MainWindow;
 
 class QGraphicsScene;
 class Blueprint;
+class Sketch;
+class GraphicalModel;
 
 class MainWindow : public QMainWindow
 {
@@ -42,6 +44,8 @@ private:
     Ui::MainWindow* mUi;
     QGraphicsScene* mScene;
     Blueprint* mCurrentBlueprint;
+    GraphicalModel* mModel;
+    Sketch* mCurrentSketch;
     Tool* mCurrentTool;
     QList<Tool*> mTools;
     SketchItem* mCreatingItem;

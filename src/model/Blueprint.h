@@ -3,18 +3,15 @@
 
 #include <QList>
 
+#include "model/GraphicalItem.h"
+
 class Page;
 
-class Blueprint
+class Blueprint : public GraphicalItem
 {
 public:
     Blueprint();
     ~Blueprint();
-
-    void addPage(Page* page);
-
-private:
-    QList<Page*> mPages;
 };
 
 #endif // BLUEPRINT_H
