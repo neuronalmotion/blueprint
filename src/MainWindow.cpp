@@ -103,6 +103,7 @@ void MainWindow::onCanvasMousePressEvent(QPointF point)
         mScene->addItem(sketchItem->getGraphicsItem());
         mCreatingItem = sketchItem;
         mCreatingLastPosition = point;
+        mModel->addGraphicalItem(mCreatingItem, mCurrentSketch);
 
     } else  if (mCurrentTool->getType() == Tool::Type::ELLIPSE) {
         SketchItemEllipse* sketchItem = new SketchItemEllipse(point.x(), point.y());
@@ -114,9 +115,9 @@ void MainWindow::onCanvasMousePressEvent(QPointF point)
         mScene->addItem(sketchItem->getGraphicsItem());
         mCreatingItem = sketchItem;
         mCreatingLastPosition = point;
+        mModel->addGraphicalItem(mCreatingItem, mCurrentSketch);
     }
 
-    mModel->addGraphicalItem(mCreatingItem, mCurrentSketch);
 }
 
 void MainWindow::onCanvasMouseMoveEvent(QPointF point)
