@@ -127,12 +127,7 @@ void SketchItemBezier::boundingBoxEvent(const BoundingBoxEvent& event)
     for (int i = 1; i < mElements.length(); i++) {
         BezierElement* element = mElements[i];
 
-        if (element->getElementType() == BezierElement::CONTROL_POINT) {
-            //continue;
-        }
-
         // Move to bounding box origin
-        // FIXME: p1 is not (0, 0) for the unmoved item !!
         QPointF p1 = element->getPos() - event.origin;
 
         // Apply scale factor
@@ -175,4 +170,45 @@ void SketchItemBezier::updateBoundingBoxBezierVisibility()
     for (auto p : mElements) {
         p->setVisible(bezierVisibility);
     }
+}
+
+QRectF SketchItemBezier::getBounds()
+{
+    QRectF bounds(0.0, 0.0, 0.0, 0.0);
+
+    if (mElements.length() <= 0) {
+        return bounds;
+    }
+
+    QPointF initValue = mElements[0]->getPos();
+    QPointF lower(initValue);
+    QPointF higher(initValue);
+
+    for (int i = 1; i < mElements.length(); i++) {
+        BezierElement* element = mElements[i];
+        QPointF position = element->getPos();
+
+        if (position.x() < lower.x()) {
+            lower.setX(position.x());
+        }
+
+        if (position.y() < lower.y()) {
+            lower.setY(position.y());
+        }
+
+        if (position.x() > higher.x()) {
+            higher.setX(position.x());
+        }
+
+        if (position.y() > higher.y()) {
+            higher.setY(position.y());
+        }
+    }
+
+    bounds.setX(lower.x());
+    bounds.setY(lower.y());
+    bounds.setWidth(higher.x() - lower.x());
+    bounds.setHeight(higher.y() - lower.y());
+
+    return bounds;
 }
