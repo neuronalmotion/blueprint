@@ -25,7 +25,7 @@ public:
     void boundingBoxEvent(const BoundingBoxEvent& event);
     void setIsSelected(bool isSelected);
     void setEditMode(EditMode mode);
-
+    QRectF getBounds();
 
 protected:
     void updateBoundingBoxBezierVisibility();

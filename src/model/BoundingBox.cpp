@@ -28,10 +28,7 @@ BoundingBox::~BoundingBox()
 
 void BoundingBox::updateRect(BoundingBoxPoint::TranslationDirection ignoredDirection)
 {
-    QRectF boundingRect = mParentSketchItem->getGraphicsItem()->boundingRect();
-    qreal marginAdjust = 10;
-    //boundingRect.adjust(-marginAdjust, -marginAdjust, marginAdjust, marginAdjust);
-    setRect(boundingRect);
+    QRectF boundingRect = mParentSketchItem->getBounds();
 
     qreal x;
     qreal y;
@@ -99,60 +96,61 @@ void BoundingBox::boundingBoxPointMoved(BoundingBoxPoint::TranslationDirection d
     QPointF handlePoint;
     QPointF origin;
 
-    qreal halfWidth = boundingRect().width() / 2.0f;
-    qreal halfHeight = boundingRect().height() / 2.0f;
+    QRectF bounds = mParentSketchItem->getBounds();
+    qreal halfWidth = bounds.width() / 2.0f;
+    qreal halfHeight = bounds.height() / 2.0f;
 
     switch (direction) {
 
         case BoundingBoxPoint::TOP_LEFT:
-            origin = boundingRect().bottomRight();
-            handlePoint = boundingRect().topLeft();
+            origin = bounds.bottomRight();
+            handlePoint = bounds.topLeft();
             break;
 
         case BoundingBoxPoint::TOP:
-            origin = boundingRect().bottomLeft();
+            origin = bounds.bottomLeft();
             origin.setX(origin.x() + halfWidth);
 
-            handlePoint = boundingRect().topLeft();
+            handlePoint = bounds.topLeft();
             handlePoint.setX(handlePoint.x() + halfWidth);
             break;
 
         case BoundingBoxPoint::TOP_RIGHT:
-            origin = boundingRect().bottomLeft();
-            handlePoint = boundingRect().topRight();
+            origin = bounds.bottomLeft();
+            handlePoint = bounds.topRight();
             break;
 
         case BoundingBoxPoint::RIGHT:
-            origin = boundingRect().topLeft();
+            origin = bounds.topLeft();
             origin.setY(origin.y() + halfHeight);
 
-            handlePoint = boundingRect().topRight();
+            handlePoint = bounds.topRight();
             handlePoint.setY( handlePoint.y() + halfHeight);
             break;
 
         case BoundingBoxPoint::BOTTOM_RIGHT:
-            origin = boundingRect().topLeft();
-            handlePoint = boundingRect().bottomRight();
+            origin = bounds.topLeft();
+            handlePoint = bounds.bottomRight();
             break;
 
         case BoundingBoxPoint::BOTTOM:
-            origin = boundingRect().topLeft();
+            origin = bounds.topLeft();
             origin.setX(origin.x() + halfWidth);
 
-            handlePoint = boundingRect().bottomLeft();
+            handlePoint = bounds.bottomLeft();
             handlePoint.setX(handlePoint.x() + halfWidth);
             break;
 
         case BoundingBoxPoint::BOTTOM_LEFT:
-            origin = boundingRect().topRight();
-            handlePoint = boundingRect().bottomLeft();
+            origin = bounds.topRight();
+            handlePoint = bounds.bottomLeft();
             break;
 
         case BoundingBoxPoint::LEFT:
-            origin = boundingRect().topRight();
+            origin = bounds.topRight();
             origin.setY(origin.y() + halfHeight);
 
-            handlePoint = boundingRect().topLeft();
+            handlePoint = bounds.topLeft();
             handlePoint.setY( handlePoint.y() + halfHeight);
             break;
 
