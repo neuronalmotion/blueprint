@@ -53,6 +53,12 @@ MainWindow::MainWindow(QWidget* parent) :
 
     mModel = new GraphicalModel(mCurrentBlueprint, this);
     mUi->treeView->setModel(mModel);
+
+    connect(mModel, &QAbstractItemModel::rowsInserted, [this](const QModelIndex& parent, int first, int last) {
+        GraphicalItem* parentItem = mModel->graphicalItemFromIndex(parent);
+        GraphicalItem* childItem = parentItem->child(first);
+        mUi->statusBar->showMessage(QString("Created item ") + childItem->name());
+    });
 }
 
 MainWindow::~MainWindow()
