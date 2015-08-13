@@ -30,11 +30,6 @@ void BoundingBox::updateRect(BoundingBoxPoint::TranslationDirection ignoredDirec
 {
     QRectF boundingRect = mParentSketchItem->getBounds();
 
-    // Uncomment that if you want a margin on boundingbox
-    //qreal marginAdjust = 10;
-    //boundingRect.adjust(-marginAdjust, -marginAdjust, marginAdjust, marginAdjust);
-    //setRect(boundingRect);
-
     qreal x;
     qreal y;
 
