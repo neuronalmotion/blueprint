@@ -54,6 +54,8 @@ MainWindow::MainWindow(QWidget* parent) :
     mModel = new GraphicalModel(mCurrentBlueprint, this);
     mUi->treeView->setModel(mModel);
 
+    // FIXME this code is so fragile that it should be deleted very quickly
+    // it works only if the parent Canvas is selected in the treeview...
     connect(mModel, &QAbstractItemModel::rowsInserted, [this](const QModelIndex& parent, int first, int last) {
         GraphicalItem* parentItem = mModel->graphicalItemFromIndex(parent);
         GraphicalItem* childItem = parentItem->child(first);
