@@ -42,13 +42,12 @@ MainWindow::MainWindow(QWidget* parent) :
     mCurrentBlueprint = new Blueprint();
     mCurrentBlueprint->setName("Blueprint");
 
-
     Page* p1 = new Page(mCurrentBlueprint);
     p1->setName("Page 1");
     mCurrentBlueprint->appendChild(p1);
 
     Sketch* s1 = new Sketch(p1);
-    s1->setName("Sketch1");
+    s1->setName("Canvas 1");
     p1->appendChild(s1);
     mCurrentSketch = s1;
 
@@ -103,7 +102,8 @@ void MainWindow::onCanvasMousePressEvent(QPointF point)
         mScene->addItem(sketchItem->getGraphicsItem());
         mCreatingItem = sketchItem;
         mCreatingLastPosition = point;
-        mModel->addGraphicalItem(mCreatingItem, mCurrentSketch);
+        QModelIndex index = mUi->treeView->selectionModel()->currentIndex();
+        mModel->addGraphicalItem(mCreatingItem, mCurrentSketch, index);
 
     } else  if (mCurrentTool->getType() == Tool::Type::ELLIPSE) {
         SketchItemEllipse* sketchItem = new SketchItemEllipse(point.x(), point.y());
@@ -115,7 +115,8 @@ void MainWindow::onCanvasMousePressEvent(QPointF point)
         mScene->addItem(sketchItem->getGraphicsItem());
         mCreatingItem = sketchItem;
         mCreatingLastPosition = point;
-        mModel->addGraphicalItem(mCreatingItem, mCurrentSketch);
+        QModelIndex index = mUi->treeView->selectionModel()->currentIndex();
+        mModel->addGraphicalItem(mCreatingItem, mCurrentSketch, index);
     }
 
 }

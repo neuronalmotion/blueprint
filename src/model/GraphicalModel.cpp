@@ -13,13 +13,16 @@ GraphicalModel::~GraphicalModel()
     delete mRootItem;
 }
 
-void GraphicalModel::addGraphicalItem(GraphicalItem* item, GraphicalItem* parent)
+void GraphicalModel::addGraphicalItem(GraphicalItem* item, GraphicalItem* parent, const QModelIndex& parentIndex)
 {
     if (!parent) {
         parent = mRootItem;
     }
+    int childRow = parent->childCount();
+    beginInsertRows(parentIndex, childRow, childRow);
     item->setParent(parent);
     parent->appendChild(item);
+    endInsertRows();
 }
 
 QVariant GraphicalModel::data(const QModelIndex& index, int role) const
@@ -83,6 +86,26 @@ int GraphicalModel::columnCount(const QModelIndex& parent) const
     return 1;
 }
 
+bool GraphicalModel::setData(const QModelIndex& index, const QVariant& value, int role)
+{
+    if (role != Qt::EditRole) {
+        return false;
+    }
+
+    GraphicalItem* item = graphicalItemFromIndex(index);
+    item->setName(value.toString());
+    emit dataChanged(index, index);
+    return true;
+}
+
+Qt::ItemFlags GraphicalModel::flags(const QModelIndex& index) const
+{
+    if (!index.isValid()) {
+        return 0;
+    }
+    return Qt::ItemIsEditable | QAbstractItemModel::flags(index);
+}
+
 GraphicalItem* GraphicalModel::graphicalItemFromIndex(const QModelIndex& index) const
 {
     if (index.isValid()) {
@@ -91,4 +114,3 @@ GraphicalItem* GraphicalModel::graphicalItemFromIndex(const QModelIndex& index) 
         return mRootItem;
     }
 }
-
