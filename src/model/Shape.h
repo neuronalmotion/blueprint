@@ -28,6 +28,7 @@ public:
     Shape(GraphicalItem* parentItem);
     virtual ~Shape();
 
+    virtual QGraphicsItem* getGraphicsItem() = 0;
     virtual void setIsSelected(bool isSelected) { }
     virtual void setEditMode(EditMode mode);
     virtual void boundingBoxEvent(const BoundingBoxEvent& event) = 0;

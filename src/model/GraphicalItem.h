@@ -5,11 +5,23 @@
 #include <QList>
 #include <QPointF>
 #include <QString>
+#include <QPersistentModelIndex>
+#include <QModelIndex>
+
 
 class GraphicalItem
 {
 public:
-    explicit GraphicalItem(GraphicalItem* parentItem = 0);
+
+    enum GraphicalType {
+        // General types
+        BLUEPRINT,
+        PAGE,
+        CANVAS,
+        SHAPE,
+    };
+
+    explicit GraphicalItem(const GraphicalType& graphicalType, GraphicalItem* parentItem = 0);
     ~GraphicalItem();
 
     virtual QGraphicsItem* getGraphicsItem() { return nullptr; }
@@ -20,17 +32,23 @@ public:
     int childCount() const;
     int columnCount() const;
     int row() const;
-    GraphicalItem* parentItem();
 
-    QString name() const;
-    void setName(const QString& name);
+    inline QString name() const { return mName; }
+    inline void setName(const QString& name) { mName = name; }
+    inline GraphicalType graphicalType() const { return mGraphicalType; }
+    inline GraphicalItem* parentItem() const {return mParentItem; }
+    inline void setParent(GraphicalItem* parentItem) { mParentItem = parentItem; }
+    inline QPersistentModelIndex* modelIndex() const { return mModelIndex; }
+    inline void setModelIndex(const QModelIndex& index) { mModelIndex = new QPersistentModelIndex(index); }
 
-    void setParent(GraphicalItem* parentItem);
-
+    virtual inline void setSelected(bool selected) { mIsSelected = selected; }
 protected:
     QString mName;
+    GraphicalType mGraphicalType;
     QList<GraphicalItem*> mChildItems;
     GraphicalItem* mParentItem;
+    QPersistentModelIndex* mModelIndex;
+    bool mIsSelected;
 };
 
 #endif // GRAPHICALITEM_H

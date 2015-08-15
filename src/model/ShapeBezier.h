@@ -23,7 +23,8 @@ public:
     void closePath();
     void updateElement(BezierElement* bezierElement, const QPointF& pos);
     void boundingBoxEvent(const BoundingBoxEvent& event);
-    void setIsSelected(bool isSelected);
+
+    void setSelected(bool selected) override;
     void setEditMode(EditMode mode);
     QRectF getBounds();
     void setBackgroundColor(QColor color);
@@ -39,7 +40,6 @@ protected:
     BoundingBox* mBoundingBox;
 
     bool mIsPathClosed;
-    bool mIsSelected;
 };
 
 #endif // SHAPEBEZIER_H

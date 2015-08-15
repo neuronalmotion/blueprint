@@ -3,7 +3,7 @@
 #include "Canvas.h"
 
 Page::Page(GraphicalItem* parentItem)
-    : GraphicalItem(parentItem)
+    : GraphicalItem(GraphicalType::PAGE, parentItem)
 {
 
 }
