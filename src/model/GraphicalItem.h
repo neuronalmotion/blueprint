@@ -1,6 +1,7 @@
 #ifndef GRAPHICALITEM_H
 #define GRAPHICALITEM_H
 
+#include <QGraphicsItem>
 #include <QList>
 #include <QPointF>
 #include <QString>
@@ -10,6 +11,8 @@ class GraphicalItem
 public:
     explicit GraphicalItem(GraphicalItem* parentItem = 0);
     ~GraphicalItem();
+
+    virtual QGraphicsItem* getGraphicsItem() { return nullptr; }
 
     void appendChild(GraphicalItem* child);
 

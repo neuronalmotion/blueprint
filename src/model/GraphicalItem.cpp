@@ -7,6 +7,14 @@ GraphicalItem::GraphicalItem(GraphicalItem* parentItem)
 {
     static int id = 1;
     mName = QString("GraphicalItem #%1").arg(id++);
+
+    if (parentItem != nullptr) {
+        QGraphicsItem* parentGraphicsItem = parentItem->getGraphicsItem();
+        QGraphicsItem* graphicsItem = getGraphicsItem();
+        if (parentGraphicsItem != nullptr && graphicsItem != nullptr) {
+            graphicsItem->setParentItem(parentGraphicsItem);
+        }
+    }
 }
 
 GraphicalItem::~GraphicalItem()
@@ -17,6 +25,12 @@ GraphicalItem::~GraphicalItem()
 void GraphicalItem::appendChild(GraphicalItem* child)
 {
     mChildItems.append(child);
+
+    QGraphicsItem* childGraphicsItem = child->getGraphicsItem();
+    QGraphicsItem* graphicsItem = getGraphicsItem();
+    if (childGraphicsItem != nullptr && graphicsItem != nullptr) {
+        childGraphicsItem->setParentItem(graphicsItem);
+    }
 }
 
 GraphicalItem*GraphicalItem::child(int row)
