@@ -3,7 +3,7 @@
 #include <QDebug>
 
 SketchItem::SketchItem(GraphicalItem* parentItem)
-    : GraphicalItem(parentItem),
+    : GraphicalItem(GraphicalType::SHAPE, parentItem),
     mEditMode(EditMode::BOUNDING_BOX)
 {
 

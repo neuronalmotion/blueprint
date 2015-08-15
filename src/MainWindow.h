@@ -39,6 +39,7 @@ private slots:
 
 private:
     void initToolbar();
+    void selectGraphicalItem(GraphicalItem* item);
 
 private:
     Ui::MainWindow* mUi;
@@ -50,7 +51,7 @@ private:
     QList<Tool*> mTools;
     SketchItem* mCreatingItem;
     QPointF mCreatingLastPosition;
-    SketchItem* mSelectedSketchItem;
+    GraphicalItem* mSelectedGraphicalItem;
 };
 
 #endif // MAINWINDOW_H

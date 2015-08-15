@@ -3,7 +3,7 @@
 #include "Sketch.h"
 
 Page::Page(GraphicalItem* parentItem)
-    : GraphicalItem(parentItem)
+    : GraphicalItem(GraphicalType::PAGE, parentItem)
 {
 
 }

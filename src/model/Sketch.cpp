@@ -3,7 +3,7 @@
 #include "SketchItem.h"
 
 Sketch::Sketch(GraphicalItem* parentItem)
-    : GraphicalItem(parentItem)
+    : GraphicalItem(GraphicalType::CANVAS, parentItem)
 {
 
 }
