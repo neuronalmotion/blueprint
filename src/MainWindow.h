@@ -45,12 +45,12 @@ private:
     QGraphicsScene* mScene;
     Blueprint* mCurrentBlueprint;
     GraphicalModel* mModel;
-    Canvas* mCurrentSketch;
+    Canvas* mCurrentCanvas;
     Tool* mCurrentTool;
     QList<Tool*> mTools;
-    Shape* mCreatingItem;
+    Shape* mCreatingShape;
     QPointF mCreatingLastPosition;
-    Shape* mSelectedSketchItem;
+    Shape* mSelectedShape;
 };
 
 #endif // MAINWINDOW_H

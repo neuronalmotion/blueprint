@@ -25,7 +25,7 @@ ShapeBezier::ShapeBezier(qreal x, qreal y)
     mItem->setFlag(QGraphicsItem::ItemIsSelectable);
     mItem->setFlag(QGraphicsItem::ItemIsFocusable);
 
-    mItem->setData(Shape::Type::SKETCH_ITEM_BEZIER, qVariantFromValue(static_cast<void *>(this)));
+    mItem->setData(Shape::Type::SHAPE_BEZIER, qVariantFromValue(static_cast<void *>(this)));
     mItem->setPos(x, y);
 
     mBoundingBox->setVisible(false);

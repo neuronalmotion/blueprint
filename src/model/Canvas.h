@@ -3,11 +3,12 @@
 
 #include <QList>
 
+#include "model/ShapeRectangle.h"
 #include "model/GraphicalItem.h"
 
 class Shape;
 
-class Canvas : public GraphicalItem
+class Canvas : public ShapeRectangle
 {
 public:
     Canvas(GraphicalItem* parentItem = 0);
