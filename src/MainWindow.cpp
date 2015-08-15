@@ -210,6 +210,8 @@ void MainWindow::onFocusItemChanged(QGraphicsItem* newFocusItem, QGraphicsItem* 
     if (sketchItemBezier != nullptr) {
         mSelectedGraphicalItem = sketchItemBezier;
         mSelectedGraphicalItem->setSelected(true);
+        mUi->treeView->selectionModel()->select(*mSelectedGraphicalItem->modelIndex(),
+                                                QItemSelectionModel::ClearAndSelect);
         qDebug() << "Focus item is now " << mSelectedGraphicalItem->name();
         return;
     }
