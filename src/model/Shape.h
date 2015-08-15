@@ -24,7 +24,7 @@ public:
         BEZIER
     };
 
-    Shape(GraphicalItem* parentItem = 0);
+    Shape(GraphicalItem* parentItem);
     virtual ~Shape();
 
     virtual QGraphicsItem* getGraphicsItem() = 0;
@@ -32,6 +32,8 @@ public:
     virtual void setEditMode(EditMode mode);
     virtual void boundingBoxEvent(const BoundingBoxEvent& event) = 0;
     virtual QRectF getBounds() { getGraphicsItem()->boundingRect(); }
+    virtual void setBackgroundColor(QColor color) { }
+    virtual void setBorderColor(QColor color) { }
 
 protected:
     EditMode mEditMode;

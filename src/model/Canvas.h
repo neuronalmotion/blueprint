@@ -11,7 +11,7 @@ class Shape;
 class Canvas : public ShapeRectangle
 {
 public:
-    Canvas(GraphicalItem* parentItem = 0);
+    Canvas(GraphicalItem* parentItem, qreal x, qreal y);
     ~Canvas();
 
 };

@@ -10,8 +10,8 @@ static const uint RIGHT_INDEX   = 3;
 static const uint BOTTOM_INDEX  = 6;
 static const uint LEFT_INDEX    = 9;
 
-ShapeEllipse::ShapeEllipse(qreal x, qreal y)
-    : ShapeBezier(x, y)
+ShapeEllipse::ShapeEllipse(GraphicalItem* parentItem, qreal x, qreal y)
+    : ShapeBezier(parentItem, x, y)
 {
     addPath(QPointF(30, 0), QPointF(50, 20), QPointF(50, 50));
     addPath(QPointF(50, 80), QPointF(30, 100), QPointF(0, 100));

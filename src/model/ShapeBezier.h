@@ -16,7 +16,7 @@ class BezierPath;
 class ShapeBezier : public Shape
 {
 public:
-    ShapeBezier(qreal x, qreal y);
+    ShapeBezier(GraphicalItem* parentItem, qreal x, qreal y);
     ~ShapeBezier();
     virtual QGraphicsItem* getGraphicsItem();
     void addPath(const QPointF& c1, const QPointF& c2, const QPointF& endPos);
@@ -26,6 +26,8 @@ public:
     void setIsSelected(bool isSelected);
     void setEditMode(EditMode mode);
     QRectF getBounds();
+    void setBackgroundColor(QColor color);
+    void setBorderColor(QColor color);
 
 protected:
     void updateBoundingBoxBezierVisibility();

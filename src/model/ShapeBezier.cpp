@@ -8,8 +8,8 @@
 #include "BezierControlPoint.h"
 #include "BezierPoint.h"
 
-ShapeBezier::ShapeBezier(qreal x, qreal y)
-    : Shape(),
+ShapeBezier::ShapeBezier(GraphicalItem* parentItem, qreal x, qreal y)
+    : Shape(parentItem),
       mItem(new QGraphicsPathItem),
       mPath(),
       mElements(),
@@ -211,4 +211,14 @@ QRectF ShapeBezier::getBounds()
     bounds.setHeight(higher.y() - lower.y());
 
     return bounds;
+}
+
+void ShapeBezier::setBackgroundColor(QColor color)
+{
+    mItem->setBrush(QBrush(color));
+}
+
+void ShapeBezier::setBorderColor(QColor color)
+{
+    mItem->setPen(QPen(color, 1, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
 }

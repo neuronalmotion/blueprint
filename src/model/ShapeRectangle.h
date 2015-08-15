@@ -7,7 +7,7 @@
 class ShapeRectangle : public ShapeBezier
 {
 public:
-    ShapeRectangle(qreal x, qreal y);
+    ShapeRectangle(GraphicalItem* parentItem, qreal x, qreal y);
 
 };
 

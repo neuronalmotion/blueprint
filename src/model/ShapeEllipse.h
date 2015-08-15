@@ -7,7 +7,7 @@
 class ShapeEllipse : public ShapeBezier
 {
 public:
-    ShapeEllipse(qreal x, qreal y);
+    ShapeEllipse(GraphicalItem* parentItem, qreal x, qreal y);
     ~ShapeEllipse();
 
 };

@@ -2,8 +2,8 @@
 
 #include "Shape.h"
 
-Canvas::Canvas(GraphicalItem* parentItem)
-    : GraphicalItem(parentItem)
+Canvas::Canvas(GraphicalItem* parentItem, qreal x, qreal y)
+    : ShapeRectangle(parentItem, x, y)
 {
 
 }

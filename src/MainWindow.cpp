@@ -46,8 +46,11 @@ MainWindow::MainWindow(QWidget* parent) :
     p1->setName("Page 1");
     mCurrentBlueprint->appendChild(p1);
 
-    Canvas* c1 = new Canvas(p1);
+    Canvas* c1 = new Canvas(p1, 0, 0);
     c1->setName("Canvas 1");
+    c1->setBorderColor(QColor(10, 10, 10));
+    c1->setBackgroundColor(QColor(225, 225, 225));
+    mScene->addItem(c1->getGraphicsItem());
     p1->appendChild(c1);
     mCurrentCanvas = c1;
 
@@ -103,7 +106,7 @@ void MainWindow::onCanvasMousePressEvent(QPointF point)
     static uint id = 0;
 
     if (mCurrentTool->getType() == Tool::Type::RECTANGLE) {
-        ShapeRectangle* shape = new ShapeRectangle(point.x(), point.y());
+        ShapeRectangle* shape = new ShapeRectangle(mCurrentCanvas, point.x(), point.y());
         //sketchItem->boundBoxPointMoved(BoundingBoxPoint::BOTTOM_RIGHT, QPointF(-100.0f, -50.0f));
         shape->setName(QString("Rectangle #%1").arg(id++));
 
@@ -114,7 +117,7 @@ void MainWindow::onCanvasMousePressEvent(QPointF point)
         mModel->addGraphicalItem(mCreatingShape, mCurrentCanvas, index);
 
     } else  if (mCurrentTool->getType() == Tool::Type::ELLIPSE) {
-        ShapeEllipse* shape = new ShapeEllipse(point.x(), point.y());
+        ShapeEllipse* shape = new ShapeEllipse(mCurrentCanvas, point.x(), point.y());
         //sketchItem->boundBoxPointMoved(BoundingBoxPoint::BOTTOM, QPointF(0.0f, -100.0f));
         //sketchItem->boundBoxPointMoved(BoundingBoxPoint::RIGHT, QPointF(-50.0f, 0.0f));
         //sketchItem->boundBoxPointMoved(BoundingBoxPoint::LEFT, QPointF(50.0f, 0.0f));
