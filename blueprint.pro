@@ -17,14 +17,14 @@ SOURCES += src/main.cpp\
     src/model/BezierControlPoint.cpp \
     src/model/BezierPoint.cpp \
     src/model/Page.cpp \
-    src/model/Sketch.cpp \
     src/model/Blueprint.cpp \
     src/model/BezierElement.cpp \
     src/model/SketchItemRectangle.cpp \
     src/model/BoundingBox.cpp \
     src/model/BoundingBoxPoint.cpp \
     src/model/GraphicalItem.cpp \
-    src/model/GraphicalModel.cpp
+    src/model/GraphicalModel.cpp \
+    src/model/Canvas.cpp
 
 HEADERS  += src/MainWindow.h \
     src/CanvasView.h \
@@ -35,13 +35,13 @@ HEADERS  += src/MainWindow.h \
     src/model/BezierControlPoint.h \
     src/model/BezierPoint.h \
     src/model/Page.h \
-    src/model/Sketch.h \
     src/model/Blueprint.h \
     src/model/BezierElement.h \
     src/model/SketchItemRectangle.h \
     src/model/BoundingBox.h \
     src/model/BoundingBoxPoint.h \
     src/model/GraphicalItem.h \
-    src/model/GraphicalModel.h
+    src/model/GraphicalModel.h \
+    src/model/Canvas.h
 
 FORMS    += src/MainWindow.ui

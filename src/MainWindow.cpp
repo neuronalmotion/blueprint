@@ -8,7 +8,7 @@
 #include "CanvasView.h"
 #include "model/Blueprint.h"
 #include "model/Page.h"
-#include "model/Sketch.h"
+#include "model/Canvas.h"
 #include "model/SketchItemBezier.h"
 #include "model/SketchItemRectangle.h"
 #include "model/SketchItemEllipse.h"
@@ -46,7 +46,7 @@ MainWindow::MainWindow(QWidget* parent) :
     p1->setName("Page 1");
     mCurrentBlueprint->appendChild(p1);
 
-    Sketch* s1 = new Sketch(p1);
+    Canvas* s1 = new Canvas(p1);
     s1->setName("Canvas 1");
     p1->appendChild(s1);
     mCurrentSketch = s1;
