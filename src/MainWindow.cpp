@@ -121,19 +121,6 @@ void MainWindow::selectGraphicalItem(GraphicalItem* item)
     item->setSelected(true);
     mSelectedGraphicalItem = item;
     qDebug() << "Selected item " << mSelectedGraphicalItem->name();
-
-    /*
-    if (item == mSelectedShape) {
-        return;
-    }
-    if (mSelectedGraphicalItem) {
-        mSelectedGraphicalItem->setSelected(false);
-    }
-    mScene->clearFocus();
-    item->setSelected(true);
-    mSelectedGraphicalItem = item;
-    qDebug() << "Selected item " << mSelectedGraphicalItem->name();
-    */
 }
 
 void MainWindow::setTool(Tool::Type toolType)
