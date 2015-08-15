@@ -111,6 +111,17 @@ void MainWindow::initToolbar()
 
 void MainWindow::selectGraphicalItem(GraphicalItem* item)
 {
+    if (item == mSelectedGraphicalItem) {
+       return;
+    }
+    if (mSelectedGraphicalItem) {
+       mSelectedGraphicalItem->setSelected(false);
+    }
+    mScene->clearFocus();
+    item->setSelected(true);
+    mSelectedGraphicalItem = item;
+    qDebug() << "Selected item " << mSelectedGraphicalItem->name();
+
     /*
     if (item == mSelectedShape) {
         return;
