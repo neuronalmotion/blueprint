@@ -4,7 +4,7 @@
 #include <QVariant>
 #include <QGraphicsItem>
 
-class SketchItemBezier;
+class ShapeBezier;
 
 class BezierElement
 {
@@ -15,7 +15,7 @@ public:
         CONTROL_POINT
     };
 
-    BezierElement(ElementType elementType, SketchItemBezier* parent, const int index);
+    BezierElement(ElementType elementType, ShapeBezier* parent, const int index);
     virtual ~BezierElement();
 
     virtual QPointF getPos() = 0;
@@ -25,14 +25,14 @@ public:
 
     inline ElementType getElementType() const { return mElementType; }
     inline int getIndex() const { return mIndex; }
-    inline SketchItemBezier* getParentSketchItemBezier(){ return mParent; }
+    inline ShapeBezier* getParentSketchItemBezier(){ return mParent; }
 
 protected:
     void propagateItemChange(QGraphicsItem::GraphicsItemChange change, const QVariant& value);
 
 protected:
     ElementType mElementType;
-    SketchItemBezier* mParent;
+    ShapeBezier* mParent;
     int mIndex;
 };
 

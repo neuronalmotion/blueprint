@@ -6,12 +6,12 @@
 #include "BezierElement.h"
 
 
-class SketchItemBezier;
+class ShapeBezier;
 
 class BezierControlPoint : public BezierElement, public QGraphicsRectItem
 {
 public:
-    BezierControlPoint(SketchItemBezier* parent, const int index);
+    BezierControlPoint(ShapeBezier* parent, const int index);
     ~BezierControlPoint();
 
     QPointF getPos();

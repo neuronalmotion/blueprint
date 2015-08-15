@@ -2,9 +2,9 @@
 
 #include <QPen>
 
-#include "SketchItemBezier.h"
+#include "ShapeBezier.h"
 
-BezierPoint::BezierPoint(SketchItemBezier* parent, const int index)
+BezierPoint::BezierPoint(ShapeBezier* parent, const int index)
     : BezierElement(ElementType::POINT, parent, index),
     QGraphicsEllipseItem(parent->getGraphicsItem())
 {
@@ -17,7 +17,7 @@ BezierPoint::BezierPoint(SketchItemBezier* parent, const int index)
     int rectSize = 10;
     setRect(-rectSize/2, -rectSize/2, rectSize, rectSize);
     setVisible(false);
-    setData(SketchItem::Type::BEZIER_POINT, qVariantFromValue(static_cast<void *>(this)));
+    setData(Shape::Type::BEZIER_POINT, qVariantFromValue(static_cast<void *>(this)));
 }
 
 BezierPoint::~BezierPoint()

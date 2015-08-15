@@ -5,7 +5,7 @@
 
 #include "model/GraphicalItem.h"
 
-class SketchItem;
+class Shape;
 
 class Canvas : public GraphicalItem
 {

@@ -1,4 +1,4 @@
-#include "SketchItemBezier.h"
+#include "ShapeBezier.h"
 
 #include <QDebug>
 #include <QPainterPath>
@@ -8,8 +8,8 @@
 #include "BezierControlPoint.h"
 #include "BezierPoint.h"
 
-SketchItemBezier::SketchItemBezier(qreal x, qreal y)
-    : SketchItem(),
+ShapeBezier::ShapeBezier(qreal x, qreal y)
+    : Shape(),
       mItem(new QGraphicsPathItem),
       mPath(),
       mElements(),
@@ -25,7 +25,7 @@ SketchItemBezier::SketchItemBezier(qreal x, qreal y)
     mItem->setFlag(QGraphicsItem::ItemIsSelectable);
     mItem->setFlag(QGraphicsItem::ItemIsFocusable);
 
-    mItem->setData(SketchItem::Type::SKETCH_ITEM_BEZIER, qVariantFromValue(static_cast<void *>(this)));
+    mItem->setData(Shape::Type::SKETCH_ITEM_BEZIER, qVariantFromValue(static_cast<void *>(this)));
     mItem->setPos(x, y);
 
     mBoundingBox->setVisible(false);
@@ -33,7 +33,7 @@ SketchItemBezier::SketchItemBezier(qreal x, qreal y)
 
 }
 
-SketchItemBezier::~SketchItemBezier()
+ShapeBezier::~ShapeBezier()
 {
     delete mItem;
     for (auto p : mElements) {
@@ -43,12 +43,12 @@ SketchItemBezier::~SketchItemBezier()
     mElements.clear();
 }
 
-QGraphicsItem* SketchItemBezier::getGraphicsItem()
+QGraphicsItem* ShapeBezier::getGraphicsItem()
 {
     return mItem;
 }
 
-void SketchItemBezier::addPath(const QPointF& c1, const QPointF& c2, const QPointF& endPos)
+void ShapeBezier::addPath(const QPointF& c1, const QPointF& c2, const QPointF& endPos)
 {
     qDebug() << "Adding path: " << mPath.currentPosition()
              << "=>" << endPos
@@ -79,14 +79,14 @@ void SketchItemBezier::addPath(const QPointF& c1, const QPointF& c2, const QPoin
     mItem->setPath(mPath);
 }
 
-void SketchItemBezier::closePath()
+void ShapeBezier::closePath()
 {
     qDebug() << "Closing path";
     mIsPathClosed = true;
     mPath.closeSubpath();
 }
 
-void SketchItemBezier::updateElement(BezierElement* bezierElement, const QPointF& pos)
+void ShapeBezier::updateElement(BezierElement* bezierElement, const QPointF& pos)
 {
     int listIndex = mElements.indexOf(bezierElement);
     QPointF delta = pos - bezierElement->getPos();
@@ -122,7 +122,7 @@ void SketchItemBezier::updateElement(BezierElement* bezierElement, const QPointF
     mBoundingBox->updateRect();
 }
 
-void SketchItemBezier::boundingBoxEvent(const BoundingBoxEvent& event)
+void ShapeBezier::boundingBoxEvent(const BoundingBoxEvent& event)
 {
     for (int i = 1; i < mElements.length(); i++) {
         BezierElement* element = mElements[i];
@@ -141,7 +141,7 @@ void SketchItemBezier::boundingBoxEvent(const BoundingBoxEvent& event)
     }
 }
 
-void SketchItemBezier::setIsSelected(bool isSelected)
+void ShapeBezier::setIsSelected(bool isSelected)
 {
     mIsSelected = isSelected;
     qDebug() << "mIsSelected : " << mIsSelected;
@@ -149,7 +149,7 @@ void SketchItemBezier::setIsSelected(bool isSelected)
     updateBoundingBoxBezierVisibility();
 }
 
-void SketchItemBezier::setEditMode(EditMode mode)
+void ShapeBezier::setEditMode(EditMode mode)
 {
     mEditMode = mode;
     qDebug() << "mEditMode : " << mEditMode;
@@ -157,7 +157,7 @@ void SketchItemBezier::setEditMode(EditMode mode)
     updateBoundingBoxBezierVisibility();
 }
 
-void SketchItemBezier::updateBoundingBoxBezierVisibility()
+void ShapeBezier::updateBoundingBoxBezierVisibility()
 {
     // Update bounding box visibility
     bool boundingboxVisibility = mIsSelected && mEditMode == EditMode::BOUNDING_BOX;
@@ -172,7 +172,7 @@ void SketchItemBezier::updateBoundingBoxBezierVisibility()
     }
 }
 
-QRectF SketchItemBezier::getBounds()
+QRectF ShapeBezier::getBounds()
 {
     QRectF bounds(0.0, 0.0, 0.0, 0.0);
 

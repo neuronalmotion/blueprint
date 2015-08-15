@@ -1,4 +1,4 @@
-#include "SketchItemEllipse.h"
+#include "ShapeEllipse.h"
 
 #include <QDebug>
 #include <QGraphicsEllipseItem>
@@ -10,8 +10,8 @@ static const uint RIGHT_INDEX   = 3;
 static const uint BOTTOM_INDEX  = 6;
 static const uint LEFT_INDEX    = 9;
 
-SketchItemEllipse::SketchItemEllipse(qreal x, qreal y)
-    : SketchItemBezier(x, y)
+ShapeEllipse::ShapeEllipse(qreal x, qreal y)
+    : ShapeBezier(x, y)
 {
     addPath(QPointF(30, 0), QPointF(50, 20), QPointF(50, 50));
     addPath(QPointF(50, 80), QPointF(30, 100), QPointF(0, 100));
@@ -21,7 +21,7 @@ SketchItemEllipse::SketchItemEllipse(qreal x, qreal y)
     mBoundingBox->updateRect();
 }
 
-SketchItemEllipse::~SketchItemEllipse()
+ShapeEllipse::~ShapeEllipse()
 {
 
 }

@@ -9,9 +9,9 @@
 #include "model/Blueprint.h"
 #include "model/Page.h"
 #include "model/Canvas.h"
-#include "model/SketchItemBezier.h"
-#include "model/SketchItemRectangle.h"
-#include "model/SketchItemEllipse.h"
+#include "model/ShapeBezier.h"
+#include "model/ShapeRectangle.h"
+#include "model/ShapeEllipse.h"
 #include "model/BezierPoint.h"
 #include "model/BezierControlPoint.h"
 #include "model/GraphicalItem.h"
@@ -103,7 +103,7 @@ void MainWindow::onCanvasMousePressEvent(QPointF point)
     static uint id = 0;
 
     if (mCurrentTool->getType() == Tool::Type::RECTANGLE) {
-        SketchItemRectangle* sketchItem = new SketchItemRectangle(point.x(), point.y());
+        ShapeRectangle* sketchItem = new ShapeRectangle(point.x(), point.y());
         //sketchItem->boundBoxPointMoved(BoundingBoxPoint::BOTTOM_RIGHT, QPointF(-100.0f, -50.0f));
         sketchItem->setName(QString("Rectangle #%1").arg(id++));
 
@@ -114,7 +114,7 @@ void MainWindow::onCanvasMousePressEvent(QPointF point)
         mModel->addGraphicalItem(mCreatingItem, mCurrentSketch, index);
 
     } else  if (mCurrentTool->getType() == Tool::Type::ELLIPSE) {
-        SketchItemEllipse* sketchItem = new SketchItemEllipse(point.x(), point.y());
+        ShapeEllipse* sketchItem = new ShapeEllipse(point.x(), point.y());
         //sketchItem->boundBoxPointMoved(BoundingBoxPoint::BOTTOM, QPointF(0.0f, -100.0f));
         //sketchItem->boundBoxPointMoved(BoundingBoxPoint::RIGHT, QPointF(-50.0f, 0.0f));
         //sketchItem->boundBoxPointMoved(BoundingBoxPoint::LEFT, QPointF(50.0f, 0.0f));
@@ -155,8 +155,8 @@ void MainWindow::onFocusItemChanged(QGraphicsItem* newFocusItem, QGraphicsItem* 
     }
 
     // SKETCH_ITEM_BEZIER
-    itemVariant = newFocusItem->data(SketchItem::Type::SKETCH_ITEM_BEZIER);
-    SketchItemBezier* sketchItemBezier = static_cast<SketchItemBezier*>(itemVariant.value<void *>());
+    itemVariant = newFocusItem->data(Shape::Type::SKETCH_ITEM_BEZIER);
+    ShapeBezier* sketchItemBezier = static_cast<ShapeBezier*>(itemVariant.value<void *>());
     if (sketchItemBezier != nullptr) {
         mSelectedSketchItem = sketchItemBezier;
 
@@ -167,7 +167,7 @@ void MainWindow::onFocusItemChanged(QGraphicsItem* newFocusItem, QGraphicsItem* 
     }
 
     // BOUNDING_BOX_POINT
-    itemVariant = newFocusItem->data(SketchItem::Type::BOUNDING_BOX_POINT);
+    itemVariant = newFocusItem->data(Shape::Type::BOUNDING_BOX_POINT);
     BoundingBoxPoint* boundingBoxPoint = static_cast<BoundingBoxPoint*>(itemVariant.value<void *>());
     if (boundingBoxPoint != nullptr) {
         mSelectedSketchItem = boundingBoxPoint->getParentBoundingBox()->getParentSketchItem();
@@ -176,7 +176,7 @@ void MainWindow::onFocusItemChanged(QGraphicsItem* newFocusItem, QGraphicsItem* 
     }
 
     // BEZIER_POINT
-    itemVariant = newFocusItem->data(SketchItem::Type::BEZIER_POINT);
+    itemVariant = newFocusItem->data(Shape::Type::BEZIER_POINT);
     BezierPoint* bezierPoint = static_cast<BezierPoint*>(itemVariant.value<void *>());
     if (bezierPoint != nullptr) {
         mSelectedSketchItem = bezierPoint->getParentSketchItemBezier();
@@ -185,7 +185,7 @@ void MainWindow::onFocusItemChanged(QGraphicsItem* newFocusItem, QGraphicsItem* 
     }
 
     // BEZIER_CONTROL_POINT
-    itemVariant = newFocusItem->data(SketchItem::Type::BEZIER_CONTROL_POINT);
+    itemVariant = newFocusItem->data(Shape::Type::BEZIER_CONTROL_POINT);
     BezierControlPoint* bezierControlPoint = static_cast<BezierControlPoint*>(itemVariant.value<void *>());
     if (bezierControlPoint != nullptr) {
         mSelectedSketchItem = bezierControlPoint->getParentSketchItemBezier();
@@ -199,9 +199,9 @@ void MainWindow::onCanvasKeyPressEvent(QKeyEvent *event)
     if (event->key() == Qt::Key_Space) {
 
         if (mSelectedSketchItem != nullptr) {
-            SketchItemBezier* sketchItemBezier = dynamic_cast<SketchItemBezier*>(mSelectedSketchItem);
+            ShapeBezier* sketchItemBezier = dynamic_cast<ShapeBezier*>(mSelectedSketchItem);
             if (sketchItemBezier){
-                sketchItemBezier->setEditMode(SketchItem::EditMode::BEZIER);
+                sketchItemBezier->setEditMode(Shape::EditMode::BEZIER);
             }
         }
     }
@@ -210,9 +210,9 @@ void MainWindow::onCanvasKeyPressEvent(QKeyEvent *event)
 void MainWindow::onCanvasKeyReleaseEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Space) {
-        SketchItemBezier* sketchItemBezier = dynamic_cast<SketchItemBezier*>(mSelectedSketchItem);
+        ShapeBezier* sketchItemBezier = dynamic_cast<ShapeBezier*>(mSelectedSketchItem);
         if (sketchItemBezier){
-            sketchItemBezier->setEditMode(SketchItem::EditMode::BOUNDING_BOX);
+            sketchItemBezier->setEditMode(Shape::EditMode::BOUNDING_BOX);
         }
     }
 }

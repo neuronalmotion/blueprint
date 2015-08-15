@@ -1,7 +1,7 @@
-#ifndef SKETCHITEMBEZIER_H
-#define SKETCHITEMBEZIER_H
+#ifndef SHAPEBEZIER_H
+#define SHAPEBEZIER_H
 
-#include "SketchItem.h"
+#include "Shape.h"
 
 #include <QList>
 #include <QGraphicsPathItem>
@@ -13,11 +13,11 @@
 class QPointF;
 class BezierPath;
 
-class SketchItemBezier : public SketchItem
+class ShapeBezier : public Shape
 {
 public:
-    SketchItemBezier(qreal x, qreal y);
-    ~SketchItemBezier();
+    ShapeBezier(qreal x, qreal y);
+    ~ShapeBezier();
     virtual QGraphicsItem* getGraphicsItem();
     void addPath(const QPointF& c1, const QPointF& c2, const QPointF& endPos);
     void closePath();
@@ -39,4 +39,4 @@ protected:
     bool mIsSelected;
 };
 
-#endif // SKETCHITEMBEZIER_H
+#endif // SHAPEBEZIER_H

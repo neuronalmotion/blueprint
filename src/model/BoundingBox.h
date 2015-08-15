@@ -7,7 +7,7 @@
 
 #include "BoundingBoxPoint.h"
 
-class SketchItem;
+class Shape;
 
 struct BoundingBoxEvent
 {
@@ -19,15 +19,15 @@ struct BoundingBoxEvent
 class BoundingBox : public QGraphicsRectItem
 {
 public:
-    BoundingBox(SketchItem* parentSketchItem);
+    BoundingBox(Shape* parentSketchItem);
     ~BoundingBox();
 
     void updateRect(BoundingBoxPoint::TranslationDirection ignoredDirection = BoundingBoxPoint::NONE);
     void boundingBoxPointMoved(BoundingBoxPoint::TranslationDirection direction, QPointF delta);
-    SketchItem* getParentSketchItem() const { return mParentSketchItem; }
+    Shape* getParentSketchItem() const { return mParentSketchItem; }
 
 private:
-    SketchItem* mParentSketchItem;
+    Shape* mParentSketchItem;
     BoundingBoxEvent mBoundingBoxEvent;
 
     QHash<BoundingBoxPoint::TranslationDirection, BoundingBoxPoint*> mHashBoundingBoxPoints;

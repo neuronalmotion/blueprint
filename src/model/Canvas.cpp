@@ -1,6 +1,6 @@
 #include "Canvas.h"
 
-#include "SketchItem.h"
+#include "Shape.h"
 
 Canvas::Canvas(GraphicalItem* parentItem)
     : GraphicalItem(parentItem)

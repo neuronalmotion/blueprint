@@ -6,7 +6,7 @@
 #include <QGraphicsItem>
 #include <QKeyEvent>
 
-#include "model/SketchItem.h"
+#include "model/Shape.h"
 #include "Tool.h"
 
 namespace Ui {
@@ -48,9 +48,9 @@ private:
     Canvas* mCurrentSketch;
     Tool* mCurrentTool;
     QList<Tool*> mTools;
-    SketchItem* mCreatingItem;
+    Shape* mCreatingItem;
     QPointF mCreatingLastPosition;
-    SketchItem* mSelectedSketchItem;
+    Shape* mSelectedSketchItem;
 };
 
 #endif // MAINWINDOW_H
