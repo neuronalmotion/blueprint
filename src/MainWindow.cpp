@@ -46,10 +46,10 @@ MainWindow::MainWindow(QWidget* parent) :
     p1->setName("Page 1");
     mCurrentBlueprint->appendChild(p1);
 
-    Canvas* s1 = new Canvas(p1);
-    s1->setName("Canvas 1");
-    p1->appendChild(s1);
-    mCurrentCanvas = s1;
+    Canvas* c1 = new Canvas(p1);
+    c1->setName("Canvas 1");
+    p1->appendChild(c1);
+    mCurrentCanvas = c1;
 
     mModel = new GraphicalModel(mCurrentBlueprint, this);
     mUi->treeView->setModel(mModel);
