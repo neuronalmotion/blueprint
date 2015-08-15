@@ -13,7 +13,7 @@ class Shape : public GraphicalItem
 public:
 
     enum Type {
-        SKETCH_ITEM_BEZIER,
+        SHAPE_BEZIER,
         BOUNDING_BOX_POINT,
         BEZIER_POINT,
         BEZIER_CONTROL_POINT
