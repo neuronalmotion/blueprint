@@ -22,6 +22,8 @@ void GraphicalModel::addGraphicalItem(GraphicalItem* item, GraphicalItem* parent
     beginInsertRows(parentIndex, childRow, childRow);
     item->setParent(parent);
     parent->appendChild(item);
+    QModelIndex childIndex = index(childRow, 0, parentIndex);
+    item->setModelIndex(childIndex);
     endInsertRows();
 }
 

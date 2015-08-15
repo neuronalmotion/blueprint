@@ -2,15 +2,20 @@
 
 #include <QString>
 
-GraphicalItem::GraphicalItem(GraphicalItem* parentItem)
-    : mParentItem(parentItem)
+static int id = 1;
+
+GraphicalItem::GraphicalItem(const GraphicalType& graphicalType, GraphicalItem* parentItem)
+    : mGraphicalType(graphicalType),
+      mParentItem(parentItem),
+      mName(QString("GraphicalItem #%1").arg(id++)),
+      mModelIndex(nullptr),
+      mIsSelected(false)
 {
-    static int id = 1;
-    mName = QString("GraphicalItem #%1").arg(id++);
 }
 
 GraphicalItem::~GraphicalItem()
 {
+    delete mModelIndex;
     qDeleteAll(mChildItems);
 }
 
@@ -42,23 +47,4 @@ int GraphicalItem::row() const
     return 0;
 }
 
-GraphicalItem*GraphicalItem::parentItem()
-{
-    return mParentItem;
-}
-
-QString GraphicalItem::name() const
-{
-    return mName;
-}
-
-void GraphicalItem::setName(const QString& name)
-{
-    mName = name;
-}
-
-void GraphicalItem::setParent(GraphicalItem* parentItem)
-{
-    mParentItem = parentItem;
-}
 

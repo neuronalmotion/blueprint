@@ -23,7 +23,7 @@ MainWindow::MainWindow(QWidget* parent) :
     mCurrentBlueprint(nullptr),
     mCurrentTool(nullptr),
     mCreatingItem(nullptr),
-    mSelectedSketchItem(nullptr)
+    mSelectedGraphicalItem(nullptr)
 {
     mUi->setupUi(this);
 
@@ -56,10 +56,17 @@ MainWindow::MainWindow(QWidget* parent) :
 
     // FIXME this code is so fragile that it should be deleted very quickly
     // it works only if the parent Canvas is selected in the treeview...
-    connect(mModel, &QAbstractItemModel::rowsInserted, [this](const QModelIndex& parent, int first, int last) {
+    connect(mModel, &QAbstractItemModel::rowsInserted,
+            [this](const QModelIndex& parent, int first, int last) {
         GraphicalItem* parentItem = mModel->graphicalItemFromIndex(parent);
         GraphicalItem* childItem = parentItem->child(first);
         mUi->statusBar->showMessage(QString("Created item ") + childItem->name());
+    });
+
+    connect(mUi->treeView->selectionModel(), &QItemSelectionModel::currentChanged,
+            [this] (const QModelIndex& current, const QModelIndex& previous) {
+        GraphicalItem* item = mModel->graphicalItemFromIndex(current);
+        selectGraphicalItem(item);
     });
 }
 
@@ -79,8 +86,23 @@ void MainWindow::initToolbar()
 
     for(Tool* tool : mTools) {
         mUi->toolBar->addAction(tool->getAction());
-        connect(tool->getAction(), &QAction::triggered, [this, tool]() { this->setTool(tool->getType()); });
+        connect(tool->getAction(), &QAction::triggered, [this, tool]() {
+            this->setTool(tool->getType()); });
     }
+}
+
+void MainWindow::selectGraphicalItem(GraphicalItem* item)
+{
+    if (item == mSelectedGraphicalItem) {
+        return;
+    }
+    if (mSelectedGraphicalItem) {
+        mSelectedGraphicalItem->setSelected(false);
+    }
+    mScene->clearFocus();
+    item->setSelected(true);
+    mSelectedGraphicalItem = item;
+    qDebug() << "Selected item " << mSelectedGraphicalItem->name();
 }
 
 void MainWindow::setTool(Tool::Type toolType)
@@ -150,47 +172,52 @@ void MainWindow::onFocusItemChanged(QGraphicsItem* newFocusItem, QGraphicsItem* 
 
     qDebug() << "\n onFocusItemChanged()";
 
-    if (mSelectedSketchItem != nullptr) {
-        mSelectedSketchItem->setIsSelected(false);
+    if (mSelectedGraphicalItem != nullptr) {
+        mSelectedGraphicalItem->setSelected(false);
     }
 
     // SKETCH_ITEM_BEZIER
     itemVariant = newFocusItem->data(SketchItem::Type::SKETCH_ITEM_BEZIER);
     SketchItemBezier* sketchItemBezier = static_cast<SketchItemBezier*>(itemVariant.value<void *>());
     if (sketchItemBezier != nullptr) {
-        mSelectedSketchItem = sketchItemBezier;
+        mSelectedGraphicalItem = sketchItemBezier;
 
         //mSelectedSketchItem->setEditMode(SketchItem::EditMode::BOUNDING_BOX);
-        mSelectedSketchItem->setIsSelected(true);
+        mSelectedGraphicalItem->setSelected(true);
+        mUi->treeView->selectionModel()->select(*mSelectedGraphicalItem->modelIndex(),
+                                                QItemSelectionModel::ClearAndSelect);
 
-        qDebug() << "Focus item is now " << mSelectedSketchItem->name();
+        qDebug() << "Focus item is now " << mSelectedGraphicalItem->name();
     }
 
     // BOUNDING_BOX_POINT
     itemVariant = newFocusItem->data(SketchItem::Type::BOUNDING_BOX_POINT);
     BoundingBoxPoint* boundingBoxPoint = static_cast<BoundingBoxPoint*>(itemVariant.value<void *>());
     if (boundingBoxPoint != nullptr) {
-        mSelectedSketchItem = boundingBoxPoint->getParentBoundingBox()->getParentSketchItem();
-        mSelectedSketchItem->getGraphicsItem()->setFocus();
-        qDebug() << "Focus item is now " << mSelectedSketchItem->name() << " (from boundingBoxPoint)";
+        SketchItem* item = boundingBoxPoint->getParentBoundingBox()->getParentSketchItem();
+        item->getGraphicsItem()->setFocus();
+        mSelectedGraphicalItem = item;
+        qDebug() << "Focus item is now " << item->name() << " (from boundingBoxPoint)";
     }
 
     // BEZIER_POINT
     itemVariant = newFocusItem->data(SketchItem::Type::BEZIER_POINT);
     BezierPoint* bezierPoint = static_cast<BezierPoint*>(itemVariant.value<void *>());
     if (bezierPoint != nullptr) {
-        mSelectedSketchItem = bezierPoint->getParentSketchItemBezier();
-        mSelectedSketchItem->getGraphicsItem()->setFocus();
-        qDebug() << "Focus item is now " << mSelectedSketchItem->name() << " (from bezier point)";
+        SketchItem* item = bezierPoint->getParentSketchItemBezier();
+        item->getGraphicsItem()->setFocus();
+        mSelectedGraphicalItem = item;
+        qDebug() << "Focus item is now " << item->name() << " (from bezier point)";
     }
 
     // BEZIER_CONTROL_POINT
     itemVariant = newFocusItem->data(SketchItem::Type::BEZIER_CONTROL_POINT);
     BezierControlPoint* bezierControlPoint = static_cast<BezierControlPoint*>(itemVariant.value<void *>());
     if (bezierControlPoint != nullptr) {
-        mSelectedSketchItem = bezierControlPoint->getParentSketchItemBezier();
-        mSelectedSketchItem->getGraphicsItem()->setFocus();
-        qDebug() << "Focus item is now " << mSelectedSketchItem->name() << " (from bezier control point)";
+        SketchItem* item = bezierControlPoint->getParentSketchItemBezier();
+        item->getGraphicsItem()->setFocus();
+        mSelectedGraphicalItem = item;
+        qDebug() << "Focus item is now " << item->name() << " (from bezier control point)";
     }
 }
 
@@ -198,8 +225,8 @@ void MainWindow::onCanvasKeyPressEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Space) {
 
-        if (mSelectedSketchItem != nullptr) {
-            SketchItemBezier* sketchItemBezier = dynamic_cast<SketchItemBezier*>(mSelectedSketchItem);
+        if (mSelectedGraphicalItem != nullptr) {
+            SketchItemBezier* sketchItemBezier = static_cast<SketchItemBezier*>(mSelectedGraphicalItem);
             if (sketchItemBezier){
                 sketchItemBezier->setEditMode(SketchItem::EditMode::BEZIER);
             }
@@ -210,7 +237,7 @@ void MainWindow::onCanvasKeyPressEvent(QKeyEvent *event)
 void MainWindow::onCanvasKeyReleaseEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Space) {
-        SketchItemBezier* sketchItemBezier = dynamic_cast<SketchItemBezier*>(mSelectedSketchItem);
+        SketchItemBezier* sketchItemBezier = static_cast<SketchItemBezier*>(mSelectedGraphicalItem);
         if (sketchItemBezier){
             sketchItemBezier->setEditMode(SketchItem::EditMode::BOUNDING_BOX);
         }

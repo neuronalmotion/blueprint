@@ -28,7 +28,7 @@ public:
     virtual ~SketchItem();
 
     virtual QGraphicsItem* getGraphicsItem() = 0;
-    virtual void setIsSelected(bool isSelected) { }
+    virtual void setSelected(bool isSelected) { }
     virtual void setEditMode(EditMode mode);
     virtual void boundingBoxEvent(const BoundingBoxEvent& event) = 0;
     virtual QRectF getBounds() { getGraphicsItem()->boundingRect(); }

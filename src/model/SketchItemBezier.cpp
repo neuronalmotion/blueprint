@@ -14,8 +14,7 @@ SketchItemBezier::SketchItemBezier(qreal x, qreal y)
       mPath(),
       mElements(),
       mBoundingBox(new BoundingBox(this)),
-      mIsPathClosed(false),
-      mIsSelected(false)
+      mIsPathClosed(false)
 {
     mItem->setPen(QPen(QColor(79, 106, 25), 1, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
     mItem->setBrush(QBrush(QColor(122, 163, 39)));
@@ -141,12 +140,14 @@ void SketchItemBezier::boundingBoxEvent(const BoundingBoxEvent& event)
     }
 }
 
-void SketchItemBezier::setIsSelected(bool isSelected)
+void SketchItemBezier::setSelected(bool selected)
 {
-    mIsSelected = isSelected;
+    GraphicalItem::setSelected(selected);
     qDebug() << "mIsSelected : " << mIsSelected;
-
     updateBoundingBoxBezierVisibility();
+    if (selected) {
+        getGraphicsItem()->setFocus();
+    }
 }
 
 void SketchItemBezier::setEditMode(EditMode mode)
