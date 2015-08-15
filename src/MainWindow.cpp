@@ -26,6 +26,7 @@ MainWindow::MainWindow(QWidget* parent) :
     mSelectedShape(nullptr)
 {
     mUi->setupUi(this);
+    resize(1200,700);
 
     mScene = new QGraphicsScene(this);
     mUi->canvas->setScene(mScene);
@@ -42,18 +43,32 @@ MainWindow::MainWindow(QWidget* parent) :
     mCurrentBlueprint = new Blueprint();
     mCurrentBlueprint->setName("Blueprint");
 
+    // Page 1
     Page* p1 = new Page(mCurrentBlueprint);
     p1->setName("Page 1");
     mCurrentBlueprint->appendChild(p1);
 
+    // Canvas 1
     Canvas* c1 = new Canvas(p1, 0, 0);
     c1->setName("Canvas 1");
     c1->setBorderColor(QColor(10, 10, 10));
-    c1->setBackgroundColor(QColor(225, 225, 225));
+    c1->setBackgroundColor(QColor(255, 255, 255));
+    c1->boundingBox()->boundingBoxPointMoved(BoundingBoxPoint::BOTTOM_RIGHT, QPointF(300.0, 500.0));
     mScene->addItem(c1->getGraphicsItem());
     p1->appendChild(c1);
+
+    // Canvas 2
+    Canvas* c2 = new Canvas(p1, 450, 0);
+    c2->setName("Canvas 2");
+    c2->setBorderColor(QColor(10, 10, 10));
+    c2->setBackgroundColor(QColor(255, 255, 255));
+    c2->boundingBox()->boundingBoxPointMoved(BoundingBoxPoint::BOTTOM_RIGHT, QPointF(300.0, 500.0));
+    mScene->addItem(c2->getGraphicsItem());
+    p1->appendChild(c2);
+
     mCurrentCanvas = c1;
 
+    // Common
     mModel = new GraphicalModel(mCurrentBlueprint, this);
     mUi->treeView->setModel(mModel);
 
@@ -105,9 +120,11 @@ void MainWindow::onCanvasMousePressEvent(QPointF point)
 {
     static uint id = 0;
 
+    QPointF relPoint(point.x() - mCurrentCanvas->getGraphicsItem()->pos().x(),
+                                point.y() - mCurrentCanvas->getGraphicsItem()->pos().y());
+
     if (mCurrentTool->getType() == Tool::Type::RECTANGLE) {
-        ShapeRectangle* shape = new ShapeRectangle(mCurrentCanvas, point.x(), point.y());
-        //sketchItem->boundBoxPointMoved(BoundingBoxPoint::BOTTOM_RIGHT, QPointF(-100.0f, -50.0f));
+        ShapeRectangle* shape = new ShapeRectangle(mCurrentCanvas, relPoint.x(), relPoint.y());
         shape->setName(QString("Rectangle #%1").arg(id++));
 
         mScene->addItem(shape->getGraphicsItem());
@@ -117,10 +134,7 @@ void MainWindow::onCanvasMousePressEvent(QPointF point)
         mModel->addGraphicalItem(mCreatingShape, mCurrentCanvas, index);
 
     } else  if (mCurrentTool->getType() == Tool::Type::ELLIPSE) {
-        ShapeEllipse* shape = new ShapeEllipse(mCurrentCanvas, point.x(), point.y());
-        //sketchItem->boundBoxPointMoved(BoundingBoxPoint::BOTTOM, QPointF(0.0f, -100.0f));
-        //sketchItem->boundBoxPointMoved(BoundingBoxPoint::RIGHT, QPointF(-50.0f, 0.0f));
-        //sketchItem->boundBoxPointMoved(BoundingBoxPoint::LEFT, QPointF(50.0f, 0.0f));
+        ShapeEllipse* shape = new ShapeEllipse(mCurrentCanvas, relPoint.x(), relPoint.y());
         shape->setName(QString("Ellipse #%1").arg(id++));
 
         mScene->addItem(shape->getGraphicsItem());
@@ -137,7 +151,7 @@ void MainWindow::onCanvasMouseMoveEvent(QPointF point)
     if (mCreatingShape != nullptr) {
         QPointF delta = point - mCreatingLastPosition;
         mCreatingLastPosition = point;
-        //mCreatingItem->boundBoxPointMoved(BoundingBoxPoint::BOTTOM_RIGHT, delta);
+        //TODO: boundingBoxPointMoved
     }
 }
 
@@ -157,16 +171,25 @@ void MainWindow::onFocusItemChanged(QGraphicsItem* newFocusItem, QGraphicsItem* 
         mSelectedShape->setIsSelected(false);
     }
 
-    // SKETCH_ITEM_BEZIER
+    // CANVAS
+    itemVariant = newFocusItem->data(Shape::Type::CANVAS);
+    Canvas* canvas = static_cast<Canvas*>(itemVariant.value<void *>());
+    if (canvas != nullptr) {
+        mSelectedShape = canvas;
+        mCurrentCanvas = canvas;
+        mSelectedShape->setIsSelected(true);
+        qDebug() << "Focus item is now " << mSelectedShape->name();
+        return;
+    }
+
+    // SHAPE_BEZIER
     itemVariant = newFocusItem->data(Shape::Type::SHAPE_BEZIER);
     ShapeBezier* sketchItemBezier = static_cast<ShapeBezier*>(itemVariant.value<void *>());
     if (sketchItemBezier != nullptr) {
         mSelectedShape = sketchItemBezier;
-
-        //mSelectedSketchItem->setEditMode(SketchItem::EditMode::BOUNDING_BOX);
         mSelectedShape->setIsSelected(true);
-
         qDebug() << "Focus item is now " << mSelectedShape->name();
+        return;
     }
 
     // BOUNDING_BOX_POINT
@@ -176,6 +199,7 @@ void MainWindow::onFocusItemChanged(QGraphicsItem* newFocusItem, QGraphicsItem* 
         mSelectedShape = boundingBoxPoint->getParentBoundingBox()->getParentSketchItem();
         mSelectedShape->getGraphicsItem()->setFocus();
         qDebug() << "Focus item is now " << mSelectedShape->name() << " (from boundingBoxPoint)";
+        return;
     }
 
     // BEZIER_POINT
@@ -185,6 +209,7 @@ void MainWindow::onFocusItemChanged(QGraphicsItem* newFocusItem, QGraphicsItem* 
         mSelectedShape = bezierPoint->getParentSketchItemBezier();
         mSelectedShape->getGraphicsItem()->setFocus();
         qDebug() << "Focus item is now " << mSelectedShape->name() << " (from bezier point)";
+        return;
     }
 
     // BEZIER_CONTROL_POINT
@@ -194,6 +219,7 @@ void MainWindow::onFocusItemChanged(QGraphicsItem* newFocusItem, QGraphicsItem* 
         mSelectedShape = bezierControlPoint->getParentSketchItemBezier();
         mSelectedShape->getGraphicsItem()->setFocus();
         qDebug() << "Focus item is now " << mSelectedShape->name() << " (from bezier control point)";
+        return;
     }
 }
 

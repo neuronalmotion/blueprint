@@ -32,7 +32,11 @@
      </widget>
     </item>
     <item>
-     <widget class="CanvasView" name="canvas"/>
+     <widget class="CanvasView" name="canvas">
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(200, 200, 200);</string>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>

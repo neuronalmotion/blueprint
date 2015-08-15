@@ -187,4 +187,3 @@ void BoundingBox::boundingBoxPointMoved(BoundingBoxPoint::TranslationDirection d
     mParentSketchItem->boundingBoxEvent(mBoundingBoxEvent);
 }
 
-

@@ -27,7 +27,8 @@ public:
     void setEditMode(EditMode mode);
     QRectF getBounds();
     void setBackgroundColor(QColor color);
-    void setBorderColor(QColor color);
+    void setBorderColor(QColor color);   
+    inline BoundingBox* boundingBox(){ return mBoundingBox; }
 
 protected:
     void updateBoundingBoxBezierVisibility();
