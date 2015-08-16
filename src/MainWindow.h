@@ -6,7 +6,7 @@
 #include <QGraphicsItem>
 #include <QKeyEvent>
 
-#include "model/SketchItem.h"
+#include "model/Shape.h"
 #include "Tool.h"
 
 namespace Ui {
@@ -15,7 +15,7 @@ class MainWindow;
 
 class QGraphicsScene;
 class Blueprint;
-class Sketch;
+class Canvas;
 class GraphicalModel;
 
 class MainWindow : public QMainWindow
@@ -46,10 +46,10 @@ private:
     QGraphicsScene* mScene;
     Blueprint* mCurrentBlueprint;
     GraphicalModel* mModel;
-    Sketch* mCurrentSketch;
+    Canvas* mCurrentCanvas;
     Tool* mCurrentTool;
     QList<Tool*> mTools;
-    SketchItem* mCreatingItem;
+    Shape* mCreatingShape;
     QPointF mCreatingLastPosition;
     GraphicalItem* mSelectedGraphicalItem;
 };

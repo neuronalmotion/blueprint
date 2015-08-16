@@ -1,5 +1,5 @@
-#ifndef SKETCHITEM_H
-#define SKETCHITEM_H
+#ifndef SHAPE_H
+#define SHAPE_H
 
 #include <QGraphicsItem>
 #include <QRectF>
@@ -8,12 +8,13 @@
 #include "model/BoundingBox.h"
 #include "model/BoundingBoxPoint.h"
 
-class SketchItem : public GraphicalItem
+class Shape : public GraphicalItem
 {
 public:
 
     enum Type {
-        SKETCH_ITEM_BEZIER,
+        CANVAS,
+        SHAPE_BEZIER,
         BOUNDING_BOX_POINT,
         BEZIER_POINT,
         BEZIER_CONTROL_POINT
@@ -24,14 +25,16 @@ public:
         BEZIER
     };
 
-    SketchItem(GraphicalItem* parentItem = 0);
-    virtual ~SketchItem();
+    Shape(GraphicalItem* parentItem);
+    virtual ~Shape();
 
     virtual QGraphicsItem* getGraphicsItem() = 0;
-    virtual void setSelected(bool isSelected) { }
+    virtual void setIsSelected(bool isSelected) { }
     virtual void setEditMode(EditMode mode);
     virtual void boundingBoxEvent(const BoundingBoxEvent& event) = 0;
     virtual QRectF getBounds() { getGraphicsItem()->boundingRect(); }
+    virtual void setBackgroundColor(QColor color) { }
+    virtual void setBorderColor(QColor color) { }
 
 protected:
     EditMode mEditMode;
@@ -39,4 +42,4 @@ protected:
 
 };
 
-#endif // SKETCHITEM_H
+#endif // SHAPE_H

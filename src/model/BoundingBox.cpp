@@ -2,9 +2,9 @@
 
 #include <QDebug>
 
-#include "SketchItem.h"
+#include "Shape.h"
 
-BoundingBox::BoundingBox(SketchItem* parentSketchItem)
+BoundingBox::BoundingBox(Shape* parentSketchItem)
     : QGraphicsRectItem(parentSketchItem->getGraphicsItem()),
       mParentSketchItem(parentSketchItem),
     mBoundingBoxEvent({QPointF(), QPointF(), QPointF()})
@@ -186,5 +186,4 @@ void BoundingBox::boundingBoxPointMoved(BoundingBoxPoint::TranslationDirection d
 
     mParentSketchItem->boundingBoxEvent(mBoundingBoxEvent);
 }
-
 

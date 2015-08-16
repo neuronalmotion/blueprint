@@ -1,20 +1,20 @@
-#include "SketchItem.h"
+#include "Shape.h"
 
 #include <QDebug>
 
-SketchItem::SketchItem(GraphicalItem* parentItem)
+Shape::Shape(GraphicalItem* parentItem)
     : GraphicalItem(GraphicalType::SHAPE, parentItem),
     mEditMode(EditMode::BOUNDING_BOX)
 {
 
 }
 
-SketchItem::~SketchItem()
+Shape::~Shape()
 {
 
 }
 
-void SketchItem::setEditMode(EditMode mode)
+void Shape::setEditMode(EditMode mode)
 {
     qDebug() << "SketchItem::setEditMode()";
     mEditMode = mode;

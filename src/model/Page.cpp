@@ -1,6 +1,6 @@
 #include "Page.h"
 
-#include "Sketch.h"
+#include "Canvas.h"
 
 Page::Page(GraphicalItem* parentItem)
     : GraphicalItem(GraphicalType::PAGE, parentItem)
