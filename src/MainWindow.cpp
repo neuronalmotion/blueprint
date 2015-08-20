@@ -46,43 +46,36 @@ MainWindow::MainWindow(QWidget* parent) :
     // Page 1
     Page* p1 = new Page(mCurrentBlueprint);
     p1->setName("Page 1");
-    mCurrentBlueprint->appendChild(p1);
 
     // Canvas 1
     Canvas* c1 = new Canvas(p1, 0, 0);
     c1->setName("Canvas 1");
-    c1->setBorderColor(QColor(10, 10, 10));
-    c1->setBackgroundColor(QColor(255, 255, 255));
-    c1->boundingBox()->boundingBoxPointMoved(BoundingBoxPoint::BOTTOM_RIGHT, QPointF(300.0, 500.0));
     mScene->addItem(c1->getGraphicsItem());
-    p1->appendChild(c1);
 
     // Canvas 2
     Canvas* c2 = new Canvas(p1, 450, 0);
     c2->setName("Canvas 2");
-    c2->setBorderColor(QColor(10, 10, 10));
-    c2->setBackgroundColor(QColor(255, 255, 255));
-    c2->boundingBox()->boundingBoxPointMoved(BoundingBoxPoint::BOTTOM_RIGHT, QPointF(300.0, 500.0));
     mScene->addItem(c2->getGraphicsItem());
-    p1->appendChild(c2);
-
     mCurrentCanvas = c1;
 
     // Common
     mModel = new GraphicalModel(mCurrentBlueprint, this);
     mUi->treeView->setModel(mModel);
+    mModel->addGraphicalItem(p1, mCurrentBlueprint);
+    mModel->addGraphicalItem(c1, p1, *p1->modelIndex());
+    mModel->addGraphicalItem(c2, p1, *p1->modelIndex());
 
     // FIXME this code is so fragile that it should be deleted very quickly
     // it works only if the parent Canvas is selected in the treeview...
     connect(mModel, &QAbstractItemModel::rowsInserted,
-            [this](const QModelIndex& parent, int first, int last) {
+            [this](const QModelIndex& parent, int first, int /*last*/) {
         GraphicalItem* parentItem = mModel->graphicalItemFromIndex(parent);
         GraphicalItem* childItem = parentItem->child(first);
         mUi->statusBar->showMessage(QString("Created item ") + childItem->name());
     });
 
     connect(mUi->treeView->selectionModel(), &QItemSelectionModel::currentChanged,
-            [this] (const QModelIndex& current, const QModelIndex& previous) {
+            [this] (const QModelIndex& current,const QModelIndex&/* previous*/) {
         GraphicalItem* item = mModel->graphicalItemFromIndex(current);
         selectGraphicalItem(item);
     });
@@ -170,7 +163,7 @@ void MainWindow::onCanvasMousePressEvent(QPointF point)
 
 void MainWindow::onCanvasMouseMoveEvent(QPointF point)
 {
-    if (mCreatingShape != nullptr) {
+    if (mCreatingShape) {
         QPointF delta = point - mCreatingLastPosition;
         mCreatingLastPosition = point;
         //TODO: boundingBoxPointMoved
@@ -189,14 +182,14 @@ void MainWindow::onFocusItemChanged(QGraphicsItem* newFocusItem, QGraphicsItem* 
 
     qDebug() << "\n onFocusItemChanged()";
 
-    if (mSelectedGraphicalItem != nullptr) {
+    if (mSelectedGraphicalItem) {
         mSelectedGraphicalItem->setSelected(false);
     }
 
     // CANVAS
     itemVariant = newFocusItem->data(Shape::Type::CANVAS);
     Canvas* canvas = static_cast<Canvas*>(itemVariant.value<void *>());
-    if (canvas != nullptr) {
+    if (canvas) {
         mSelectedGraphicalItem = canvas;
         mCurrentCanvas = canvas;
         mSelectedGraphicalItem->setSelected(true);
@@ -207,7 +200,7 @@ void MainWindow::onFocusItemChanged(QGraphicsItem* newFocusItem, QGraphicsItem* 
     // SHAPE_BEZIER
     itemVariant = newFocusItem->data(Shape::Type::SHAPE_BEZIER);
     ShapeBezier* sketchItemBezier = static_cast<ShapeBezier*>(itemVariant.value<void *>());
-    if (sketchItemBezier != nullptr) {
+    if (sketchItemBezier) {
         mSelectedGraphicalItem = sketchItemBezier;
         mSelectedGraphicalItem->setSelected(true);
         mUi->treeView->selectionModel()->select(*mSelectedGraphicalItem->modelIndex(),
@@ -219,7 +212,7 @@ void MainWindow::onFocusItemChanged(QGraphicsItem* newFocusItem, QGraphicsItem* 
     // BOUNDING_BOX_POINT
     itemVariant = newFocusItem->data(Shape::Type::BOUNDING_BOX_POINT);
     BoundingBoxPoint* boundingBoxPoint = static_cast<BoundingBoxPoint*>(itemVariant.value<void *>());
-    if (boundingBoxPoint != nullptr) {
+    if (boundingBoxPoint) {
         Shape* item = boundingBoxPoint->getParentBoundingBox()->getParentSketchItem();
         item->getGraphicsItem()->setFocus();
         mSelectedGraphicalItem = item;
@@ -230,7 +223,7 @@ void MainWindow::onFocusItemChanged(QGraphicsItem* newFocusItem, QGraphicsItem* 
     // BEZIER_POINT
     itemVariant = newFocusItem->data(Shape::Type::BEZIER_POINT);
     BezierPoint* bezierPoint = static_cast<BezierPoint*>(itemVariant.value<void *>());
-    if (bezierPoint != nullptr) {
+    if (bezierPoint) {
         Shape* item = bezierPoint->getParentSketchItemBezier();
         item->getGraphicsItem()->setFocus();
         mSelectedGraphicalItem = item;
@@ -240,7 +233,7 @@ void MainWindow::onFocusItemChanged(QGraphicsItem* newFocusItem, QGraphicsItem* 
     // BEZIER_CONTROL_POINT
     itemVariant = newFocusItem->data(Shape::Type::BEZIER_CONTROL_POINT);
     BezierControlPoint* bezierControlPoint = static_cast<BezierControlPoint*>(itemVariant.value<void *>());
-    if (bezierControlPoint != nullptr) {
+    if (bezierControlPoint) {
         Shape* item = bezierControlPoint->getParentSketchItemBezier();
         item->getGraphicsItem()->setFocus();
         mSelectedGraphicalItem = item;
@@ -252,7 +245,7 @@ void MainWindow::onCanvasKeyPressEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Space) {
 
-        if (mSelectedGraphicalItem != nullptr) {
+        if (mSelectedGraphicalItem) {
             ShapeBezier* sketchItemBezier = dynamic_cast<ShapeBezier*>(mSelectedGraphicalItem);
             if (sketchItemBezier){
                 sketchItemBezier->setEditMode(Shape::EditMode::BEZIER);
