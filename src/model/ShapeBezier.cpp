@@ -16,8 +16,8 @@ ShapeBezier::ShapeBezier(GraphicalItem* parentItem, qreal x, qreal y)
       mBoundingBox(new BoundingBox(this)),
       mIsPathClosed(false)
 {
-    mItem->setPen(QPen(QColor(79, 106, 25), 1, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
-    mItem->setBrush(QBrush(QColor(122, 163, 39)));
+    setBorderColor(QColor(40, 40, 40));
+    setBackgroundColor(QColor(229, 229, 229));
 
     mItem->setFlag(QGraphicsItem::ItemIsMovable);
     mItem->setFlag(QGraphicsItem::ItemSendsGeometryChanges);
@@ -151,7 +151,7 @@ void ShapeBezier::setSelected(bool selected)
     }
 }
 
-void ShapeBezier::setEditMode(EditMode mode)
+void ShapeBezier::setEditMode(const EditMode& mode)
 {
     mEditMode = mode;
     qDebug() << "mEditMode : " << mEditMode;
@@ -215,12 +215,12 @@ QRectF ShapeBezier::getBounds()
     return bounds;
 }
 
-void ShapeBezier::setBackgroundColor(QColor color)
+void ShapeBezier::setBackgroundColor(const QColor& color)
 {
     mItem->setBrush(QBrush(color));
 }
 
-void ShapeBezier::setBorderColor(QColor color)
+void ShapeBezier::setBorderColor(const QColor& color)
 {
     mItem->setPen(QPen(color, 1, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
 }

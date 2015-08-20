@@ -25,10 +25,10 @@ public:
     void boundingBoxEvent(const BoundingBoxEvent& event);
 
     void setSelected(bool selected) override;
-    void setEditMode(EditMode mode);
+    void setEditMode(const EditMode& mode);
     QRectF getBounds();
-    void setBackgroundColor(QColor color);
-    void setBorderColor(QColor color);   
+    void setBackgroundColor(const QColor& color);
+    void setBorderColor(const QColor& color);
     inline BoundingBox* boundingBox(){ return mBoundingBox; }
 
 protected:
