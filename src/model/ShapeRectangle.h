@@ -8,7 +8,7 @@ namespace blueprint {
 class ShapeRectangle : public Shape
 {
 public:
-    ShapeRectangle(TreeItem* parentItem, qreal x, qreal y);
+    ShapeRectangle(TreeItem* parentTreeItem, qreal x, qreal y);
     ~ShapeRectangle();
 
 };

@@ -20,7 +20,7 @@ public:
 
     enum ShapeType {
         CANVAS,
-        SHAPE_BEZIER,
+        SHAPE,
         BOUNDING_BOX_POINT,
         BEZIER_POINT,
         BEZIER_CONTROL_POINT
@@ -31,8 +31,8 @@ public:
         BEZIER
     };
 
-    Shape(TreeItem* parentItem, qreal x, qreal y);
-    ~Shape();
+    Shape(TreeItem* parentTreeItem, qreal x, qreal y);
+    virtual ~Shape();
     void addPath(const QPointF& c1, const QPointF& c2, const QPointF& endPos);
     void closePath();
     void updateElement(BezierElement* bezierElement, const QPointF& pos);

@@ -20,7 +20,7 @@ public:
     CanvasView(QWidget* parent = 0);
     ~CanvasView();
 
-    void selectGraphicalItem(blueprint::TreeItem* item);
+    void selectionsChanged(const QModelIndex& parent, int first, int last);
 
 public slots:
     void setTool(Tool::Type toolType);
@@ -41,7 +41,7 @@ protected:
 
 protected:
     Tool::Type mCurrentTool;
-    blueprint::TreeItem* mSelectedGraphicalItem;
+    blueprint::TreeItem* mSelectedShape;
     blueprint::Canvas* mCurrentCanvas;
     blueprint::Shape* mCreatingShape;
     QPointF mCreatingLastPosition;

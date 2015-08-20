@@ -11,7 +11,7 @@ class Canvas;
 class Page : public TreeItem
 {
 public:
-    Page(TreeItem* parentItem = 0);
+    Page(TreeItem* parentTreeItem = 0);
     ~Page();
 
 };

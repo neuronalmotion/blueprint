@@ -35,6 +35,16 @@ TreeItem*TreeItem::child(int row)
     return mChildItems.at(row);
 }
 
+int TreeItem::indexOf(const TreeItem* child) const
+{
+    for (int i = 0; i < mChildItems.length(); ++i) {
+        if (mChildItems[i] == child) {
+            return i;
+        }
+    }
+    return -1;
+}
+
 int TreeItem::childCount() const
 {
     return mChildItems.length();

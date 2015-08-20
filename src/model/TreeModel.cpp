@@ -35,7 +35,7 @@ void TreeModel::addItem(TreeItem* item, TreeItem* parent)
                 (QModelIndex)(*parent->modelIndex())
                 : QModelIndex();
     beginInsertRows(parentIndex, childRow, childRow);
-    item->setParent(parent);
+    item->setParentTreeItem(parent);
     parent->appendChild(item);
     QModelIndex childIndex = index(childRow, 0, parentIndex);
     item->setModelIndex(childIndex);
@@ -78,7 +78,7 @@ QModelIndex TreeModel::parent(const QModelIndex& child) const
     }
 
     TreeItem* childItem = itemFromIndex(child);
-    TreeItem* parentItem = childItem->parentItem();
+    TreeItem* parentItem = childItem->parentTreeItem();
 
     if (parentItem == mRootItem) {
         return QModelIndex();
@@ -123,6 +123,12 @@ Qt::ItemFlags TreeModel::flags(const QModelIndex& index) const
     return Qt::ItemIsEditable | QAbstractItemModel::flags(index);
 }
 
+void TreeModel::setRootItem(TreeItem* rootItem)
+{
+    mRootItem = rootItem;
+    mRootItem->setModelIndex(index(0, 0));
+}
+
 TreeItem* TreeModel::itemFromIndex(const QModelIndex& index) const
 {
     if (index.isValid()) {
@@ -130,4 +136,10 @@ TreeItem* TreeModel::itemFromIndex(const QModelIndex& index) const
     } else {
         return mRootItem;
     }
+}
+
+TreeItem* TreeModel::itemFromParentIndex(const QModelIndex& parentIndex, int row) const
+{
+    TreeItem* parentItem = itemFromIndex(parentIndex);
+    return parentItem->child(row);
 }

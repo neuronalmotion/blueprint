@@ -57,16 +57,31 @@ MainWindow::MainWindow(QWidget* parent) :
     // it works only if the parent Canvas is selected in the treeview...
     connect(model, &QAbstractItemModel::rowsInserted,
             [this, model](const QModelIndex& parent, int first, int /*last*/) {
-        blueprint::TreeItem* parentItem = model->itemFromIndex(parent);
-        blueprint::TreeItem* childItem = parentItem->child(first);
+        TreeItem* parentItem = model->itemFromIndex(parent);
+        TreeItem* childItem = parentItem->child(first);
         mUi->statusBar->showMessage(QString("Created item ") + childItem->name());
     });
 
     connect(mUi->treeView->selectionModel(), &QItemSelectionModel::currentChanged,
             [this, model] (const QModelIndex& current,const QModelIndex&/* previous*/) {
-        blueprint::TreeItem* item = model->itemFromIndex(current);
-        mUi->canvas->selectGraphicalItem(item);
+        TreeItem* item = model->itemFromIndex(current);
+        qDebug() << "ITEM NAME" << item->name();
+        if (!item->parentTreeItem()) {
+            return;
+        }
+        model->selectionsChanged(((QModelIndex)*item->parentTreeItem()->modelIndex()),
+                                             item->parentTreeItem()->indexOf(item),
+                                             item->parentTreeItem()->indexOf(item));
     });
+
+    connect(model, &TreeModel::selectionsChanged,
+            [this, model](const QModelIndex& parent, int first, int last) {
+        TreeItem* parentItem = model->itemFromIndex(parent);
+        TreeItem* childItem = parentItem->child(first);
+        mUi->treeView->selectionModel()->select(*childItem->modelIndex(),
+                                                QItemSelectionModel::ClearAndSelect);
+    });
+
 }
 
 MainWindow::~MainWindow()

@@ -11,7 +11,7 @@ namespace blueprint {
 class Canvas : public ShapeRectangle
 {
 public:
-    Canvas(TreeItem* parentItem, qreal x, qreal y);
+    Canvas(TreeItem* parentTreeItem, qreal x, qreal y);
     ~Canvas();
 
 };

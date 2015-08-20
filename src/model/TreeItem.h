@@ -22,12 +22,13 @@ public:
         SHAPE,
     };
 
-    explicit TreeItem(const ItemType& itemType, TreeItem* parentItem = 0);
+    explicit TreeItem(const ItemType& itemType, TreeItem* parentTreeItem = 0);
     virtual ~TreeItem();
 
     void appendChild(TreeItem* child);
 
     TreeItem* child(int row);
+    int indexOf(const TreeItem* child) const;
     int childCount() const;
     int columnCount() const;
     int row() const;
@@ -35,8 +36,8 @@ public:
     inline QString name() const { return mName; }
     inline void setName(const QString& name) { mName = name; }
     inline ItemType itemType() const { return mItemType; }
-    inline TreeItem* parentItem() const {return mParentItem; }
-    inline void setParent(TreeItem* parentItem) { mParentItem = parentItem; }
+    inline TreeItem* parentTreeItem() const {return mParentItem; }
+    inline void setParentTreeItem(TreeItem* parentItem) { mParentItem = parentItem; }
     inline QPersistentModelIndex* modelIndex() const { return mModelIndex; }
     inline void setModelIndex(const QModelIndex& index) { mModelIndex = new QPersistentModelIndex(index); }
 

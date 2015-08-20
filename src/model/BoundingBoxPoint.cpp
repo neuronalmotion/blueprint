@@ -21,8 +21,6 @@ BoundingBoxPoint::BoundingBoxPoint(BoundingBox* parent, TranslationDirection dir
 
     qreal halfSize = HANDLE_SIZE / 2.0f;
     setRect(-halfSize, -halfSize, HANDLE_SIZE, HANDLE_SIZE);
-
-    setData(Shape::ShapeType::BOUNDING_BOX_POINT, qVariantFromValue(static_cast<void *>(this)));
 }
 
 BoundingBoxPoint::~BoundingBoxPoint()

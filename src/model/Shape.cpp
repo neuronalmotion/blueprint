@@ -27,7 +27,7 @@ Shape::Shape(TreeItem* parentItem, qreal x, qreal y)
     setFlag(QGraphicsItem::ItemIsSelectable);
     setFlag(QGraphicsItem::ItemIsFocusable);
 
-    setData(Shape::ShapeType::SHAPE_BEZIER, qVariantFromValue(static_cast<void *>(this)));
+    setData(Shape::ShapeType::SHAPE, qVariantFromValue(static_cast<void *>(this)));
     setPos(x, y);
 
     mBoundingBox->setVisible(false);
@@ -139,6 +139,8 @@ void Shape::setSelected(bool selected)
     updateBoundingBoxBezierVisibility();
     if (selected) {
         setFocus();
+    } else {
+        clearFocus();
     }
 }
 

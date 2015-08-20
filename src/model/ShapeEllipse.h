@@ -7,7 +7,7 @@ namespace blueprint {
 class ShapeEllipse : public Shape
 {
 public:
-    ShapeEllipse(TreeItem* parentItem, qreal x, qreal y);
+    ShapeEllipse(TreeItem* parentTreeItem, qreal x, qreal y);
     ~ShapeEllipse();
 
 };
