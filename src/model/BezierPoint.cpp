@@ -4,6 +4,8 @@
 
 #include "Shape.h"
 
+using namespace blueprint;
+
 BezierPoint::BezierPoint(Shape* parent, const int index)
     : BezierElement(ElementType::POINT, parent, index),
     QGraphicsEllipseItem(parent)

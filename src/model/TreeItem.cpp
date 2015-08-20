@@ -3,12 +3,14 @@
 #include <QString>
 #include <QDebug>
 
+using namespace blueprint;
+
 static int id = 1;
 
 TreeItem::TreeItem(const ItemType& itemType, TreeItem* parentItem)
     : mItemType(itemType),
-      mParentItem(parentItem),
       mName(QString("GraphicalItem #%1").arg(id++)),
+      mParentItem(parentItem),
       mModelIndex(nullptr),
       mIsSelected(false)
 {

@@ -4,6 +4,8 @@
 
 #include "Shape.h"
 
+using namespace blueprint;
+
 BezierElement::BezierElement(ElementType elementType, Shape* parent, const int index)
     : mElementType(elementType),
     mParent(parent),

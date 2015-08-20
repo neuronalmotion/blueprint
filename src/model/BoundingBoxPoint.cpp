@@ -6,6 +6,8 @@
 #include "model/BoundingBox.h"
 #include "model/Shape.h"
 
+using namespace blueprint;
+
 BoundingBoxPoint::BoundingBoxPoint(BoundingBox* parent, TranslationDirection direction)
     : QGraphicsRectItem(parent),
       mParentBoundingBox(parent),

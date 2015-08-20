@@ -3,6 +3,7 @@
 
 #include "Shape.h"
 
+namespace blueprint {
 
 class ShapeRectangle : public Shape
 {
@@ -11,5 +12,6 @@ public:
     ~ShapeRectangle();
 
 };
+}
 
 #endif // SHAPERECTANGLE_H

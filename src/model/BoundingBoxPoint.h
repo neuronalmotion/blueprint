@@ -4,6 +4,8 @@
 #include <QGraphicsRectItem>
 #include <QGraphicsSceneMouseEvent>
 
+namespace blueprint {
+
 class BoundingBox;
 
 class BoundingBoxPoint : public QGraphicsRectItem
@@ -40,5 +42,7 @@ private:
     BoundingBox* mParentBoundingBox;
     TranslationDirection mTranslationDirection;
 };
+
+}
 
 #endif // BOUNDINGBOXPOINT_H

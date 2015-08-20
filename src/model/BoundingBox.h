@@ -7,7 +7,8 @@
 
 #include "BoundingBoxPoint.h"
 
-class Shape;
+namespace blueprint {
+    class Shape;
 
 struct BoundingBoxEvent
 {
@@ -33,5 +34,6 @@ private:
     QHash<BoundingBoxPoint::TranslationDirection, BoundingBoxPoint*> mHashBoundingBoxPoints;
 
 };
+}
 
 #endif // BOUNDINGBOX_H

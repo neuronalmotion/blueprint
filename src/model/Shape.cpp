@@ -8,6 +8,8 @@
 #include "BezierControlPoint.h"
 #include "BezierPoint.h"
 
+using namespace blueprint;
+
 Shape::Shape(TreeItem* parentItem, qreal x, qreal y)
     : TreeItem(ItemType::SHAPE, parentItem),
       QGraphicsPathItem(),

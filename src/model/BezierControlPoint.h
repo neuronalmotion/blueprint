@@ -5,7 +5,7 @@
 
 #include "BezierElement.h"
 
-
+namespace blueprint {
 class Shape;
 
 class BezierControlPoint : public BezierElement, public QGraphicsRectItem
@@ -22,5 +22,6 @@ public:
 protected:
     QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 };
+}
 
 #endif // BEZIERCONTROLPOINT_H

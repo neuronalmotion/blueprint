@@ -5,6 +5,8 @@
 
 #include "BezierElement.h"
 
+namespace blueprint {
+
 class Shape;
 
 class BezierPoint : public BezierElement, public QGraphicsEllipseItem
@@ -21,5 +23,7 @@ public:
 protected:
     QVariant itemChange(QGraphicsItem::GraphicsItemChange change, const QVariant& value);
 };
+
+}
 
 #endif // BEZIERPOINT_H

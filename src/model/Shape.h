@@ -10,6 +10,8 @@
 #include "BoundingBox.h"
 
 class QPointF;
+
+namespace blueprint {
 class BezierPath;
 
 class Shape : public TreeItem, public QGraphicsPathItem
@@ -52,5 +54,7 @@ protected:
     bool mIsPathClosed;
     EditMode mEditMode;
 };
+
+}
 
 #endif // SHAPE_H

@@ -8,6 +8,7 @@
 #include <QPersistentModelIndex>
 #include <QModelIndex>
 
+namespace blueprint {
 
 class TreeItem
 {
@@ -43,10 +44,11 @@ public:
 protected:
     QString mName;
     ItemType mItemType;
-    QList<TreeItem*> mChildItems;
     TreeItem* mParentItem;
+    QList<TreeItem*> mChildItems;
     QPersistentModelIndex* mModelIndex;
     bool mIsSelected;
 };
+}
 
 #endif // TREEITEM_H

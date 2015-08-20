@@ -6,7 +6,7 @@
 #include "model/ShapeRectangle.h"
 #include "model/TreeItem.h"
 
-class Shape;
+namespace blueprint {
 
 class Canvas : public ShapeRectangle
 {
@@ -15,5 +15,6 @@ public:
     ~Canvas();
 
 };
+}
 
 #endif // CANVAS_H

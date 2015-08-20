@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <QGraphicsEllipseItem>
 
+using namespace blueprint;
 
 // Constants
 static const uint TOP_INDEX     = 12;

@@ -5,6 +5,7 @@
 
 #include "model/TreeItem.h"
 
+namespace blueprint {
 class Canvas;
 
 class Page : public TreeItem
@@ -14,5 +15,6 @@ public:
     ~Page();
 
 };
+}
 
 #endif // PAGE_H

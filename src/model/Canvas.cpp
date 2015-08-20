@@ -2,6 +2,8 @@
 
 #include "Shape.h"
 
+using namespace blueprint;
+
 Canvas::Canvas(TreeItem* parentItem, qreal x, qreal y)
     : ShapeRectangle(parentItem, x, y)
 {

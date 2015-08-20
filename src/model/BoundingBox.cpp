@@ -4,6 +4,8 @@
 
 #include "Shape.h"
 
+using namespace blueprint;
+
 BoundingBox::BoundingBox(Shape* parentSketchItem)
     : QGraphicsRectItem(parentSketchItem),
       mParentShape(parentSketchItem),

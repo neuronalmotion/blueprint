@@ -3,7 +3,7 @@
 
 #include "Shape.h"
 
-
+namespace blueprint {
 class ShapeEllipse : public Shape
 {
 public:
@@ -11,5 +11,6 @@ public:
     ~ShapeEllipse();
 
 };
+}
 
 #endif // SHAPEELLIPSE_H

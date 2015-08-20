@@ -4,17 +4,20 @@
 #include <QAbstractItemModel>
 #include <QPointF>
 
+namespace blueprint {
 class TreeItem;
 
-class TreelModel : public QAbstractItemModel
+class TreeModel : public QAbstractItemModel
 {
     Q_OBJECT
 public:
-    explicit TreelModel(TreeItem* rootItem = 0, QObject* parent = 0);
-    ~TreelModel();
+    static TreeModel* instance();
 
-    void addItem(TreeItem* item, TreeItem* parent = 0, const QModelIndex& parentIndex = QModelIndex());
-    TreeItem* itemFromIndex(const QModelIndex& index) const;
+    explicit TreeModel();
+    ~TreeModel();
+
+    void addItem(TreeItem* item, TreeItem* parent = 0);
+    blueprint::TreeItem* itemFromIndex(const QModelIndex& index) const;
 
     QVariant data(const QModelIndex& index, int role) const override;
     bool setData(const QModelIndex& index, const QVariant& value, int role) override;
@@ -27,10 +30,12 @@ public:
 
     Qt::ItemFlags flags(const QModelIndex& index) const override;
 
-private:
+    inline void setRootItem(TreeItem* rootItem) { mRootItem = rootItem; }
 
 private:
     TreeItem* mRootItem;
+    static TreeModel* sInstance;
 };
+}
 
 #endif // TREEMODEL_H

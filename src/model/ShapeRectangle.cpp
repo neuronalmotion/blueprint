@@ -2,6 +2,8 @@
 
 #include <QDebug>
 
+using namespace blueprint;
+
 // Constants
 static const uint TOP_LEFT_INDEX        = 12;
 static const uint TOP_RIGHT_INDEX       = 3;

@@ -4,6 +4,8 @@
 
 #include "Shape.h"
 
+using namespace blueprint;
+
 BezierControlPoint::BezierControlPoint(Shape* parent, int index)
     : BezierElement(ElementType::CONTROL_POINT, parent, index),
     QGraphicsRectItem(parent)

@@ -4,6 +4,7 @@
 #include <QVariant>
 #include <QGraphicsItem>
 
+namespace blueprint {
 class Shape;
 
 class BezierElement
@@ -35,5 +36,7 @@ protected:
     Shape* mParent;
     int mIndex;
 };
+
+}
 
 #endif // BEZIERELEMENT_H

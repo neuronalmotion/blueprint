@@ -2,6 +2,16 @@
 #define CANVASVIEW_H
 
 #include <QGraphicsView>
+#include <QPointF>
+
+#include "Tool.h"
+#include "model/Shape.h"
+
+namespace blueprint {
+class Canvas;
+class TreeItem;
+class Shape;
+}
 
 class CanvasView : public QGraphicsView
 {
@@ -10,14 +20,14 @@ public:
     CanvasView(QWidget* parent = 0);
     ~CanvasView();
 
-signals:
-    void signalMousePressEvent(QPointF point);
-    void signalMouseMoveEvent(QPointF point);
-    void signalMouseReleaseEvent(QPointF point);
-    void signalKeyPressEvent(QKeyEvent *event);
-    void signalKeyReleaseEvent(QKeyEvent *event);
+    void selectGraphicalItem(blueprint::TreeItem* item);
 
-protected: // from QGraphicsView
+public slots:
+    void setTool(Tool::Type toolType);
+    void onFocusItemChanged(QGraphicsItem* newFocusItem, QGraphicsItem* oldFocusItem, Qt::FocusReason reason);
+
+protected:
+    // from QGraphicsView
     void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent* event) override;
@@ -27,10 +37,15 @@ protected: // from QGraphicsView
     void keyPressEvent(QKeyEvent *event) override;
     void keyReleaseEvent(QKeyEvent *event) override;
 
-protected:
     void fitView();
 
-    float mZoomfactor;
+protected:
+    Tool::Type mCurrentTool;
+    blueprint::TreeItem* mSelectedGraphicalItem;
+    blueprint::Canvas* mCurrentCanvas;
+    blueprint::Shape* mCreatingShape;
+    QPointF mCreatingLastPosition;
+    float mZoomFactor;
 };
 
 #endif // CANVASVIEW_H
