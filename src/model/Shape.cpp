@@ -10,7 +10,7 @@
 
 Shape::Shape(TreeItem* parentItem, qreal x, qreal y)
     : TreeItem(ItemType::SHAPE, parentItem),
-      mItem(new QGraphicsPathItem),
+      QGraphicsPathItem(),
       mPath(),
       mElements(),
       mBoundingBox(new BoundingBox(this)),
@@ -20,27 +20,20 @@ Shape::Shape(TreeItem* parentItem, qreal x, qreal y)
     setBorderColor(QColor(40, 40, 40));
     setBackgroundColor(QColor(229, 229, 229));
 
-    mItem->setFlag(QGraphicsItem::ItemIsMovable);
-    mItem->setFlag(QGraphicsItem::ItemSendsGeometryChanges);
-    mItem->setFlag(QGraphicsItem::ItemIsSelectable);
-    mItem->setFlag(QGraphicsItem::ItemIsFocusable);
+    setFlag(QGraphicsItem::ItemIsMovable);
+    setFlag(QGraphicsItem::ItemSendsGeometryChanges);
+    setFlag(QGraphicsItem::ItemIsSelectable);
+    setFlag(QGraphicsItem::ItemIsFocusable);
 
-    mItem->setData(Shape::Type::SHAPE_BEZIER, qVariantFromValue(static_cast<void *>(this)));
-    mItem->setPos(x, y);
+    setData(Shape::ShapeType::SHAPE_BEZIER, qVariantFromValue(static_cast<void *>(this)));
+    setPos(x, y);
 
     mBoundingBox->setVisible(false);
-
-
 }
 
 Shape::~Shape()
 {
     //FIXME check memleak of mElements/mItem
-}
-
-QGraphicsItem* Shape::getGraphicsItem()
-{
-    return mItem;
 }
 
 void Shape::addPath(const QPointF& c1, const QPointF& c2, const QPointF& endPos)
@@ -71,7 +64,7 @@ void Shape::addPath(const QPointF& c1, const QPointF& c2, const QPointF& endPos)
          mElements.append(bezierElement);
     }
 
-    mItem->setPath(mPath);
+    setPath(mPath);
 }
 
 void Shape::closePath()
@@ -111,7 +104,7 @@ void Shape::updateElement(BezierElement* bezierElement, const QPointF& pos)
 
     // Move the current element
     mPath.setElementPositionAt(bezierElement->getIndex(), pos.x(), pos.y());
-    mItem->setPath(mPath);
+    setPath(mPath);
 
     // Update bounding box and handles positions
     mBoundingBox->updateRect();
@@ -143,7 +136,7 @@ void Shape::setSelected(bool selected)
 
     updateBoundingBoxBezierVisibility();
     if (selected) {
-        getGraphicsItem()->setFocus();
+        setFocus();
     }
 }
 
@@ -213,10 +206,10 @@ QRectF Shape::getBounds()
 
 void Shape::setBackgroundColor(const QColor& color)
 {
-    mItem->setBrush(QBrush(color));
+    setBrush(QBrush(color));
 }
 
 void Shape::setBorderColor(const QColor& color)
 {
-    mItem->setPen(QPen(color, 1, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
+    setPen(QPen(color, 1, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
 }

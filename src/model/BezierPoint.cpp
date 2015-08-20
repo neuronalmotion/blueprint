@@ -6,7 +6,7 @@
 
 BezierPoint::BezierPoint(Shape* parent, const int index)
     : BezierElement(ElementType::POINT, parent, index),
-    QGraphicsEllipseItem(parent->getGraphicsItem())
+    QGraphicsEllipseItem(parent)
 {
     setFlag(QGraphicsItem::ItemIsMovable);
     setFlag(QGraphicsItem::ItemSendsGeometryChanges);
@@ -17,7 +17,7 @@ BezierPoint::BezierPoint(Shape* parent, const int index)
     int rectSize = 10;
     setRect(-rectSize/2, -rectSize/2, rectSize, rectSize);
     setVisible(false);
-    setData(Shape::Type::BEZIER_POINT, qVariantFromValue(static_cast<void *>(this)));
+    setData(Shape::ShapeType::BEZIER_POINT, qVariantFromValue(static_cast<void *>(this)));
 }
 
 BezierPoint::~BezierPoint()

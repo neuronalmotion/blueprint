@@ -6,7 +6,7 @@
 
 BezierControlPoint::BezierControlPoint(Shape* parent, int index)
     : BezierElement(ElementType::CONTROL_POINT, parent, index),
-    QGraphicsRectItem(parent->getGraphicsItem())
+    QGraphicsRectItem(parent)
 {
     setFlag(QGraphicsItem::ItemIsMovable);
     setFlag(QGraphicsItem::ItemSendsGeometryChanges);
@@ -19,7 +19,7 @@ BezierControlPoint::BezierControlPoint(Shape* parent, int index)
     int rectSize = 10;
     setRect(-rectSize/2, -rectSize/2, rectSize, rectSize);
     setVisible(false);
-    setData(Shape::Type::BEZIER_CONTROL_POINT, qVariantFromValue(static_cast<void *>(this)));
+    setData(Shape::ShapeType::BEZIER_CONTROL_POINT, qVariantFromValue(static_cast<void *>(this)));
 }
 
 BezierControlPoint::~BezierControlPoint()

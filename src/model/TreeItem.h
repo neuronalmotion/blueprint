@@ -24,8 +24,6 @@ public:
     explicit TreeItem(const ItemType& itemType, TreeItem* parentItem = 0);
     virtual ~TreeItem();
 
-    virtual QGraphicsItem* getGraphicsItem() { return nullptr; }
-
     void appendChild(TreeItem* child);
 
     TreeItem* child(int row);

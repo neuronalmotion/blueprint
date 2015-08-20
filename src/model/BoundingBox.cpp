@@ -5,8 +5,8 @@
 #include "Shape.h"
 
 BoundingBox::BoundingBox(Shape* parentSketchItem)
-    : QGraphicsRectItem(parentSketchItem->getGraphicsItem()),
-      mParentSketchItem(parentSketchItem),
+    : QGraphicsRectItem(parentSketchItem),
+      mParentShape(parentSketchItem),
     mBoundingBoxEvent({QPointF(), QPointF(), QPointF()})
 {
     mHashBoundingBoxPoints.insert(BoundingBoxPoint::TOP_LEFT, new BoundingBoxPoint(this, BoundingBoxPoint::TOP_LEFT));
@@ -28,7 +28,7 @@ BoundingBox::~BoundingBox()
 
 void BoundingBox::updateRect(BoundingBoxPoint::TranslationDirection ignoredDirection)
 {
-    QRectF boundingRect = mParentSketchItem->getBounds();
+    QRectF boundingRect = mParentShape->getBounds();
 
     qreal x;
     qreal y;
@@ -96,7 +96,7 @@ void BoundingBox::boundingBoxPointMoved(BoundingBoxPoint::TranslationDirection d
     QPointF handlePoint;
     QPointF origin;
 
-    QRectF bounds = mParentSketchItem->getBounds();
+    QRectF bounds = mParentShape->getBounds();
     qreal halfWidth = bounds.width() / 2.0f;
     qreal halfHeight = bounds.height() / 2.0f;
 
@@ -184,6 +184,6 @@ void BoundingBox::boundingBoxPointMoved(BoundingBoxPoint::TranslationDirection d
     mBoundingBoxEvent.scale.setX(finalScale.x());
     mBoundingBoxEvent.scale.setY(finalScale.y());
 
-    mParentSketchItem->boundingBoxEvent(mBoundingBoxEvent);
+    mParentShape->boundingBoxEvent(mBoundingBoxEvent);
 }
 

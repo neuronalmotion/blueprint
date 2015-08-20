@@ -12,12 +12,11 @@
 class QPointF;
 class BezierPath;
 
-class Shape : public TreeItem
+class Shape : public TreeItem, public QGraphicsPathItem
 {
 public:
 
-    // FIXME Rename to ShapeType
-    enum Type {
+    enum ShapeType {
         CANVAS,
         SHAPE_BEZIER,
         BOUNDING_BOX_POINT,
@@ -32,7 +31,6 @@ public:
 
     Shape(TreeItem* parentItem, qreal x, qreal y);
     ~Shape();
-    virtual QGraphicsItem* getGraphicsItem();
     void addPath(const QPointF& c1, const QPointF& c2, const QPointF& endPos);
     void closePath();
     void updateElement(BezierElement* bezierElement, const QPointF& pos);
@@ -48,7 +46,6 @@ public:
 protected:
     void updateBoundingBoxBezierVisibility();
 
-    QGraphicsPathItem* mItem;
     QPainterPath mPath;
     QList<BezierElement*> mElements;
     BoundingBox* mBoundingBox;

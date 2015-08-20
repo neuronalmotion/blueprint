@@ -24,10 +24,10 @@ public:
 
     void updateRect(BoundingBoxPoint::TranslationDirection ignoredDirection = BoundingBoxPoint::NONE);
     void boundingBoxPointMoved(BoundingBoxPoint::TranslationDirection direction, QPointF delta);
-    Shape* getParentSketchItem() const { return mParentSketchItem; }
+    Shape* getParentSketchItem() const { return mParentShape; }
 
 private:
-    Shape* mParentSketchItem;
+    Shape* mParentShape;
     BoundingBoxEvent mBoundingBoxEvent;
 
     QHash<BoundingBoxPoint::TranslationDirection, BoundingBoxPoint*> mHashBoundingBoxPoints;
