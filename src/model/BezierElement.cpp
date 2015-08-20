@@ -2,9 +2,9 @@
 
 #include <QGraphicsItem>
 
-#include "ShapeBezier.h"
+#include "Shape.h"
 
-BezierElement::BezierElement(ElementType elementType, ShapeBezier* parent, const int index)
+BezierElement::BezierElement(ElementType elementType, Shape* parent, const int index)
     : mElementType(elementType),
     mParent(parent),
     mIndex(index)

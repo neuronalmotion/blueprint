@@ -3,7 +3,7 @@
 #include "model/Page.h"
 
 Blueprint::Blueprint()
-    : GraphicalItem(GraphicalType::BLUEPRINT)
+    : TreeItem(ItemType::BLUEPRINT)
 {
 
 }

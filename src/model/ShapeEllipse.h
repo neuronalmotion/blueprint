@@ -1,13 +1,13 @@
 #ifndef SHAPEELLIPSE_H
 #define SHAPEELLIPSE_H
 
-#include "ShapeBezier.h"
+#include "Shape.h"
 
 
-class ShapeEllipse : public ShapeBezier
+class ShapeEllipse : public Shape
 {
 public:
-    ShapeEllipse(GraphicalItem* parentItem, qreal x, qreal y);
+    ShapeEllipse(TreeItem* parentItem, qreal x, qreal y);
     ~ShapeEllipse();
 
 };

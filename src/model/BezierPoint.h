@@ -5,12 +5,12 @@
 
 #include "BezierElement.h"
 
-class ShapeBezier;
+class Shape;
 
 class BezierPoint : public BezierElement, public QGraphicsEllipseItem
 {
 public:
-    BezierPoint(ShapeBezier* parent, const int index);
+    BezierPoint(Shape* parent, const int index);
     ~BezierPoint();
 
     QPointF getPos();

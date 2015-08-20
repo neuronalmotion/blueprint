@@ -16,7 +16,7 @@ class MainWindow;
 class QGraphicsScene;
 class Blueprint;
 class Canvas;
-class GraphicalModel;
+class TreelModel;
 
 class MainWindow : public QMainWindow
 {
@@ -39,19 +39,19 @@ private slots:
 
 private:
     void initToolbar();
-    void selectGraphicalItem(GraphicalItem* item);
+    void selectGraphicalItem(TreeItem* item);
 
 private:
     Ui::MainWindow* mUi;
     QGraphicsScene* mScene;
     Blueprint* mCurrentBlueprint;
-    GraphicalModel* mModel;
+    TreelModel* mModel;
     Canvas* mCurrentCanvas;
     Tool* mCurrentTool;
     QList<Tool*> mTools;
     Shape* mCreatingShape;
     QPointF mCreatingLastPosition;
-    GraphicalItem* mSelectedGraphicalItem;
+    TreeItem* mSelectedGraphicalItem;
 };
 
 #endif // MAINWINDOW_H

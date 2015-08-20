@@ -1,19 +1,19 @@
-#include "GraphicalModel.h"
+#include "TreeModel.h"
 
-#include "model/GraphicalItem.h"
+#include "model/TreeItem.h"
 
-GraphicalModel::GraphicalModel(GraphicalItem* rootItem, QObject* parent)
+TreelModel::TreelModel(TreeItem* rootItem, QObject* parent)
     : QAbstractItemModel(parent),
       mRootItem(rootItem)
 {
 }
 
-GraphicalModel::~GraphicalModel()
+TreelModel::~TreelModel()
 {
     delete mRootItem;
 }
 
-void GraphicalModel::addGraphicalItem(GraphicalItem* item, GraphicalItem* parent, const QModelIndex& parentIndex)
+void TreelModel::addItem(TreeItem* item, TreeItem* parent, const QModelIndex& parentIndex)
 {
     if (!parent) {
         parent = mRootItem;
@@ -27,7 +27,7 @@ void GraphicalModel::addGraphicalItem(GraphicalItem* item, GraphicalItem* parent
     endInsertRows();
 }
 
-QVariant GraphicalModel::data(const QModelIndex& index, int role) const
+QVariant TreelModel::data(const QModelIndex& index, int role) const
 {
     if (!index.isValid()) {
         return QVariant();
@@ -37,18 +37,18 @@ QVariant GraphicalModel::data(const QModelIndex& index, int role) const
         return QVariant();
     }
 
-    GraphicalItem* item = graphicalItemFromIndex(index);
+    TreeItem* item = itemFromIndex(index);
     return item->name();
 }
 
-QModelIndex GraphicalModel::index(int row, int column, const QModelIndex& parent) const
+QModelIndex TreelModel::index(int row, int column, const QModelIndex& parent) const
 {
     if (!hasIndex(row, column, parent)) {
         return QModelIndex();
     }
 
-    GraphicalItem* parentItem = graphicalItemFromIndex(parent);
-    GraphicalItem* childItem = parentItem->child(row);
+    TreeItem* parentItem = itemFromIndex(parent);
+    TreeItem* childItem = parentItem->child(row);
     if (childItem) {
         return createIndex(row, column, childItem);
     } else {
@@ -56,14 +56,14 @@ QModelIndex GraphicalModel::index(int row, int column, const QModelIndex& parent
     }
 }
 
-QModelIndex GraphicalModel::parent(const QModelIndex& child) const
+QModelIndex TreelModel::parent(const QModelIndex& child) const
 {
     if (!child.isValid()) {
         return QModelIndex();
     }
 
-    GraphicalItem* childItem = graphicalItemFromIndex(child);
-    GraphicalItem* parentItem = childItem->parentItem();
+    TreeItem* childItem = itemFromIndex(child);
+    TreeItem* parentItem = childItem->parentItem();
 
     if (parentItem == mRootItem) {
         return QModelIndex();
@@ -72,35 +72,35 @@ QModelIndex GraphicalModel::parent(const QModelIndex& child) const
     return createIndex(parentItem->row(), 0, parentItem);
 }
 
-int GraphicalModel::rowCount(const QModelIndex& parent) const
+int TreelModel::rowCount(const QModelIndex& parent) const
 {
-    GraphicalItem* parentItem;
+    TreeItem* parentItem;
     if (parent.column() > 0) {
         return 0;
     }
 
-    parentItem = graphicalItemFromIndex(parent);
+    parentItem = itemFromIndex(parent);
     return parentItem->childCount();
 }
 
-int GraphicalModel::columnCount(const QModelIndex& parent) const
+int TreelModel::columnCount(const QModelIndex& parent) const
 {
     return 1;
 }
 
-bool GraphicalModel::setData(const QModelIndex& index, const QVariant& value, int role)
+bool TreelModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
     if (role != Qt::EditRole) {
         return false;
     }
 
-    GraphicalItem* item = graphicalItemFromIndex(index);
+    TreeItem* item = itemFromIndex(index);
     item->setName(value.toString());
     emit dataChanged(index, index);
     return true;
 }
 
-Qt::ItemFlags GraphicalModel::flags(const QModelIndex& index) const
+Qt::ItemFlags TreelModel::flags(const QModelIndex& index) const
 {
     if (!index.isValid()) {
         return 0;
@@ -108,10 +108,10 @@ Qt::ItemFlags GraphicalModel::flags(const QModelIndex& index) const
     return Qt::ItemIsEditable | QAbstractItemModel::flags(index);
 }
 
-GraphicalItem* GraphicalModel::graphicalItemFromIndex(const QModelIndex& index) const
+TreeItem* TreelModel::itemFromIndex(const QModelIndex& index) const
 {
     if (index.isValid()) {
-        return static_cast<GraphicalItem*>(index.internalPointer());
+        return static_cast<TreeItem*>(index.internalPointer());
     } else {
         return mRootItem;
     }

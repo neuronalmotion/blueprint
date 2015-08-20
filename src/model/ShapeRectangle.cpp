@@ -8,8 +8,8 @@ static const uint TOP_RIGHT_INDEX       = 3;
 static const uint BOTTOM_RIGHT_INDEX    = 6;
 static const uint BOTTOM_LEFT_INDEX     = 9;
 
-ShapeRectangle::ShapeRectangle(GraphicalItem* parentItem, qreal x, qreal y)
-    : ShapeBezier(parentItem, x, y)
+ShapeRectangle::ShapeRectangle(TreeItem* parentItem, qreal x, qreal y)
+    : Shape(parentItem, x, y)
 {
     addPath(QPointF(40, 0), QPointF(60, 0), QPointF(100, 0));
     addPath(QPointF(100, 20), QPointF(100, 40), QPointF(100, 50));
@@ -17,5 +17,10 @@ ShapeRectangle::ShapeRectangle(GraphicalItem* parentItem, qreal x, qreal y)
     addPath(QPointF(0, 40), QPointF(0, 20), QPointF(0, 0));
     closePath();
     mBoundingBox->updateRect();
+}
+
+ShapeRectangle::~ShapeRectangle()
+{
+
 }
 

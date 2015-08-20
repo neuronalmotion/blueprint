@@ -2,9 +2,9 @@
 
 #include <QPen>
 
-#include "ShapeBezier.h"
+#include "Shape.h"
 
-BezierControlPoint::BezierControlPoint(ShapeBezier* parent, int index)
+BezierControlPoint::BezierControlPoint(Shape* parent, int index)
     : BezierElement(ElementType::CONTROL_POINT, parent, index),
     QGraphicsRectItem(parent->getGraphicsItem())
 {

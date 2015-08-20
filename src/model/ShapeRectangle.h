@@ -1,13 +1,14 @@
 #ifndef SHAPERECTANGLE_H
 #define SHAPERECTANGLE_H
 
-#include "ShapeBezier.h"
+#include "Shape.h"
 
 
-class ShapeRectangle : public ShapeBezier
+class ShapeRectangle : public Shape
 {
 public:
-    ShapeRectangle(GraphicalItem* parentItem, qreal x, qreal y);
+    ShapeRectangle(TreeItem* parentItem, qreal x, qreal y);
+    ~ShapeRectangle();
 
 };
 

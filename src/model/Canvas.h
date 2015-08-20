@@ -4,14 +4,14 @@
 #include <QList>
 
 #include "model/ShapeRectangle.h"
-#include "model/GraphicalItem.h"
+#include "model/TreeItem.h"
 
 class Shape;
 
 class Canvas : public ShapeRectangle
 {
 public:
-    Canvas(GraphicalItem* parentItem, qreal x, qreal y);
+    Canvas(TreeItem* parentItem, qreal x, qreal y);
     ~Canvas();
 
 };

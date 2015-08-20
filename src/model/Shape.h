@@ -1,17 +1,22 @@
 #ifndef SHAPE_H
 #define SHAPE_H
 
-#include <QGraphicsItem>
-#include <QRectF>
+#include <QList>
+#include <QGraphicsPathItem>
+#include <QGraphicsEllipseItem>
 
-#include "model/GraphicalItem.h"
-#include "model/BoundingBox.h"
-#include "model/BoundingBoxPoint.h"
+#include "TreeItem.h"
+#include "BezierElement.h"
+#include "BoundingBox.h"
 
-class Shape : public GraphicalItem
+class QPointF;
+class BezierPath;
+
+class Shape : public TreeItem
 {
 public:
 
+    // FIXME Rename to ShapeType
     enum Type {
         CANVAS,
         SHAPE_BEZIER,
@@ -25,21 +30,30 @@ public:
         BEZIER
     };
 
-    Shape(GraphicalItem* parentItem);
-    virtual ~Shape();
+    Shape(TreeItem* parentItem, qreal x, qreal y);
+    ~Shape();
+    virtual QGraphicsItem* getGraphicsItem();
+    void addPath(const QPointF& c1, const QPointF& c2, const QPointF& endPos);
+    void closePath();
+    void updateElement(BezierElement* bezierElement, const QPointF& pos);
+    void boundingBoxEvent(const BoundingBoxEvent& event);
 
-    virtual QGraphicsItem* getGraphicsItem() = 0;
-    virtual void setIsSelected(bool isSelected) { }
-    virtual void setEditMode(EditMode mode);
-    virtual void boundingBoxEvent(const BoundingBoxEvent& event) = 0;
-    virtual QRectF getBounds() { getGraphicsItem()->boundingRect(); }
-    virtual void setBackgroundColor(QColor color) { }
-    virtual void setBorderColor(QColor color) { }
+    void setSelected(bool selected) override;
+    void setEditMode(const EditMode& mode);
+    QRectF getBounds();
+    void setBackgroundColor(const QColor& color);
+    void setBorderColor(const QColor& color);
+    inline BoundingBox* boundingBox(){ return mBoundingBox; }
 
 protected:
+    void updateBoundingBoxBezierVisibility();
+
+    QGraphicsPathItem* mItem;
+    QPainterPath mPath;
+    QList<BezierElement*> mElements;
+    BoundingBox* mBoundingBox;
+    bool mIsPathClosed;
     EditMode mEditMode;
-
-
 };
 
 #endif // SHAPE_H

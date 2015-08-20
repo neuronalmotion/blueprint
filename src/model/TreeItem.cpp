@@ -1,11 +1,11 @@
-#include "GraphicalItem.h"
+#include "TreeItem.h"
 
 #include <QString>
 
 static int id = 1;
 
-GraphicalItem::GraphicalItem(const GraphicalType& graphicalType, GraphicalItem* parentItem)
-    : mGraphicalType(graphicalType),
+TreeItem::TreeItem(const ItemType& itemType, TreeItem* parentItem)
+    : mItemType(itemType),
       mParentItem(parentItem),
       mName(QString("GraphicalItem #%1").arg(id++)),
       mModelIndex(nullptr),
@@ -23,13 +23,13 @@ GraphicalItem::GraphicalItem(const GraphicalType& graphicalType, GraphicalItem* 
     }
 }
 
-GraphicalItem::~GraphicalItem()
+TreeItem::~TreeItem()
 {
     delete mModelIndex;
     qDeleteAll(mChildItems);
 }
 
-void GraphicalItem::appendChild(GraphicalItem* child)
+void TreeItem::appendChild(TreeItem* child)
 {
     mChildItems.append(child);
 
@@ -40,25 +40,25 @@ void GraphicalItem::appendChild(GraphicalItem* child)
     }
 }
 
-GraphicalItem*GraphicalItem::child(int row)
+TreeItem*TreeItem::child(int row)
 {
     return mChildItems.at(row);
 }
 
-int GraphicalItem::childCount() const
+int TreeItem::childCount() const
 {
     return mChildItems.length();
 }
 
-int GraphicalItem::columnCount() const
+int TreeItem::columnCount() const
 {
     return 1;
 }
 
-int GraphicalItem::row() const
+int TreeItem::row() const
 {
     if (mParentItem) {
-        return mParentItem->mChildItems.indexOf((const_cast<GraphicalItem*>(this)));
+        return mParentItem->mChildItems.indexOf((const_cast<TreeItem*>(this)));
     }
     return 0;
 }

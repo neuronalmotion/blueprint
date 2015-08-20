@@ -1,5 +1,5 @@
-#ifndef GRAPHICALITEM_H
-#define GRAPHICALITEM_H
+#ifndef TREEITEM_H
+#define TREEITEM_H
 
 #include <QGraphicsItem>
 #include <QList>
@@ -9,11 +9,11 @@
 #include <QModelIndex>
 
 
-class GraphicalItem
+class TreeItem
 {
 public:
 
-    enum GraphicalType {
+    enum ItemType {
         // General types
         BLUEPRINT,
         PAGE,
@@ -21,34 +21,34 @@ public:
         SHAPE,
     };
 
-    explicit GraphicalItem(const GraphicalType& graphicalType, GraphicalItem* parentItem = 0);
-    ~GraphicalItem();
+    explicit TreeItem(const ItemType& itemType, TreeItem* parentItem = 0);
+    virtual ~TreeItem();
 
     virtual QGraphicsItem* getGraphicsItem() { return nullptr; }
 
-    void appendChild(GraphicalItem* child);
+    void appendChild(TreeItem* child);
 
-    GraphicalItem* child(int row);
+    TreeItem* child(int row);
     int childCount() const;
     int columnCount() const;
     int row() const;
 
     inline QString name() const { return mName; }
     inline void setName(const QString& name) { mName = name; }
-    inline GraphicalType graphicalType() const { return mGraphicalType; }
-    inline GraphicalItem* parentItem() const {return mParentItem; }
-    inline void setParent(GraphicalItem* parentItem) { mParentItem = parentItem; }
+    inline ItemType itemType() const { return mItemType; }
+    inline TreeItem* parentItem() const {return mParentItem; }
+    inline void setParent(TreeItem* parentItem) { mParentItem = parentItem; }
     inline QPersistentModelIndex* modelIndex() const { return mModelIndex; }
     inline void setModelIndex(const QModelIndex& index) { mModelIndex = new QPersistentModelIndex(index); }
 
     virtual inline void setSelected(bool selected) { mIsSelected = selected; }
 protected:
     QString mName;
-    GraphicalType mGraphicalType;
-    QList<GraphicalItem*> mChildItems;
-    GraphicalItem* mParentItem;
+    ItemType mItemType;
+    QList<TreeItem*> mChildItems;
+    TreeItem* mParentItem;
     QPersistentModelIndex* mModelIndex;
     bool mIsSelected;
 };
 
-#endif // GRAPHICALITEM_H
+#endif // TREEITEM_H

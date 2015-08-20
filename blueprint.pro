@@ -18,13 +18,12 @@ SOURCES += src/main.cpp\
     src/model/BezierElement.cpp \
     src/model/BoundingBox.cpp \
     src/model/BoundingBoxPoint.cpp \
-    src/model/GraphicalItem.cpp \
-    src/model/GraphicalModel.cpp \
     src/model/Canvas.cpp \
-    src/model/Shape.cpp \
-    src/model/ShapeBezier.cpp \
     src/model/ShapeEllipse.cpp \
-    src/model/ShapeRectangle.cpp
+    src/model/ShapeRectangle.cpp \
+    src/model/TreeModel.cpp \
+    src/model/TreeItem.cpp \
+    src/model/Shape.cpp
 
 HEADERS  += src/MainWindow.h \
     src/CanvasView.h \
@@ -36,12 +35,11 @@ HEADERS  += src/MainWindow.h \
     src/model/BezierElement.h \
     src/model/BoundingBox.h \
     src/model/BoundingBoxPoint.h \
-    src/model/GraphicalItem.h \
-    src/model/GraphicalModel.h \
     src/model/Canvas.h \
-    src/model/Shape.h \
-    src/model/ShapeBezier.h \
     src/model/ShapeEllipse.h \
-    src/model/ShapeRectangle.h
+    src/model/ShapeRectangle.h \
+    src/model/TreeModel.h \
+    src/model/TreeItem.h \
+    src/model/Shape.h
 
 FORMS    += src/MainWindow.ui

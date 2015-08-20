@@ -3,11 +3,11 @@
 
 #include <QList>
 
-#include "model/GraphicalItem.h"
+#include "model/TreeItem.h"
 
 class Page;
 
-class Blueprint : public GraphicalItem
+class Blueprint : public TreeItem
 {
 public:
     Blueprint();

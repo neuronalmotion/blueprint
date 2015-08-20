@@ -9,13 +9,13 @@
 #include "model/Blueprint.h"
 #include "model/Page.h"
 #include "model/Canvas.h"
-#include "model/ShapeBezier.h"
+#include "model/Shape.h"
 #include "model/ShapeRectangle.h"
 #include "model/ShapeEllipse.h"
 #include "model/BezierPoint.h"
 #include "model/BezierControlPoint.h"
-#include "model/GraphicalItem.h"
-#include "model/GraphicalModel.h"
+#include "model/TreeItem.h"
+#include "model/TreeModel.h"
 
 MainWindow::MainWindow(QWidget* parent) :
     QMainWindow(parent),
@@ -59,24 +59,24 @@ MainWindow::MainWindow(QWidget* parent) :
     mCurrentCanvas = c1;
 
     // Common
-    mModel = new GraphicalModel(mCurrentBlueprint, this);
+    mModel = new TreelModel(mCurrentBlueprint, this);
     mUi->treeView->setModel(mModel);
-    mModel->addGraphicalItem(p1, mCurrentBlueprint);
-    mModel->addGraphicalItem(c1, p1, *p1->modelIndex());
-    mModel->addGraphicalItem(c2, p1, *p1->modelIndex());
+    mModel->addItem(p1, mCurrentBlueprint);
+    mModel->addItem(c1, p1, *p1->modelIndex());
+    mModel->addItem(c2, p1, *p1->modelIndex());
 
     // FIXME this code is so fragile that it should be deleted very quickly
     // it works only if the parent Canvas is selected in the treeview...
     connect(mModel, &QAbstractItemModel::rowsInserted,
             [this](const QModelIndex& parent, int first, int /*last*/) {
-        GraphicalItem* parentItem = mModel->graphicalItemFromIndex(parent);
-        GraphicalItem* childItem = parentItem->child(first);
+        TreeItem* parentItem = mModel->itemFromIndex(parent);
+        TreeItem* childItem = parentItem->child(first);
         mUi->statusBar->showMessage(QString("Created item ") + childItem->name());
     });
 
     connect(mUi->treeView->selectionModel(), &QItemSelectionModel::currentChanged,
             [this] (const QModelIndex& current,const QModelIndex&/* previous*/) {
-        GraphicalItem* item = mModel->graphicalItemFromIndex(current);
+        TreeItem* item = mModel->itemFromIndex(current);
         selectGraphicalItem(item);
     });
 }
@@ -102,7 +102,7 @@ void MainWindow::initToolbar()
     }
 }
 
-void MainWindow::selectGraphicalItem(GraphicalItem* item)
+void MainWindow::selectGraphicalItem(TreeItem* item)
 {
     if (item == mSelectedGraphicalItem) {
        return;
@@ -146,7 +146,7 @@ void MainWindow::onCanvasMousePressEvent(QPointF point)
         mCreatingShape = shape;
         mCreatingLastPosition = point;
         QModelIndex index = mUi->treeView->selectionModel()->currentIndex();
-        mModel->addGraphicalItem(mCreatingShape, mCurrentCanvas, index);
+        mModel->addItem(mCreatingShape, mCurrentCanvas, index);
 
     } else  if (mCurrentTool->getType() == Tool::Type::ELLIPSE) {
         ShapeEllipse* shape = new ShapeEllipse(mCurrentCanvas, relPoint.x(), relPoint.y());
@@ -156,7 +156,7 @@ void MainWindow::onCanvasMousePressEvent(QPointF point)
         mCreatingShape = shape;
         mCreatingLastPosition = point;
         QModelIndex index = mUi->treeView->selectionModel()->currentIndex();
-        mModel->addGraphicalItem(mCreatingShape, mCurrentCanvas, index);
+        mModel->addItem(mCreatingShape, mCurrentCanvas, index);
     }
 
 }
@@ -199,7 +199,7 @@ void MainWindow::onFocusItemChanged(QGraphicsItem* newFocusItem, QGraphicsItem* 
 
     // SHAPE_BEZIER
     itemVariant = newFocusItem->data(Shape::Type::SHAPE_BEZIER);
-    ShapeBezier* sketchItemBezier = static_cast<ShapeBezier*>(itemVariant.value<void *>());
+    Shape* sketchItemBezier = static_cast<Shape*>(itemVariant.value<void *>());
     if (sketchItemBezier) {
         mSelectedGraphicalItem = sketchItemBezier;
         mSelectedGraphicalItem->setSelected(true);
@@ -246,7 +246,7 @@ void MainWindow::onCanvasKeyPressEvent(QKeyEvent *event)
     if (event->key() == Qt::Key_Space) {
 
         if (mSelectedGraphicalItem) {
-            ShapeBezier* sketchItemBezier = dynamic_cast<ShapeBezier*>(mSelectedGraphicalItem);
+            Shape* sketchItemBezier = dynamic_cast<Shape*>(mSelectedGraphicalItem);
             if (sketchItemBezier){
                 sketchItemBezier->setEditMode(Shape::EditMode::BEZIER);
             }
@@ -257,7 +257,7 @@ void MainWindow::onCanvasKeyPressEvent(QKeyEvent *event)
 void MainWindow::onCanvasKeyReleaseEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Space) {
-        ShapeBezier* sketchItemBezier = dynamic_cast<ShapeBezier*>(mSelectedGraphicalItem);
+        Shape* sketchItemBezier = dynamic_cast<Shape*>(mSelectedGraphicalItem);
         if (sketchItemBezier){
             sketchItemBezier->setEditMode(Shape::EditMode::BOUNDING_BOX);
         }

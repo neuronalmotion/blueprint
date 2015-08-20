@@ -3,14 +3,14 @@
 
 #include <QList>
 
-#include "model/GraphicalItem.h"
+#include "model/TreeItem.h"
 
 class Canvas;
 
-class Page : public GraphicalItem
+class Page : public TreeItem
 {
 public:
-    Page(GraphicalItem* parentItem = 0);
+    Page(TreeItem* parentItem = 0);
     ~Page();
 
 };
