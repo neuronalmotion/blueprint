@@ -1,9 +1,7 @@
 #ifndef TREEITEM_H
 #define TREEITEM_H
 
-#include <QGraphicsItem>
 #include <QList>
-#include <QPointF>
 #include <QString>
 #include <QPersistentModelIndex>
 #include <QModelIndex>
@@ -43,8 +41,8 @@ public:
 
     virtual inline void setSelected(bool selected) { mIsSelected = selected; }
 protected:
-    QString mName;
     ItemType mItemType;
+    QString mName;
     TreeItem* mParentItem;
     QList<TreeItem*> mChildItems;
     QPersistentModelIndex* mModelIndex;

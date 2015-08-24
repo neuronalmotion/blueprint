@@ -26,17 +26,17 @@ BezierPoint::~BezierPoint()
 
 }
 
-QPointF BezierPoint::getPos()
+QPointF BezierPoint::pos() const
 {
     return QGraphicsItem::pos();
 }
 
-void BezierPoint::setPos(QPointF pos)
+void BezierPoint::setPos(const QPointF& pos)
 {
     QGraphicsItem::setPos(pos);
 }
 
-void BezierPoint::moveBy(QPointF delta)
+void BezierPoint::moveBy(const QPointF& delta)
 {
     QGraphicsItem::moveBy(delta.x(), delta.y());
 }

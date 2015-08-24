@@ -27,34 +27,33 @@ MainWindow::MainWindow(QWidget* parent) :
 
     initToolbar();
 
+    // Warning! The scene must be owned by MainWindow
+    // and deleted manually (no Qt parenting).
+    // All drawn TreeItems (Shapes) are derived classes
+    // of QGraphicsItem, which would delete our items before us
+    mScene = new QGraphicsScene();
+    TreeModel* model = TreeModel::instance();
+    mUi->canvas->setScene(mScene);
+    mUi->treeView->setModel(model);
+
     mCurrentBlueprint = new Blueprint();
     mCurrentBlueprint->setName("Blueprint");
 
-    // Page 1
     Page* p1 = new Page(mCurrentBlueprint);
     p1->setName("Page 1");
 
-    // Canvas 1
     Canvas* c1 = new Canvas(p1, 0, 0);
     c1->setName("Canvas 1");
     mUi->canvas->scene()->addItem(c1);
 
-    // Canvas 2
     Canvas* c2 = new Canvas(p1, 450, 0);
     c2->setName("Canvas 2");
     mUi->canvas->scene()->addItem(c2);
 
-    // Common
-    TreeModel* model = TreeModel::instance();
-    model->setRootItem(mCurrentBlueprint);
-
-    mUi->treeView->setModel(model);
-    model->addItem(p1, mCurrentBlueprint);
+    model->setRootItem(p1);
     model->addItem(c1, p1);
     model->addItem(c2, p1);
 
-    // FIXME this code is so fragile that it should be deleted very quickly
-    // it works only if the parent Canvas is selected in the treeview...
     connect(model, &QAbstractItemModel::rowsInserted,
             [this, model](const QModelIndex& parent, int first, int /*last*/) {
         TreeItem* parentItem = model->itemFromIndex(parent);
@@ -65,7 +64,6 @@ MainWindow::MainWindow(QWidget* parent) :
     connect(mUi->treeView->selectionModel(), &QItemSelectionModel::currentChanged,
             [this, model] (const QModelIndex& current,const QModelIndex&/* previous*/) {
         TreeItem* item = model->itemFromIndex(current);
-        qDebug() << "ITEM NAME" << item->name();
         if (!item->parentTreeItem()) {
             return;
         }
@@ -75,7 +73,7 @@ MainWindow::MainWindow(QWidget* parent) :
     });
 
     connect(model, &TreeModel::selectionsChanged,
-            [this, model](const QModelIndex& parent, int first, int last) {
+            [this, model](const QModelIndex& parent, int first, int /*last*/) {
         TreeItem* parentItem = model->itemFromIndex(parent);
         TreeItem* childItem = parentItem->child(first);
         mUi->treeView->selectionModel()->select(*childItem->modelIndex(),
@@ -86,6 +84,11 @@ MainWindow::MainWindow(QWidget* parent) :
 
 MainWindow::~MainWindow()
 {
+    // remove items *before* cleaning treeitem
+    for (auto item : mScene->items()) {
+        mScene->removeItem(item);
+    }
+    delete mCurrentBlueprint;
     delete TreeModel::instance();
     delete mUi;
     qDeleteAll(mTools);

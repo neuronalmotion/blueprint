@@ -11,6 +11,7 @@ TreeItem::TreeItem(const ItemType& itemType, TreeItem* parentItem)
     : mItemType(itemType),
       mName(QString("GraphicalItem #%1").arg(id++)),
       mParentItem(parentItem),
+      mChildItems(),
       mModelIndex(nullptr),
       mIsSelected(false)
 {
@@ -20,7 +21,6 @@ TreeItem::TreeItem(const ItemType& itemType, TreeItem* parentItem)
 
 TreeItem::~TreeItem()
 {
-    qDebug() << "~TreeItem() " << mName;
     delete mModelIndex;
     qDeleteAll(mChildItems);
 }

@@ -15,7 +15,7 @@ Shape::Shape(TreeItem* parentItem, qreal x, qreal y)
       QGraphicsPathItem(),
       mPath(),
       mElements(),
-      mBoundingBox(new BoundingBox(this)),
+      mBoundingBox(this),
       mIsPathClosed(false),
       mEditMode(EditMode::BOUNDING_BOX)
 {
@@ -30,12 +30,12 @@ Shape::Shape(TreeItem* parentItem, qreal x, qreal y)
     setData(Shape::ShapeType::SHAPE, qVariantFromValue(static_cast<void *>(this)));
     setPos(x, y);
 
-    mBoundingBox->setVisible(false);
+    mBoundingBox.setVisible(false);
 }
 
 Shape::~Shape()
 {
-    //FIXME check memleak of mElements/mItem
+    qDeleteAll(mElements);
 }
 
 void Shape::addPath(const QPointF& c1, const QPointF& c2, const QPointF& endPos)
@@ -79,11 +79,11 @@ void Shape::closePath()
 void Shape::updateElement(BezierElement* bezierElement, const QPointF& pos)
 {
     int listIndex = mElements.indexOf(bezierElement);
-    QPointF delta = pos - bezierElement->getPos();
+    QPointF delta = pos - bezierElement->pos();
 
     // Move control points associated to the bezier point
     if(listIndex >= 0
-            && bezierElement->getElementType() == BezierElement::POINT
+            && bezierElement->elementType() == BezierElement::POINT
             && mEditMode == EditMode::BEZIER) {
 
         if (bezierElement == mElements.first()) {
@@ -105,11 +105,11 @@ void Shape::updateElement(BezierElement* bezierElement, const QPointF& pos)
     }
 
     // Move the current element
-    mPath.setElementPositionAt(bezierElement->getIndex(), pos.x(), pos.y());
+    mPath.setElementPositionAt(bezierElement->index(), pos.x(), pos.y());
     setPath(mPath);
 
     // Update bounding box and handles positions
-    mBoundingBox->updateRect();
+    mBoundingBox.updateRect();
 }
 
 void Shape::boundingBoxEvent(const BoundingBoxEvent& event)
@@ -118,7 +118,7 @@ void Shape::boundingBoxEvent(const BoundingBoxEvent& event)
         BezierElement* element = mElements[i];
 
         // Move to bounding box origin
-        QPointF p1 = element->getPos() - event.origin;
+        QPointF p1 = element->pos() - event.origin;
 
         // Apply scale factor
         p1.setX(p1.x() * event.scale.x());
@@ -165,7 +165,7 @@ void Shape::updateBoundingBoxBezierVisibility()
     // Update bounding box visibility
     bool boundingboxVisibility = mIsSelected && mEditMode == EditMode::BOUNDING_BOX;
     qDebug() << "boundingboxVisibility : " << boundingboxVisibility;
-    mBoundingBox->setVisible(boundingboxVisibility);
+    mBoundingBox.setVisible(boundingboxVisibility);
 
     // Update bezier points visibility
     bool bezierVisibility = mIsSelected && mEditMode == EditMode::BEZIER;
@@ -175,7 +175,7 @@ void Shape::updateBoundingBoxBezierVisibility()
     }
 }
 
-QRectF Shape::getBounds()
+QRectF Shape::bounds() const
 {
     QRectF bounds(0.0, 0.0, 0.0, 0.0);
 
@@ -183,13 +183,13 @@ QRectF Shape::getBounds()
         return bounds;
     }
 
-    QPointF initValue = mElements[0]->getPos();
+    QPointF initValue = mElements[0]->pos();
     QPointF lower(initValue);
     QPointF higher(initValue);
 
     for (int i = 1; i < mElements.length(); i++) {
         BezierElement* element = mElements[i];
-        QPointF position = element->getPos();
+        QPointF position = element->pos();
 
         if (position.x() < lower.x()) {
             lower.setX(position.x());

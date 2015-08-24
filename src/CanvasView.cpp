@@ -19,15 +19,12 @@ using namespace blueprint;
 CanvasView::CanvasView(QWidget* parent)
     : QGraphicsView(parent),
     mCurrentTool(Tool::Type::SELECTION),
-    mCreatingShape(nullptr),
-    mCurrentCanvas(nullptr),
     mSelectedShape(nullptr),
+    mCurrentCanvas(nullptr),
+    mCreatingShape(nullptr),
+    mCreatingLastPosition(0, 0),
     mZoomFactor(1.0f)
 {
-    QGraphicsScene* scene = new QGraphicsScene(this);
-    setScene(scene);
-
-    connect(scene, &QGraphicsScene::focusItemChanged, this, &CanvasView::onFocusItemChanged);
     connect(TreeModel::instance(), &TreeModel::selectionsChanged, this, &CanvasView::selectionsChanged);
 }
 
@@ -35,7 +32,7 @@ CanvasView::~CanvasView()
 {
 }
 
-void CanvasView::selectionsChanged(const QModelIndex& parent, int first, int last)
+void CanvasView::selectionsChanged(const QModelIndex& parent, int first, int /*last*/)
 {
     TreeModel* model = TreeModel::instance();
     blueprint::Shape* item = static_cast<blueprint::Shape*>(model->itemFromParentIndex(parent, first));
@@ -97,7 +94,6 @@ void CanvasView::mouseMoveEvent(QMouseEvent *event)
 
     QPointF point = QGraphicsView::mapToScene(event->pos());
     if (mCreatingShape) {
-        QPointF delta = point - mCreatingLastPosition;
         mCreatingLastPosition = point;
         //TODO: boundingBoxPointMoved
     }
@@ -110,7 +106,7 @@ void CanvasView::mouseReleaseEvent(QMouseEvent *event)
     mCreatingLastPosition = QPointF(0.0f, 0.0f);
 }
 
-void CanvasView::mouseDoubleClickEvent(QMouseEvent* event)
+void CanvasView::mouseDoubleClickEvent(QMouseEvent* /*event*/)
 {
     if (mSelectedShape) {
         mSelectedShape->toggleEditMode();
@@ -124,12 +120,12 @@ void CanvasView::wheelEvent(QWheelEvent *event)
     fitView();
 }
 
-void CanvasView::resizeEvent(QResizeEvent* event)
+void CanvasView::resizeEvent(QResizeEvent* /*event*/)
 {
     fitView();
 }
 
-void CanvasView::showEvent(QShowEvent* event)
+void CanvasView::showEvent(QShowEvent* /*event*/)
 {
     fitView();
 }
@@ -150,7 +146,7 @@ void CanvasView::keyReleaseEvent(QKeyEvent *event)
     QGraphicsView::keyReleaseEvent(event);
 }
 
-void CanvasView::onFocusItemChanged(QGraphicsItem* newFocusItem, QGraphicsItem* oldFocusItem, Qt::FocusReason reason)
+void CanvasView::onFocusItemChanged(QGraphicsItem* newFocusItem, QGraphicsItem* /*oldFocusItem*/, Qt::FocusReason /*reason*/)
 {
     QVariant itemVariant = newFocusItem->data(blueprint::Shape::ShapeType::SHAPE);
     blueprint::Shape* shape = static_cast<blueprint::Shape*>(itemVariant.value<void *>());
@@ -160,6 +156,12 @@ void CanvasView::onFocusItemChanged(QGraphicsItem* newFocusItem, QGraphicsItem* 
     QModelIndex index = (QModelIndex)(*shape->parentTreeItem()->modelIndex());
     int shapeIndex = shape->parentTreeItem()->indexOf(shape);
     TreeModel::instance()->selectionsChanged(index, shapeIndex, shapeIndex);
+}
+
+void CanvasView::setScene(QGraphicsScene* scene)
+{
+    QGraphicsView::setScene(scene);
+    connect(scene, &QGraphicsScene::focusItemChanged, this, &CanvasView::onFocusItemChanged);
 }
 
 void CanvasView::fitView()

@@ -14,10 +14,10 @@ public:
     BezierControlPoint(Shape* parent, const int index);
     ~BezierControlPoint();
 
-    QPointF getPos();
-    void setPos(QPointF pos);
-    void moveBy(QPointF delta);
-    void setVisible(bool isVisible);
+    QPointF pos() const override;
+    void setPos(const QPointF& pos) override;
+    void moveBy(const QPointF& delta) override;
+    void setVisible(bool isVisible) override;
 
 protected:
     QVariant itemChange(GraphicsItemChange change, const QVariant &value);

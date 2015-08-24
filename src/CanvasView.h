@@ -22,6 +22,8 @@ public:
     CanvasView(QWidget* parent = 0);
     ~CanvasView();
 
+    void setScene(QGraphicsScene *scene);
+
     void selectionsChanged(const QModelIndex& parent, int first, int last);
 
 public slots:
