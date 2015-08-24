@@ -144,6 +144,14 @@ void Shape::setSelected(bool selected)
     }
 }
 
+void Shape::toggleEditMode()
+{
+    EditMode nextEditMode = editMode() == EditMode::BEZIER ?
+                EditMode::BOUNDING_BOX
+              : EditMode::BEZIER;
+    setEditMode(nextEditMode);
+}
+
 void Shape::setEditMode(const EditMode& mode)
 {
     mEditMode = mode;

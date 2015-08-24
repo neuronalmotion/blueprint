@@ -3,6 +3,8 @@
 
 #include <QAction>
 
+namespace blueprint {
+
 class Tool
 {
 public:
@@ -25,5 +27,7 @@ private:
     Type mType;
     QAction* mAction;
 };
+
+}
 
 #endif // TOOL_H

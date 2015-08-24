@@ -9,9 +9,11 @@
 
 namespace blueprint {
 class Canvas;
-class TreeItem;
 class Shape;
+class Tool;
+class TreeItem;
 }
+
 
 class CanvasView : public QGraphicsView
 {
@@ -23,7 +25,7 @@ public:
     void selectionsChanged(const QModelIndex& parent, int first, int last);
 
 public slots:
-    void setTool(Tool::Type toolType);
+    void setTool(blueprint::Tool::Type toolType);
     void onFocusItemChanged(QGraphicsItem* newFocusItem, QGraphicsItem* oldFocusItem, Qt::FocusReason reason);
 
 protected:
@@ -31,17 +33,19 @@ protected:
     void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent* event) override;
+    void mouseDoubleClickEvent(QMouseEvent* event) override;
     void wheelEvent(QWheelEvent *event) override;
     void resizeEvent(QResizeEvent *event) override;
     void showEvent(QShowEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
     void keyReleaseEvent(QKeyEvent *event) override;
 
+private:
     void fitView();
 
-protected:
-    Tool::Type mCurrentTool;
-    blueprint::TreeItem* mSelectedShape;
+private:
+    blueprint::Tool::Type mCurrentTool;
+    blueprint::Shape* mSelectedShape;
     blueprint::Canvas* mCurrentCanvas;
     blueprint::Shape* mCreatingShape;
     QPointF mCreatingLastPosition;
