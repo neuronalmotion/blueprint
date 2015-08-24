@@ -28,7 +28,7 @@ BezierControlPoint::~BezierControlPoint()
 
 }
 
-QPointF BezierControlPoint::getPos()
+QPointF BezierControlPoint::pos() const
 {
     return QGraphicsItem::pos();
 }

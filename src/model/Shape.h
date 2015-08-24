@@ -42,7 +42,7 @@ public:
     inline EditMode editMode() const { return mEditMode; }
     void toggleEditMode();
     void setEditMode(const EditMode& mode);
-    QRectF getBounds();
+    QRectF bounds() const;
     void setBackgroundColor(const QColor& color);
     void setBorderColor(const QColor& color);
     inline BoundingBox* boundingBox(){ return mBoundingBox; }

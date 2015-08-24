@@ -98,7 +98,7 @@ int TreeModel::rowCount(const QModelIndex& parent) const
     return parentItem->childCount();
 }
 
-int TreeModel::columnCount(const QModelIndex& parent) const
+int TreeModel::columnCount(const QModelIndex& /*parent*/) const
 {
     return 1;
 }

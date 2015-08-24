@@ -75,7 +75,7 @@ MainWindow::MainWindow(QWidget* parent) :
     });
 
     connect(model, &TreeModel::selectionsChanged,
-            [this, model](const QModelIndex& parent, int first, int last) {
+            [this, model](const QModelIndex& parent, int first, int /*last*/) {
         TreeItem* parentItem = model->itemFromIndex(parent);
         TreeItem* childItem = parentItem->child(first);
         mUi->treeView->selectionModel()->select(*childItem->modelIndex(),

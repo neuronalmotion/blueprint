@@ -7,8 +7,6 @@
 
 namespace blueprint {
 
-class Page;
-
 class Blueprint : public TreeItem
 {
 public:

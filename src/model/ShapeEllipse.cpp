@@ -5,12 +5,6 @@
 
 using namespace blueprint;
 
-// Constants
-static const uint TOP_INDEX     = 12;
-static const uint RIGHT_INDEX   = 3;
-static const uint BOTTOM_INDEX  = 6;
-static const uint LEFT_INDEX    = 9;
-
 ShapeEllipse::ShapeEllipse(TreeItem* parentItem, qreal x, qreal y)
     : Shape(parentItem, x, y)
 {

@@ -4,12 +4,6 @@
 
 using namespace blueprint;
 
-// Constants
-static const uint TOP_LEFT_INDEX        = 12;
-static const uint TOP_RIGHT_INDEX       = 3;
-static const uint BOTTOM_RIGHT_INDEX    = 6;
-static const uint BOTTOM_LEFT_INDEX     = 9;
-
 ShapeRectangle::ShapeRectangle(TreeItem* parentItem, qreal x, qreal y)
     : Shape(parentItem, x, y)
 {

@@ -20,7 +20,7 @@ struct BoundingBoxEvent
 class BoundingBox : public QGraphicsRectItem
 {
 public:
-    BoundingBox(Shape* parentSketchItem);
+    BoundingBox(Shape* parent);
     ~BoundingBox();
 
     void updateRect(BoundingBoxPoint::TranslationDirection ignoredDirection = BoundingBoxPoint::NONE);
@@ -30,7 +30,6 @@ public:
 private:
     Shape* mParentShape;
     BoundingBoxEvent mBoundingBoxEvent;
-
     QHash<BoundingBoxPoint::TranslationDirection, BoundingBoxPoint*> mHashBoundingBoxPoints;
 
 };

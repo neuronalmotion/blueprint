@@ -6,10 +6,11 @@
 
 using namespace blueprint;
 
-BoundingBox::BoundingBox(Shape* parentSketchItem)
-    : QGraphicsRectItem(parentSketchItem),
-      mParentShape(parentSketchItem),
-    mBoundingBoxEvent({QPointF(), QPointF(), QPointF()})
+BoundingBox::BoundingBox(Shape* parent)
+    : QGraphicsRectItem(parent),
+      mParentShape(parent),
+    mBoundingBoxEvent({QPointF(), QPointF(), QPointF()}),
+    mHashBoundingBoxPoints()
 {
     mHashBoundingBoxPoints.insert(BoundingBoxPoint::TOP_LEFT, new BoundingBoxPoint(this, BoundingBoxPoint::TOP_LEFT));
     mHashBoundingBoxPoints.insert(BoundingBoxPoint::TOP, new BoundingBoxPoint(this, BoundingBoxPoint::TOP));
@@ -19,9 +20,6 @@ BoundingBox::BoundingBox(Shape* parentSketchItem)
     mHashBoundingBoxPoints.insert(BoundingBoxPoint::BOTTOM, new BoundingBoxPoint(this, BoundingBoxPoint::BOTTOM));
     mHashBoundingBoxPoints.insert(BoundingBoxPoint::BOTTOM_LEFT, new BoundingBoxPoint(this, BoundingBoxPoint::BOTTOM_LEFT));
     mHashBoundingBoxPoints.insert(BoundingBoxPoint::LEFT, new BoundingBoxPoint(this, BoundingBoxPoint::LEFT));
-
-    qDebug() << "mHashBoundingBoxPoints : BOTTOM_RIGHT : " << mHashBoundingBoxPoints[BoundingBoxPoint::BOTTOM_RIGHT]->pos();
-    qDebug() << "mHashBoundingBoxPoints : TOP_LEFT : " << mHashBoundingBoxPoints[BoundingBoxPoint::TOP_LEFT]->pos();
 }
 
 BoundingBox::~BoundingBox()
@@ -30,61 +28,53 @@ BoundingBox::~BoundingBox()
 
 void BoundingBox::updateRect(BoundingBoxPoint::TranslationDirection ignoredDirection)
 {
-    QRectF boundingRect = mParentShape->getBounds();
+    QRectF boundingRect = mParentShape->bounds();
 
     qreal x;
     qreal y;
 
-    // position top left handle
     if (ignoredDirection != BoundingBoxPoint::TOP_LEFT) {
         x = boundingRect.x();
         y = boundingRect.y();
         mHashBoundingBoxPoints[BoundingBoxPoint::TOP_LEFT]->setPos(x, y);
     }
 
-    // position top handle
     if (ignoredDirection != BoundingBoxPoint::TOP) {
         x = boundingRect.x() + (boundingRect.width() / 2);
         y = boundingRect.y();
         mHashBoundingBoxPoints[BoundingBoxPoint::TOP]->setPos(x, y);
     }
 
-    // position top right handle
     if (ignoredDirection != BoundingBoxPoint::TOP_RIGHT) {
         x = boundingRect.x() + boundingRect.width();
         y = boundingRect.y();
         mHashBoundingBoxPoints[BoundingBoxPoint::TOP_RIGHT]->setPos(x, y);
     }
 
-    // position right handle
     if (ignoredDirection != BoundingBoxPoint::RIGHT) {
         x = boundingRect.x() + boundingRect.width();
         y = boundingRect.y() + (boundingRect.height() / 2);
         mHashBoundingBoxPoints[BoundingBoxPoint::RIGHT]->setPos(x, y);
     }
 
-    // position bottom right handle
     if (ignoredDirection != BoundingBoxPoint::BOTTOM_RIGHT) {
         x = boundingRect.x() + boundingRect.width();
         y = boundingRect.y() + boundingRect.height();
         mHashBoundingBoxPoints[BoundingBoxPoint::BOTTOM_RIGHT]->setPos(x, y);
     }
 
-    // position bottom handle
     if (ignoredDirection != BoundingBoxPoint::BOTTOM) {
         x = boundingRect.x() + (boundingRect.width() / 2);
         y = boundingRect.y() + boundingRect.height();
         mHashBoundingBoxPoints[BoundingBoxPoint::BOTTOM]->setPos(x, y);
     }
 
-    // position bottom left handle
     if (ignoredDirection != BoundingBoxPoint::BOTTOM_LEFT) {
         x = boundingRect.x();
         y = boundingRect.y() + boundingRect.height();
         mHashBoundingBoxPoints[BoundingBoxPoint::BOTTOM_LEFT]->setPos(x, y);
     }
 
-    // position left handle
     if (ignoredDirection != BoundingBoxPoint::LEFT) {
         x = boundingRect.x();
         y = boundingRect.y() + (boundingRect.height() / 2);
@@ -98,7 +88,7 @@ void BoundingBox::boundingBoxPointMoved(BoundingBoxPoint::TranslationDirection d
     QPointF handlePoint;
     QPointF origin;
 
-    QRectF bounds = mParentShape->getBounds();
+    QRectF bounds = mParentShape->bounds();
     qreal halfWidth = bounds.width() / 2.0f;
     qreal halfHeight = bounds.height() / 2.0f;
 

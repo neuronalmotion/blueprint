@@ -26,7 +26,7 @@ BezierPoint::~BezierPoint()
 
 }
 
-QPointF BezierPoint::getPos()
+QPointF BezierPoint::pos() const
 {
     return QGraphicsItem::pos();
 }

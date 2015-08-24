@@ -28,11 +28,6 @@ BoundingBoxPoint::~BoundingBoxPoint()
 
 }
 
-BoundingBoxPoint::TranslationDirection BoundingBoxPoint::getTranslationDirection() const
-{
-    return mTranslationDirection;
-}
-
 void BoundingBoxPoint::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
 {
     if ((event->buttons() & Qt::LeftButton) == Qt::LeftButton)
