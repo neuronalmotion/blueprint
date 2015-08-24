@@ -19,13 +19,12 @@ public:
     virtual ~BezierElement();
 
     virtual QPointF pos() const = 0;
-    virtual void setPos(QPointF pos) = 0;
-    virtual void moveBy(QPointF delta) = 0;
+    virtual void setPos(const QPointF& pos) = 0;
+    virtual void moveBy(const QPointF& delta) = 0;
     virtual void setVisible(bool isVisible) = 0;
 
     inline ElementType elementType() const { return mElementType; }
     inline int index() const { return mIndex; }
-    inline Shape* parentShape(){ return mParentShape; }
 
 protected:
     void propagateItemChange(QGraphicsItem::GraphicsItemChange change, const QVariant& value);

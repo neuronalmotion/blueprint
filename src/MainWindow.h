@@ -2,9 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QGraphicsScene>
 #include <QList>
-#include <QGraphicsItem>
-#include <QKeyEvent>
 
 #include "Tool.h"
 
@@ -34,6 +33,7 @@ private slots:
 
 private:
     Ui::MainWindow* mUi;
+    QGraphicsScene* mScene;
     blueprint::Blueprint* mCurrentBlueprint;
     QList<blueprint::Tool*> mTools;
 };

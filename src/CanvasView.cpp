@@ -25,10 +25,6 @@ CanvasView::CanvasView(QWidget* parent)
     mCreatingLastPosition(0, 0),
     mZoomFactor(1.0f)
 {
-    QGraphicsScene* scene = new QGraphicsScene(this);
-    setScene(scene);
-
-    connect(scene, &QGraphicsScene::focusItemChanged, this, &CanvasView::onFocusItemChanged);
     connect(TreeModel::instance(), &TreeModel::selectionsChanged, this, &CanvasView::selectionsChanged);
 }
 
@@ -160,6 +156,12 @@ void CanvasView::onFocusItemChanged(QGraphicsItem* newFocusItem, QGraphicsItem* 
     QModelIndex index = (QModelIndex)(*shape->parentTreeItem()->modelIndex());
     int shapeIndex = shape->parentTreeItem()->indexOf(shape);
     TreeModel::instance()->selectionsChanged(index, shapeIndex, shapeIndex);
+}
+
+void CanvasView::setScene(QGraphicsScene* scene)
+{
+    QGraphicsView::setScene(scene);
+    connect(scene, &QGraphicsScene::focusItemChanged, this, &CanvasView::onFocusItemChanged);
 }
 
 void CanvasView::fitView()

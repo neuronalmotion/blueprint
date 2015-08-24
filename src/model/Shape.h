@@ -45,14 +45,14 @@ public:
     QRectF bounds() const;
     void setBackgroundColor(const QColor& color);
     void setBorderColor(const QColor& color);
-    inline BoundingBox* boundingBox(){ return mBoundingBox; }
+    inline BoundingBox& boundingBox() { return mBoundingBox; }
 
 protected:
     void updateBoundingBoxBezierVisibility();
 
     QPainterPath mPath;
     QList<BezierElement*> mElements;
-    BoundingBox* mBoundingBox;
+    BoundingBox mBoundingBox;
     bool mIsPathClosed;
     EditMode mEditMode;
 };

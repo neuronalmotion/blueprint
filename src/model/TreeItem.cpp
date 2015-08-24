@@ -21,7 +21,6 @@ TreeItem::TreeItem(const ItemType& itemType, TreeItem* parentItem)
 
 TreeItem::~TreeItem()
 {
-    qDebug() << "~TreeItem() " << mName;
     delete mModelIndex;
     qDeleteAll(mChildItems);
 }

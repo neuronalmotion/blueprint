@@ -14,7 +14,6 @@ TreeModel::TreeModel()
 
 TreeModel::~TreeModel()
 {
-    delete mRootItem;
 }
 
 TreeModel* TreeModel::instance()

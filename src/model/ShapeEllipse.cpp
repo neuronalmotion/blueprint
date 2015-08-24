@@ -13,10 +13,9 @@ ShapeEllipse::ShapeEllipse(TreeItem* parentItem, qreal x, qreal y)
     addPath(QPointF(-40, 100), QPointF(-50, 80), QPointF(-50, 50));
     addPath(QPointF(-40, 20), QPointF(-30, 0), QPointF(0, 0));
     closePath();
-    mBoundingBox->updateRect();
+    mBoundingBox.updateRect();
 }
 
 ShapeEllipse::~ShapeEllipse()
 {
-
 }

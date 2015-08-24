@@ -15,8 +15,8 @@ public:
     ~BezierControlPoint();
 
     QPointF pos() const override;
-    void setPos(QPointF pos) override;
-    void moveBy(QPointF delta) override;
+    void setPos(const QPointF& pos) override;
+    void moveBy(const QPointF& delta) override;
     void setVisible(bool isVisible) override;
 
 protected:
