@@ -110,6 +110,13 @@ void CanvasView::mouseReleaseEvent(QMouseEvent *event)
     mCreatingLastPosition = QPointF(0.0f, 0.0f);
 }
 
+void CanvasView::mouseDoubleClickEvent(QMouseEvent* event)
+{
+    if (mSelectedShape) {
+        mSelectedShape->toggleEditMode();
+    }
+}
+
 void CanvasView::wheelEvent(QWheelEvent *event)
 {
     mZoomFactor +=  0.1f * (event->delta() / abs(event->delta()));
@@ -129,26 +136,18 @@ void CanvasView::showEvent(QShowEvent* event)
 
 void CanvasView::keyPressEvent(QKeyEvent *event)
 {
-    if (!event->isAutoRepeat() && event->key() == Qt::Key_Space) {
-        if (mSelectedShape) {
-            blueprint::Shape* sketchItemBezier = dynamic_cast<blueprint::Shape*>(mSelectedShape);
-            if (sketchItemBezier){
-                sketchItemBezier->setEditMode(blueprint::Shape::EditMode::BEZIER);
-            }
-        }
-    }
-    return QGraphicsView::keyPressEvent(event);
+    QGraphicsView::keyPressEvent(event);
 }
 
 void CanvasView::keyReleaseEvent(QKeyEvent *event)
 {
-    if (!event->isAutoRepeat() && event->key() == Qt::Key_Space) {
-        blueprint::Shape* sketchItemBezier = dynamic_cast<blueprint::Shape*>(mSelectedShape);
-        if (sketchItemBezier){
-            sketchItemBezier->setEditMode(blueprint::Shape::EditMode::BOUNDING_BOX);
+    if (!event->isAutoRepeat() && (
+                event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return)) {
+        if (mSelectedShape){
+            mSelectedShape->toggleEditMode();
         }
     }
-    return QGraphicsView::keyReleaseEvent(event);
+    QGraphicsView::keyReleaseEvent(event);
 }
 
 void CanvasView::onFocusItemChanged(QGraphicsItem* newFocusItem, QGraphicsItem* oldFocusItem, Qt::FocusReason reason)

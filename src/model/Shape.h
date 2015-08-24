@@ -39,6 +39,8 @@ public:
     void boundingBoxEvent(const BoundingBoxEvent& event);
 
     void setSelected(bool selected) override;
+    inline EditMode editMode() const { return mEditMode; }
+    void toggleEditMode();
     void setEditMode(const EditMode& mode);
     QRectF getBounds();
     void setBackgroundColor(const QColor& color);
