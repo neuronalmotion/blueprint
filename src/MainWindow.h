@@ -15,6 +15,7 @@ class MainWindow;
 namespace blueprint {
 class Blueprint;
 class Canvas;
+class Tool;
 }
 
 class MainWindow : public QMainWindow
@@ -29,12 +30,12 @@ private:
     void initToolbar();
 
 private slots:
-    void setTool(Tool::Type toolType);
+    void setTool(blueprint::Tool::Type toolType);
 
 private:
     Ui::MainWindow* mUi;
     blueprint::Blueprint* mCurrentBlueprint;
-    QList<Tool*> mTools;
+    QList<blueprint::Tool*> mTools;
 };
 
 #endif // MAINWINDOW_H
