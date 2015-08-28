@@ -222,3 +222,15 @@ void Shape::setBorderColor(const QColor& color)
 {
     setPen(QPen(color, 1, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
 }
+
+QPointF Shape::posAbsolute()
+{
+    QPointF position = pos();
+
+    if (itemType() != TreeItem::ItemType::CANVAS) {
+        blueprint::Shape* shapeParent = dynamic_cast<blueprint::Shape*>(mParentItem);
+        position = position + shapeParent->posAbsolute();
+    }
+
+    return position;
+}

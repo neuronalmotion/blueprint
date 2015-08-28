@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <QMouseEvent>
 #include <QGraphicsScene>
+#include <QTransform>
 
 #include "Tool.h"
 #include "model/BezierControlPoint.h"
@@ -20,7 +21,6 @@ CanvasView::CanvasView(QWidget* parent)
     : QGraphicsView(parent),
     mCurrentTool(Tool::Type::SELECTION),
     mSelectedShape(nullptr),
-    mCurrentCanvas(nullptr),
     mCreatingShape(nullptr),
     mCreatingLastPosition(0, 0),
     mZoomFactor(1.0f)
@@ -37,10 +37,6 @@ void CanvasView::selectionsChanged(const QModelIndex& parent, int first, int /*l
     TreeModel* model = TreeModel::instance();
     blueprint::Shape* item = static_cast<blueprint::Shape*>(model->itemFromParentIndex(parent, first));
     Q_ASSERT(item);
-
-    if (item->itemType() == TreeItem::ItemType::CANVAS) {
-        mCurrentCanvas = static_cast<Canvas*>(item);
-    }
 
     if (item == mSelectedShape) {
        return;
@@ -61,30 +57,44 @@ void CanvasView::setTool(Tool::Type toolType)
 void CanvasView::mousePressEvent(QMouseEvent *event)
 {
     QGraphicsView::mousePressEvent(event);
+
+    // Selection tool does not require other action
+    if (mCurrentTool == Tool::Type::SELECTION) {
+        return;
+    }
+
+    // Creation tool require to search the parent item
+    blueprint::Shape* shapeParent = nullptr;
     QPointF point = QGraphicsView::mapToScene(event->pos());
     TreeModel* model = TreeModel::instance();
     static uint id = 0;
-    if (!mCurrentCanvas) {
-        return;
+
+    QGraphicsItem* graphicsItem = scene()->itemAt(point, QTransform());
+
+    // Can't add a shape outside of another Shape (or a Canvas)
+    if (graphicsItem == nullptr) {
+          return;
     }
-    QPointF relPoint(point.x() - mCurrentCanvas->pos().x(),
-                                point.y() - mCurrentCanvas->pos().y());
+
+    // Position is always relative to direct parent
+    shapeParent = dynamic_cast<blueprint::Shape*>(graphicsItem);
+    QPointF relPoint(point.x() - shapeParent->posAbsolute().x(),  point.y() - shapeParent->posAbsolute().y());
 
     if (mCurrentTool == Tool::Type::RECTANGLE) {
-        ShapeRectangle* shape = new ShapeRectangle(mCurrentCanvas, relPoint.x(), relPoint.y());
+        ShapeRectangle* shape = new ShapeRectangle(shapeParent, relPoint.x(), relPoint.y());
         shape->setName(QString("Rectangle #%1").arg(id++));
-        shape->setParentItem(mCurrentCanvas);
+        shape->setParentItem(shapeParent);
         mCreatingShape = shape;
         mCreatingLastPosition = point;
-        model->addItem(mCreatingShape, mCurrentCanvas);
+        model->addItem(mCreatingShape, shapeParent);
 
     } else  if (mCurrentTool == Tool::Type::ELLIPSE) {
-        ShapeEllipse* shape = new ShapeEllipse(mCurrentCanvas, relPoint.x(), relPoint.y());
+        ShapeEllipse* shape = new ShapeEllipse(shapeParent, relPoint.x(), relPoint.y());
         shape->setName(QString("Ellipse #%1").arg(id++));
-        shape->setParentItem(mCurrentCanvas);
+        shape->setParentItem(shapeParent);
         mCreatingShape = shape;
         mCreatingLastPosition = point;
-        model->addItem(mCreatingShape, mCurrentCanvas);
+        model->addItem(mCreatingShape, shapeParent);
     }
 }
 
