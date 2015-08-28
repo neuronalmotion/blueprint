@@ -47,6 +47,8 @@ public:
     void setBorderColor(const QColor& color);
     inline BoundingBox& boundingBox() { return mBoundingBox; }
 
+    QPointF posAbsolute();
+
 protected:
     void updateBoundingBoxBezierVisibility();
 
