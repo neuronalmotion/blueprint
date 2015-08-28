@@ -48,7 +48,6 @@ private:
 private:
     blueprint::Tool::Type mCurrentTool;
     blueprint::Shape* mSelectedShape;
-    blueprint::Canvas* mCurrentCanvas;
     blueprint::Shape* mCreatingShape;
     QPointF mCreatingLastPosition;
     float mZoomFactor;
