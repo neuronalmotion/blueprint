@@ -21,7 +21,6 @@ CanvasView::CanvasView(QWidget* parent)
     : QGraphicsView(parent),
     mCurrentTool(Tool::Type::SELECTION),
     mSelectedShape(nullptr),
-    mCurrentCanvas(nullptr),
     mCreatingShape(nullptr),
     mCreatingLastPosition(0, 0),
     mZoomFactor(1.0f)
