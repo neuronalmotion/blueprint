@@ -133,15 +133,12 @@ void Shape::boundingBoxEvent(const BoundingBoxEvent& event)
 
 void Shape::setSelected(bool selected)
 {
+    QGraphicsPathItem::setSelected(selected);
+
     TreeItem::setSelected(selected);
     qDebug() << "mIsSelected : " << mIsSelected;
 
     updateBoundingBoxBezierVisibility();
-    if (selected) {
-        setFocus();
-    } else {
-        clearFocus();
-    }
 }
 
 void Shape::toggleEditMode()
