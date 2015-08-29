@@ -3,6 +3,8 @@
 
 #include <QWidget>
 
+#include "model/Shape.h"
+
 namespace Ui {
 class PropertiesWindow;
 }
@@ -17,9 +19,11 @@ public:
 
 public slots:
     void selectionsChanged(const QModelIndex& parent, int first, int last);
+    void onBackgroundColorClicked();
 
 private:
     Ui::PropertiesWindow *mUi;
+    blueprint::Shape* mCurrentItem;
 };
 
 #endif // PROPERTIESWINDOW_H
