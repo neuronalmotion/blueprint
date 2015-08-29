@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>855</width>
-    <height>535</height>
+    <width>1200</width>
+    <height>700</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -45,7 +45,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>855</width>
+     <width>1200</width>
      <height>23</height>
     </rect>
    </property>
@@ -75,6 +75,24 @@
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QDockWidget" name="propertiesDock">
+   <property name="minimumSize">
+    <size>
+     <width>150</width>
+     <height>62</height>
+    </size>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>2</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents">
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="PropertiesWindow" name="propertiesWindow" native="true"/>
+     </item>
+    </layout>
+   </widget>
+  </widget>
   <action name="actionLine">
    <property name="checkable">
     <bool>true</bool>
@@ -114,6 +132,12 @@
    <class>CanvasView</class>
    <extends>QGraphicsView</extends>
    <header>CanvasView.h</header>
+  </customwidget>
+  <customwidget>
+   <class>PropertiesWindow</class>
+   <extends>QWidget</extends>
+   <header>PropertiesWindow.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>
