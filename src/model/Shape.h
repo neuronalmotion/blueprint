@@ -4,6 +4,7 @@
 #include <QList>
 #include <QGraphicsPathItem>
 #include <QGraphicsEllipseItem>
+#include <QPainter>
 
 #include "TreeItem.h"
 #include "BezierElement.h"
@@ -33,6 +34,7 @@ public:
 
     Shape(TreeItem* parentTreeItem, qreal x, qreal y);
     virtual ~Shape();
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0) override;
     void addPath(const QPointF& c1, const QPointF& c2, const QPointF& endPos);
     void closePath();
     void updateElement(BezierElement* bezierElement, const QPointF& pos);
@@ -46,7 +48,6 @@ public:
     void setBackgroundColor(const QColor& color);
     void setBorderColor(const QColor& color);
     inline BoundingBox& boundingBox() { return mBoundingBox; }
-
     QPointF posAbsolute();
 
 protected:
