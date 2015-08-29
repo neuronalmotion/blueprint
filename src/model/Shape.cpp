@@ -20,7 +20,9 @@ Shape::Shape(TreeItem* parentItem, qreal x, qreal y)
       mEditMode(EditMode::BOUNDING_BOX)
 {
     setBorderColor(QColor(40, 40, 40));
-    setBackgroundColor(QColor(229, 229, 229));
+
+    // fast random color
+    setBackgroundColor(QColor(qrand() % 255, qrand() % 255, qrand() % 255));
 
     setFlag(QGraphicsItem::ItemIsMovable);
     setFlag(QGraphicsItem::ItemSendsGeometryChanges);
@@ -36,6 +38,47 @@ Shape::Shape(TreeItem* parentItem, qreal x, qreal y)
 Shape::~Shape()
 {
     qDeleteAll(mElements);
+}
+
+void Shape::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
+{
+    // Draw original shape
+    QGraphicsPathItem::paint(painter, option, widget);
+
+    // Apply grey-mask on out of parent bounds for Shape
+    if (itemType() == TreeItem::ItemType::SHAPE) {
+
+        // Shape bounds
+        QRectF shapeBounds = boundingRect();
+
+        // Parent bounds (in shape coordinate!)
+        blueprint::Shape* parentShape = dynamic_cast<blueprint::Shape*>(mParentItem);
+        QRectF parentBounds = parentShape->boundingRect();
+        parentBounds.moveTo(-pos().x() - shapeBounds.x(), -pos().y() - shapeBounds.y());
+
+        // Temp buffer
+        QImage buffer = QImage(shapeBounds.width(), shapeBounds.height(), QImage::Format_ARGB32_Premultiplied);
+        buffer.fill(0);
+        QPainter p(&buffer);
+        p.setRenderHint(QPainter::Antialiasing);
+
+        //Draw base (parent bounds)
+        p.setPen(Qt::NoPen);
+        p.setBrush(QColor(0, 0, 0, 255));
+        p.drawRect(parentBounds);
+
+        // Apply composition
+        p.setCompositionMode(QPainter::CompositionMode_SourceOut);
+
+        //Draw source (grey mask)
+        QRectF drawTargetRect(0, 0, buffer.width(), buffer.height());
+        p.setPen(Qt::NoPen);
+        p.setBrush(QColor(200,200,200,235));
+        p.drawRect(drawTargetRect);
+
+        // Draw final image
+        painter->drawImage(shapeBounds, buffer);
+    }
 }
 
 void Shape::addPath(const QPointF& c1, const QPointF& c2, const QPointF& endPos)
