@@ -35,6 +35,7 @@ public:
 
 signals:
     void selectionsChanged(const QModelIndex& parent, int first, int last);
+    void propertiesChanged(const QModelIndex& parent, int first, int last);
 
 private:
     TreeItem* mRootItem;

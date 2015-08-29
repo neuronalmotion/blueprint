@@ -31,35 +31,26 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="0">
+   <item row="2" column="0">
     <widget class="QLabel" name="label">
      <property name="text">
       <string>Background</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="1">
-    <widget class="QLabel" name="backgroundColor">
-     <property name="minimumSize">
-      <size>
-       <width>50</width>
-       <height>0</height>
-      </size>
+   <item row="2" column="1">
+    <widget class="QPushButton" name="backgroundColor">
+     <property name="autoFillBackground">
+      <bool>false</bool>
      </property>
-     <property name="maximumSize">
-      <size>
-       <width>50</width>
-       <height>16777215</height>
-      </size>
-     </property>
-     <property name="frameShape">
-      <enum>QFrame::Box</enum>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(160, 9, 77);</string>
      </property>
      <property name="text">
       <string/>
      </property>
-     <property name="alignment">
-      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+     <property name="flat">
+      <bool>false</bool>
      </property>
     </widget>
    </item>
