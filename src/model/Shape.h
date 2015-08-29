@@ -4,6 +4,8 @@
 #include <QList>
 #include <QGraphicsPathItem>
 #include <QGraphicsEllipseItem>
+#include <QColor>
+#include <QBrush>
 #include <QPainter>
 
 #include "TreeItem.h"
@@ -48,6 +50,8 @@ public:
     void setBackgroundColor(const QColor& color);
     void setBorderColor(const QColor& color);
     inline BoundingBox& boundingBox() { return mBoundingBox; }
+    inline QColor backgroundColor() { return brush().color(); }
+
     QPointF posAbsolute();
 
 protected:
