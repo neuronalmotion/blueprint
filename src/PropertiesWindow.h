@@ -20,6 +20,7 @@ public:
 public slots:
     void selectionsChanged(const QModelIndex& parent, int first, int last);
     void onBackgroundColorClicked();
+    void onBackgroundImageClicked();
 
 private:
     Ui::PropertiesWindow *mUi;

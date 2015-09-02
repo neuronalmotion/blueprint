@@ -4,6 +4,7 @@
 #include <QPainterPath>
 #include <QPen>
 #include <QPointF>
+#include <QImage>
 
 #include "BezierControlPoint.h"
 #include "BezierPoint.h"
@@ -17,7 +18,8 @@ Shape::Shape(TreeItem* parentItem, qreal x, qreal y)
       mElements(),
       mBoundingBox(this),
       mIsPathClosed(false),
-      mEditMode(EditMode::BOUNDING_BOX)
+      mEditMode(EditMode::BOUNDING_BOX),
+      mBackgroundImage(nullptr)
 {
     setBorderColor(QColor(40, 40, 40));
 
@@ -44,6 +46,13 @@ void Shape::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWi
 {
     // Draw original shape
     QGraphicsPathItem::paint(painter, option, widget);
+
+    // Draw background image
+    if (mBackgroundImage) {
+        QRectF target = boundingRect();
+        QRectF source(mBackgroundImage->rect());
+        painter->drawImage(target, *mBackgroundImage, source);
+    }
 
     // Apply grey-mask on out of parent bounds for Shape
     if (itemType() == TreeItem::ItemType::SHAPE) {
@@ -264,6 +273,17 @@ void Shape::setBackgroundColor(const QColor& color)
 void Shape::setBorderColor(const QColor& color)
 {
     setPen(QPen(color, 1, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
+}
+
+void Shape::setBackgroundImage(const QString& fileName)
+{
+    mBackgroundImageFileName = fileName;
+
+    if (mBackgroundImage){
+        delete mBackgroundImage;
+    }
+
+    mBackgroundImage = new QImage(fileName);
 }
 
 QPointF Shape::posAbsolute()

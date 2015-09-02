@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>186</width>
+    <width>226</width>
     <height>433</height>
    </rect>
   </property>
@@ -24,21 +24,22 @@
    <item row="0" column="1">
     <widget class="QLineEdit" name="name">
      <property name="styleSheet">
-      <string notr="true">background-color: rgb(210, 210, 210);</string>
+      <string notr="true">background-color: rgb(210, 210, 210);
+color: rgb(86, 86, 86);</string>
      </property>
      <property name="readOnly">
       <bool>true</bool>
      </property>
     </widget>
    </item>
-   <item row="2" column="0">
+   <item row="1" column="0">
     <widget class="QLabel" name="label">
      <property name="text">
       <string>Background</string>
      </property>
     </widget>
    </item>
-   <item row="2" column="1">
+   <item row="1" column="1">
     <widget class="QPushButton" name="backgroundColor">
      <property name="autoFillBackground">
       <bool>false</bool>
@@ -53,6 +54,50 @@
       <bool>false</bool>
      </property>
     </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Image</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLineEdit" name="backgroundImageText">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(210, 210, 210);
+color: rgb(86, 86, 86);</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="backgroundImage">
+       <property name="minimumSize">
+        <size>
+         <width>25</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>25</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>
