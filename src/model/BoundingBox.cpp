@@ -177,5 +177,6 @@ void BoundingBox::boundingBoxPointMoved(BoundingBoxPoint::TranslationDirection d
     mBoundingBoxEvent.scale.setY(finalScale.y());
 
     mParentShape->boundingBoxEvent(mBoundingBoxEvent);
+    updateRect();
 }
 

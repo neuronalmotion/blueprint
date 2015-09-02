@@ -19,3 +19,8 @@ ShapeRectangle::~ShapeRectangle()
 {
 }
 
+void ShapeRectangle::collapse()
+{
+    mBoundingBox.boundingBoxPointMoved(BoundingBoxPoint::TranslationDirection::BOTTOM_RIGHT, QPointF(-99, -49));
+}
+
