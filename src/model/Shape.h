@@ -47,12 +47,15 @@ public:
     void toggleEditMode();
     void setEditMode(const EditMode& mode);
     QRectF bounds() const;
-    void setBackgroundColor(const QColor& color);
-    void setBorderColor(const QColor& color);
     inline BoundingBox& boundingBox() { return mBoundingBox; }
-    inline QColor backgroundColor() { return brush().color(); }
-
     QPointF posAbsolute();
+
+    void setBackgroundColor(const QColor& color);
+    inline QColor backgroundColor() { return brush().color(); }
+    void setBorderColor(const QColor& color);
+    void setBackgroundImage(const QString& fileName);
+    inline QImage* backgroundImage() { return mBackgroundImage; }
+    inline QString backgroundImageFileName() { return mBackgroundImageFileName; }
 
 protected:
     void updateBoundingBoxBezierVisibility();
@@ -62,6 +65,8 @@ protected:
     BoundingBox mBoundingBox;
     bool mIsPathClosed;
     EditMode mEditMode;
+    QImage* mBackgroundImage;
+    QString mBackgroundImageFileName;
 };
 
 }

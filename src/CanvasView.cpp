@@ -26,6 +26,7 @@ CanvasView::CanvasView(QWidget* parent)
     mZoomFactor(1.0f)
 {
     connect(TreeModel::instance(), &TreeModel::selectionsChanged, this, &CanvasView::selectionsChanged);
+    connect(TreeModel::instance(), &TreeModel::propertiesChanged, this, &CanvasView::propertiesChanged);
 }
 
 CanvasView::~CanvasView()
@@ -47,6 +48,15 @@ void CanvasView::selectionsChanged(const QModelIndex& parent, int first, int /*l
     item->setSelected(true);
     mSelectedShape = item;
     qDebug() << "Selected item " << mSelectedShape->name();
+}
+
+void CanvasView::propertiesChanged(const QModelIndex& parent, int first, int last)
+{
+    TreeModel* model = TreeModel::instance();
+    blueprint::Shape* item = static_cast<blueprint::Shape*>(model->itemFromParentIndex(parent, first));
+    Q_ASSERT(item);
+
+    item->update();
 }
 
 void CanvasView::setTool(Tool::Type toolType)
