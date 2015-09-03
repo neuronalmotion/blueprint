@@ -11,6 +11,7 @@ public:
     ShapeRectangle(TreeItem* parentTreeItem, qreal x, qreal y);
     ~ShapeRectangle();
 
+    void collapse() override;
 };
 }
 

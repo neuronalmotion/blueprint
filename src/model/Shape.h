@@ -41,7 +41,6 @@ public:
     void closePath();
     void updateElement(BezierElement* bezierElement, const QPointF& pos);
     void boundingBoxEvent(const BoundingBoxEvent& event);
-
     void setSelected(bool selected) override;
     inline EditMode editMode() const { return mEditMode; }
     void toggleEditMode();
@@ -51,8 +50,9 @@ public:
     void setBorderColor(const QColor& color);
     inline BoundingBox& boundingBox() { return mBoundingBox; }
     inline QColor backgroundColor() { return brush().color(); }
-
     QPointF posAbsolute();
+
+    virtual inline void collapse() { }
 
 protected:
     void updateBoundingBoxBezierVisibility();

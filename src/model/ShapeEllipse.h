@@ -10,6 +10,7 @@ public:
     ShapeEllipse(TreeItem* parentTreeItem, qreal x, qreal y);
     ~ShapeEllipse();
 
+    void collapse() override;
 };
 }
 

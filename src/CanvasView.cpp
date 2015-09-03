@@ -56,14 +56,19 @@ void CanvasView::setTool(Tool::Type toolType)
 
 void CanvasView::mousePressEvent(QMouseEvent *event)
 {
-    QGraphicsView::mousePressEvent(event);
-
-    // Selection tool does not require other action
+    // ::: Selection tool actions :::
     if (mCurrentTool == Tool::Type::SELECTION) {
+
+        // Only selection require to call QGraphicsView implementation
+        QGraphicsView::mousePressEvent(event);
+
         return;
     }
 
-    // Creation tool require to search the parent item
+    // ::: Shape Creation tool actions :::
+    blueprint::Shape* shape = nullptr;
+
+    // Search the parent item
     blueprint::Shape* shapeParent = nullptr;
     QPointF point = QGraphicsView::mapToScene(event->pos());
     TreeModel* model = TreeModel::instance();
@@ -80,22 +85,29 @@ void CanvasView::mousePressEvent(QMouseEvent *event)
     shapeParent = dynamic_cast<blueprint::Shape*>(graphicsItem);
     QPointF relPoint(point.x() - shapeParent->posAbsolute().x(),  point.y() - shapeParent->posAbsolute().y());
 
+    // Create the right Shape
     if (mCurrentTool == Tool::Type::RECTANGLE) {
-        ShapeRectangle* shape = new ShapeRectangle(shapeParent, relPoint.x(), relPoint.y());
+        shape = new ShapeRectangle(shapeParent, relPoint.x(), relPoint.y());
         shape->setName(QString("Rectangle #%1").arg(id++));
-        shape->setParentItem(shapeParent);
-        mCreatingShape = shape;
-        mCreatingLastPosition = point;
-        model->addItem(mCreatingShape, shapeParent);
 
     } else  if (mCurrentTool == Tool::Type::ELLIPSE) {
-        ShapeEllipse* shape = new ShapeEllipse(shapeParent, relPoint.x(), relPoint.y());
+        shape = new ShapeEllipse(shapeParent, relPoint.x(), relPoint.y());
         shape->setName(QString("Ellipse #%1").arg(id++));
-        shape->setParentItem(shapeParent);
-        mCreatingShape = shape;
-        mCreatingLastPosition = point;
-        model->addItem(mCreatingShape, shapeParent);
+
     }
+    Q_ASSERT(shape != nullptr);
+
+    // Do common stuff
+    mCreatingShape = shape;
+    mCreatingLastPosition = point;
+    shape->collapse();
+    shape->setParentItem(shapeParent);
+    model->addItem(mCreatingShape, shapeParent);
+
+    // Select the new Shape
+    QModelIndex index = (QModelIndex)(*shape->parentTreeItem()->modelIndex());
+    int shapeIndex = shape->parentTreeItem()->indexOf(shape);
+    TreeModel::instance()->selectionsChanged(index, shapeIndex, shapeIndex);
 }
 
 void CanvasView::mouseMoveEvent(QMouseEvent *event)
@@ -104,8 +116,9 @@ void CanvasView::mouseMoveEvent(QMouseEvent *event)
 
     QPointF point = QGraphicsView::mapToScene(event->pos());
     if (mCreatingShape) {
+        QPointF delta = point - mCreatingLastPosition;
         mCreatingLastPosition = point;
-        //TODO: boundingBoxPointMoved
+        mCreatingShape->boundingBox().boundingBoxPointMoved(BoundingBoxPoint::TranslationDirection::BOTTOM_RIGHT, delta);
     }
 }
 
