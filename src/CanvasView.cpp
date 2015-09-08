@@ -10,6 +10,7 @@
 #include "model/BezierPoint.h"
 #include "model/Canvas.h"
 #include "model/Shape.h"
+#include "model/ShapeLine.h"
 #include "model/ShapeRectangle.h"
 #include "model/ShapeEllipse.h"
 #include "model/TreeItem.h"
@@ -50,7 +51,7 @@ void CanvasView::selectionsChanged(const QModelIndex& parent, int first, int /*l
     qDebug() << "Selected item " << mSelectedShape->name();
 }
 
-void CanvasView::propertiesChanged(const QModelIndex& parent, int first, int last)
+void CanvasView::propertiesChanged(const QModelIndex& parent, int first, int /*last*/)
 {
     TreeModel* model = TreeModel::instance();
     blueprint::Shape* item = static_cast<blueprint::Shape*>(model->itemFromParentIndex(parent, first));
@@ -96,16 +97,27 @@ void CanvasView::mousePressEvent(QMouseEvent *event)
     QPointF relPoint(point.x() - shapeParent->posAbsolute().x(),  point.y() - shapeParent->posAbsolute().y());
 
     // Create the right Shape
-    if (mCurrentTool == Tool::Type::RECTANGLE) {
+    QString name;
+    switch (mCurrentTool) {
+    case Tool::Type::RECTANGLE:
         shape = new ShapeRectangle(shapeParent, relPoint.x(), relPoint.y());
-        shape->setName(QString("Rectangle #%1").arg(id++));
+        name = "Rectangle";
+        break;
 
-    } else  if (mCurrentTool == Tool::Type::ELLIPSE) {
+    case Tool::Type::ELLIPSE:
         shape = new ShapeEllipse(shapeParent, relPoint.x(), relPoint.y());
-        shape->setName(QString("Ellipse #%1").arg(id++));
+        name = "Ellipse";
+        break;
 
+    case Tool::Type::LINE:
+        shape = new ShapeLine(shapeParent, relPoint.x(), relPoint.y());
+        name = "Line";
+        break;
+    default:
+        break;
     }
     Q_ASSERT(shape != nullptr);
+    shape->setName(QString("%1 %2").arg(name).arg(id++));
 
     // Do common stuff
     mCreatingShape = shape;
@@ -181,8 +193,7 @@ void CanvasView::keyReleaseEvent(QKeyEvent *event)
 
 void CanvasView::onFocusItemChanged(QGraphicsItem* newFocusItem, QGraphicsItem* /*oldFocusItem*/, Qt::FocusReason /*reason*/)
 {
-    QVariant itemVariant = newFocusItem->data(blueprint::Shape::ShapeType::SHAPE);
-    blueprint::Shape* shape = static_cast<blueprint::Shape*>(itemVariant.value<void *>());
+    blueprint::Shape* shape = blueprint::Shape::fromQGraphicsItem(*newFocusItem);
     if (!shape) {
         return;
     }

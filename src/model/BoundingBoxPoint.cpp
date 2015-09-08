@@ -33,7 +33,6 @@ void BoundingBoxPoint::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
     if ((event->buttons() & Qt::LeftButton) == Qt::LeftButton)
     {
         QPointF delta = restrictPosition(event->pos() - event->lastPos());
-        //QPointF delta = restrictPosition(event->pos() - pos());
         mParentBoundingBox->boundingBoxPointMoved(mTranslationDirection, delta);
     }
 }

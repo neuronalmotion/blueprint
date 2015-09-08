@@ -11,10 +11,17 @@
 
 using namespace blueprint;
 
-Shape::Shape(TreeItem* parentItem, qreal x, qreal y)
+Shape* Shape::fromQGraphicsItem(const QGraphicsItem& item)
+{
+    QVariant itemVariant = item.data(0);
+    return static_cast<Shape*>(itemVariant.value<void *>());
+}
+
+Shape::Shape(TreeItem* parentItem, const ShapeType shapeType, qreal x, qreal y)
     : TreeItem(ItemType::SHAPE, parentItem),
       QGraphicsPathItem(),
       mPath(),
+      mShapeType(shapeType),
       mElements(),
       mBoundingBox(this),
       mIsPathClosed(false),
@@ -31,7 +38,7 @@ Shape::Shape(TreeItem* parentItem, qreal x, qreal y)
     setFlag(QGraphicsItem::ItemIsSelectable);
     setFlag(QGraphicsItem::ItemIsFocusable);
 
-    setData(Shape::ShapeType::SHAPE, qVariantFromValue(static_cast<void *>(this)));
+    setData(0, qVariantFromValue(static_cast<void *>(this)));
     setPos(x, y);
 
     mBoundingBox.setVisible(false);

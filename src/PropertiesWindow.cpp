@@ -31,7 +31,7 @@ PropertiesWindow::~PropertiesWindow()
     delete mUi;
 }
 
-void PropertiesWindow::selectionsChanged(const QModelIndex& parent, int first, int last)
+void PropertiesWindow::selectionsChanged(const QModelIndex& parent, int first, int /*last*/)
 {
     TreeModel* model = TreeModel::instance();
     mCurrentItem = static_cast<blueprint::Shape*>(model->itemFromParentIndex(parent, first));

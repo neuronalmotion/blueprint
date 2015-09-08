@@ -6,7 +6,7 @@
 using namespace blueprint;
 
 ShapeEllipse::ShapeEllipse(TreeItem* parentItem, qreal x, qreal y)
-    : Shape(parentItem, x, y)
+    : Shape(parentItem, ShapeType::ELLIPSE, x, y)
 {
     addPath(QPointF(30, 0), QPointF(50, 20), QPointF(50, 50));
     addPath(QPointF(50, 80), QPointF(30, 100), QPointF(0, 100));
@@ -23,5 +23,6 @@ ShapeEllipse::~ShapeEllipse()
 
 void ShapeEllipse::collapse()
 {
-    mBoundingBox.boundingBoxPointMoved(BoundingBoxPoint::TranslationDirection::BOTTOM_RIGHT, QPointF(-99, -99));
+    mBoundingBox.boundingBoxPointMoved(BoundingBoxPoint::TranslationDirection::BOTTOM_RIGHT,
+                                       QPointF(-99, -99));
 }
