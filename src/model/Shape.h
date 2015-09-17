@@ -48,7 +48,7 @@ public:
     void setSelected(bool selected) override;
     inline EditMode editMode() const { return mEditMode; }
     void toggleEditMode();
-    void setEditMode(const EditMode& mode);
+    virtual void setEditMode(const EditMode& mode);
     QRectF bounds() const;
     inline BoundingBox& boundingBox() { return mBoundingBox; }
     QPointF posAbsolute();

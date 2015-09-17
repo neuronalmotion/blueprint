@@ -9,6 +9,8 @@ class ShapeLine : public Shape
 public:
     ShapeLine(TreeItem* parentTreeItem, qreal x, qreal y);
     ~ShapeLine();
+
+    void setEditMode(const EditMode& mode) override;
 };
 }
 
