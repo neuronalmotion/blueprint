@@ -1,5 +1,6 @@
 #include "Shape.h"
 
+#include <QtMath>
 #include <QDebug>
 #include <QPainterPath>
 #include <QPen>
@@ -11,10 +12,17 @@
 
 using namespace blueprint;
 
-Shape::Shape(TreeItem* parentItem, qreal x, qreal y)
+Shape* Shape::fromQGraphicsItem(const QGraphicsItem& item)
+{
+    QVariant itemVariant = item.data(0);
+    return static_cast<Shape*>(itemVariant.value<void *>());
+}
+
+Shape::Shape(TreeItem* parentItem, const ShapeType shapeType, qreal x, qreal y)
     : TreeItem(ItemType::SHAPE, parentItem),
       QGraphicsPathItem(),
       mPath(),
+      mShapeType(shapeType),
       mElements(),
       mBoundingBox(this),
       mIsPathClosed(false),
@@ -31,7 +39,7 @@ Shape::Shape(TreeItem* parentItem, qreal x, qreal y)
     setFlag(QGraphicsItem::ItemIsSelectable);
     setFlag(QGraphicsItem::ItemIsFocusable);
 
-    setData(Shape::ShapeType::SHAPE, qVariantFromValue(static_cast<void *>(this)));
+    setData(0, qVariantFromValue(static_cast<void *>(this)));
     setPos(x, y);
 
     mBoundingBox.setVisible(false);
@@ -133,23 +141,6 @@ void Shape::updateElement(BezierElement* bezierElement, const QPointF& pos)
     int listIndex = mElements.indexOf(bezierElement);
     QPointF delta = pos - bezierElement->pos();
 
-    // Move control points associated to the bezier point
-    if(listIndex >= 0
-            && bezierElement->elementType() == BezierElement::POINT
-            && mEditMode == EditMode::BEZIER) {
-
-        if (bezierElement == mElements.first()) {
-            mElements[listIndex + 1]->moveBy(delta);
-
-        } else if (bezierElement == mElements.last()) {
-            mElements[listIndex - 1]->moveBy(delta);
-
-        } else {
-            mElements[listIndex - 1]->moveBy(delta);
-            mElements[listIndex + 1]->moveBy(delta);
-        }
-    }
-
     // Moving link between the first and the last element
     if (bezierElement == mElements.last() && mIsPathClosed) {
         mElements.first()->moveBy(delta);
@@ -158,6 +149,49 @@ void Shape::updateElement(BezierElement* bezierElement, const QPointF& pos)
 
     // Move the current element
     mPath.setElementPositionAt(bezierElement->index(), pos.x(), pos.y());
+
+    // Move control points associated to the bezier point
+    if (listIndex >= 0
+            && bezierElement->elementType() == BezierElement::POINT
+            && mEditMode == EditMode::BEZIER) {
+
+        if (mShapeType == ShapeType::LINE) {
+
+            // Get Slope
+            QPointF refPos = mElements.first()->pos();
+            QPointF firstElementPos = mElements.first()->pos();
+            QPointF lastElementPos = mElements.last()->pos();
+            firstElementPos -= refPos;
+            lastElementPos -= refPos;
+
+            float distance = qSqrt(qPow(lastElementPos.x(), 2) + qPow(lastElementPos.y(), 2));
+            QPointF slope = lastElementPos / distance;
+
+            // Update new control first point position
+            float firstControlPointDistance = distance * 0.1f;
+            mElements[1]->setPos((slope * firstControlPointDistance) + refPos);
+
+            // Update new control last point position
+            float lastControlPointDistance = distance * 0.9f;
+            mElements[mElements.length() - 2]->setPos((slope * lastControlPointDistance) + refPos);
+
+        } else {
+
+            if (bezierElement == mElements.first()) {
+                mElements[listIndex + 1]->moveBy(delta);
+
+            } else if (bezierElement == mElements.last()) {
+                mElements[listIndex - 1]->moveBy(delta);
+
+            } else {
+                mElements[listIndex - 1]->moveBy(delta);
+                mElements[listIndex + 1]->moveBy(delta);
+            }
+        }
+    }
+
+
+    // Update path
     setPath(mPath);
 
     // Update bounding box and handles positions
@@ -181,6 +215,11 @@ void Shape::boundingBoxEvent(const BoundingBoxEvent& event)
 
         element->setPos(p1);
     }
+}
+
+void Shape::resizeOnCreation(const QPointF& delta)
+{
+     mBoundingBox.boundingBoxPointMoved(BoundingBoxPoint::TranslationDirection::BOTTOM_RIGHT, delta);
 }
 
 void Shape::setSelected(bool selected)

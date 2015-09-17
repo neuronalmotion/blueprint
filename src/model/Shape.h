@@ -23,10 +23,9 @@ public:
 
     enum ShapeType {
         CANVAS,
-        SHAPE,
-        BOUNDING_BOX_POINT,
-        BEZIER_POINT,
-        BEZIER_CONTROL_POINT
+        ELLIPSE,
+        LINE,
+        RECTANGLE,
     };
 
     enum EditMode {
@@ -34,19 +33,23 @@ public:
         BEZIER
     };
 
-    Shape(TreeItem* parentTreeItem, qreal x, qreal y);
+    static Shape* fromQGraphicsItem(const QGraphicsItem& item);
+
+    explicit Shape(TreeItem* parentTreeItem, const ShapeType shapeType, qreal x, qreal y);
     virtual ~Shape();
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0) override;
     void addPath(const QPointF& c1, const QPointF& c2, const QPointF& endPos);
     void closePath();
     void updateElement(BezierElement* bezierElement, const QPointF& pos);
     void boundingBoxEvent(const BoundingBoxEvent& event);
-    virtual void collapse() {}
+    virtual void collapse() = 0;
+    virtual void resizeOnCreation(const QPointF& delta);
 
+    inline ShapeType shapeType() const { return mShapeType; }
     void setSelected(bool selected) override;
     inline EditMode editMode() const { return mEditMode; }
     void toggleEditMode();
-    void setEditMode(const EditMode& mode);
+    virtual void setEditMode(const EditMode& mode);
     QRectF bounds() const;
     inline BoundingBox& boundingBox() { return mBoundingBox; }
     QPointF posAbsolute();
@@ -59,9 +62,10 @@ public:
     inline QString backgroundImageFileName() { return mBackgroundImageFileName; }
 
 protected:
-    void updateBoundingBoxBezierVisibility();
+    virtual void updateBoundingBoxBezierVisibility();
 
     QPainterPath mPath;
+    ShapeType mShapeType;
     QList<BezierElement*> mElements;
     BoundingBox mBoundingBox;
     bool mIsPathClosed;
