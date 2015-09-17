@@ -16,7 +16,31 @@ ShapeLine::~ShapeLine()
 
 }
 
-void ShapeLine::setEditMode(const Shape::EditMode& mode)
+void ShapeLine::setEditMode(const Shape::EditMode& /*mode*/)
 {
     // No op
+}
+
+void ShapeLine::collapse()
+{
+    for (auto e : mElements) {
+        e->setPos(QPointF(0, 0));
+    }
+}
+
+void ShapeLine::resizeOnCreation(const QPointF& delta)
+{
+    mElements.last()->moveBy(delta);
+}
+
+void ShapeLine::updateBoundingBoxBezierVisibility()
+{
+    bool bezierVisibility = mIsSelected && mEditMode == EditMode::BEZIER;
+
+    for (auto e : mElements) {
+        e->setVisible(bezierVisibility);
+    }
+
+    mElements[1]->setVisible(false);
+    mElements[mElements.length() - 2]->setVisible(false);
 }

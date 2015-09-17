@@ -217,6 +217,11 @@ void Shape::boundingBoxEvent(const BoundingBoxEvent& event)
     }
 }
 
+void Shape::resizeOnCreation(const QPointF& delta)
+{
+     mBoundingBox.boundingBoxPointMoved(BoundingBoxPoint::TranslationDirection::BOTTOM_RIGHT, delta);
+}
+
 void Shape::setSelected(bool selected)
 {
     QGraphicsPathItem::setSelected(selected);

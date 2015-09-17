@@ -11,6 +11,11 @@ public:
     ~ShapeLine();
 
     void setEditMode(const EditMode& mode) override;
+    void collapse() override;
+    void resizeOnCreation(const QPointF& delta) override;
+
+protected:
+    void updateBoundingBoxBezierVisibility() override;
 };
 }
 

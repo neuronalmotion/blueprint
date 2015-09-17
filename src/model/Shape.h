@@ -42,7 +42,8 @@ public:
     void closePath();
     void updateElement(BezierElement* bezierElement, const QPointF& pos);
     void boundingBoxEvent(const BoundingBoxEvent& event);
-    virtual void collapse() {}
+    virtual void collapse() = 0;
+    virtual void resizeOnCreation(const QPointF& delta);
 
     inline ShapeType shapeType() const { return mShapeType; }
     void setSelected(bool selected) override;
@@ -61,7 +62,7 @@ public:
     inline QString backgroundImageFileName() { return mBackgroundImageFileName; }
 
 protected:
-    void updateBoundingBoxBezierVisibility();
+    virtual void updateBoundingBoxBezierVisibility();
 
     QPainterPath mPath;
     ShapeType mShapeType;

@@ -140,7 +140,8 @@ void CanvasView::mouseMoveEvent(QMouseEvent *event)
     if (mCreatingShape) {
         QPointF delta = point - mCreatingLastPosition;
         mCreatingLastPosition = point;
-        mCreatingShape->boundingBox().boundingBoxPointMoved(BoundingBoxPoint::TranslationDirection::BOTTOM_RIGHT, delta);
+
+        mCreatingShape->resizeOnCreation(delta);
     }
 }
 
