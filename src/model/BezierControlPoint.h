@@ -6,12 +6,12 @@
 #include "BezierElement.h"
 
 namespace blueprint {
-class Shape;
+class ShapeBezier;
 
 class BezierControlPoint : public BezierElement, public QGraphicsRectItem
 {
 public:
-    BezierControlPoint(Shape* parent, const int index);
+    BezierControlPoint(ShapeBezier* parent, const int index);
     ~BezierControlPoint();
 
     QPointF pos() const override;

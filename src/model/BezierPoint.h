@@ -7,12 +7,12 @@
 
 namespace blueprint {
 
-class Shape;
+class ShapeBezier;
 
 class BezierPoint : public BezierElement, public QGraphicsEllipseItem
 {
 public:
-    BezierPoint(Shape* parent, const int index);
+    BezierPoint(ShapeBezier* parent, const int index);
     ~BezierPoint();
 
     QPointF pos() const override;

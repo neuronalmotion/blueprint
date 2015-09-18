@@ -3,15 +3,14 @@
 
 #include <QList>
 
-#include "model/ShapeRectangle.h"
-#include "model/TreeItem.h"
+#include "ShapeRectangle.h"
 
 namespace blueprint {
 
 class Canvas : public ShapeRectangle
 {
 public:
-    Canvas(TreeItem* parentTreeItem, qreal x, qreal y);
+    Canvas(Shape* parentShape, const qreal& x, const qreal& y);
     ~Canvas();
 
 };

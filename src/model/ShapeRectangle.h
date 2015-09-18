@@ -1,17 +1,23 @@
 #ifndef SHAPERECTANGLE_H
 #define SHAPERECTANGLE_H
 
-#include "Shape.h"
+#include "ShapeBezier.h"
 
 namespace blueprint {
 
-class ShapeRectangle : public Shape
+class ShapeRectangle : public ShapeBezier
 {
 public:
-    ShapeRectangle(TreeItem* parentTreeItem, qreal x, qreal y);
+    ShapeRectangle(Shape* parentShape, const qreal& x, const qreal& y);
     ~ShapeRectangle();
 
     void collapse() override;
+
+protected:
+    ShapeRectangle(Shape* parentShape, const ShapeType& shapeType, const qreal& x, const qreal& y);
+
+private:
+    void init();
 };
 }
 

@@ -5,20 +5,20 @@
 #include <QPointF>
 
 namespace blueprint {
-class TreeItem;
+class Shape;
 
-class TreeModel : public QAbstractItemModel
+class ShapeModel : public QAbstractItemModel
 {
     Q_OBJECT
 public:
-    static TreeModel* instance();
+    static ShapeModel* instance();
 
-    explicit TreeModel();
-    ~TreeModel();
+    explicit ShapeModel();
+    ~ShapeModel();
 
-    void addItem(TreeItem* item, TreeItem* parent = 0);
-    TreeItem* itemFromIndex(const QModelIndex& index) const;
-    TreeItem* itemFromParentIndex(const QModelIndex& parentIndex, int row) const;
+    void addItem(Shape* item, Shape* parent = 0);
+    Shape* itemFromIndex(const QModelIndex& index) const;
+    Shape* itemFromParentIndex(const QModelIndex& parentIndex, int row) const;
 
     QVariant data(const QModelIndex& index, int role) const override;
     bool setData(const QModelIndex& index, const QVariant& value, int role) override;
@@ -31,15 +31,15 @@ public:
 
     Qt::ItemFlags flags(const QModelIndex& index) const override;
 
-    void setRootItem(TreeItem* rootItem);
+    void setRootItem(Shape* rootItem);
 
 signals:
     void selectionsChanged(const QModelIndex& parent, int first, int last);
     void propertiesChanged(const QModelIndex& parent, int first, int last);
 
 private:
-    TreeItem* mRootItem;
-    static TreeModel* sInstance;
+    Shape* mRootItem;
+    static ShapeModel* sInstance;
 };
 }
 

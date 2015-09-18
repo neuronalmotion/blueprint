@@ -2,13 +2,13 @@
 
 #include <QPen>
 
-#include "Shape.h"
+#include "ShapeBezier.h"
 
 using namespace blueprint;
 
-BezierPoint::BezierPoint(Shape* parent, const int index)
+BezierPoint::BezierPoint(ShapeBezier* parent, const int index)
     : BezierElement(ElementType::POINT, parent, index),
-    QGraphicsEllipseItem(parent)
+    QGraphicsEllipseItem(parent->graphicsItem())
 {
     setFlag(QGraphicsItem::ItemIsMovable);
     setFlag(QGraphicsItem::ItemSendsGeometryChanges);

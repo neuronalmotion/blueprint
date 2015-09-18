@@ -13,8 +13,7 @@
 #include "model/ShapeLine.h"
 #include "model/ShapeRectangle.h"
 #include "model/ShapeEllipse.h"
-#include "model/TreeItem.h"
-#include "model/TreeModel.h"
+#include "model/ShapeModel.h"
 
 using namespace blueprint;
 
@@ -26,8 +25,8 @@ CanvasView::CanvasView(QWidget* parent)
     mCreatingLastPosition(0, 0),
     mZoomFactor(1.0f)
 {
-    connect(TreeModel::instance(), &TreeModel::selectionsChanged, this, &CanvasView::selectionsChanged);
-    connect(TreeModel::instance(), &TreeModel::propertiesChanged, this, &CanvasView::propertiesChanged);
+    connect(ShapeModel::instance(), &ShapeModel::selectionsChanged, this, &CanvasView::selectionsChanged);
+    connect(ShapeModel::instance(), &ShapeModel::propertiesChanged, this, &CanvasView::propertiesChanged);
 }
 
 CanvasView::~CanvasView()
@@ -36,7 +35,7 @@ CanvasView::~CanvasView()
 
 void CanvasView::selectionsChanged(const QModelIndex& parent, int first, int /*last*/)
 {
-    TreeModel* model = TreeModel::instance();
+    ShapeModel* model = ShapeModel::instance();
     blueprint::Shape* item = static_cast<blueprint::Shape*>(model->itemFromParentIndex(parent, first));
     Q_ASSERT(item);
 
@@ -53,11 +52,11 @@ void CanvasView::selectionsChanged(const QModelIndex& parent, int first, int /*l
 
 void CanvasView::propertiesChanged(const QModelIndex& parent, int first, int /*last*/)
 {
-    TreeModel* model = TreeModel::instance();
+    ShapeModel* model = ShapeModel::instance();
     blueprint::Shape* item = static_cast<blueprint::Shape*>(model->itemFromParentIndex(parent, first));
     Q_ASSERT(item);
 
-    item->update();
+    item->graphicsItem()->update();
 }
 
 void CanvasView::setTool(Tool::Type toolType)
@@ -72,7 +71,6 @@ void CanvasView::mousePressEvent(QMouseEvent *event)
 
         // Only selection require to call QGraphicsView implementation
         QGraphicsView::mousePressEvent(event);
-
         return;
     }
 
@@ -82,7 +80,7 @@ void CanvasView::mousePressEvent(QMouseEvent *event)
     // Search the parent item
     blueprint::Shape* shapeParent = nullptr;
     QPointF point = QGraphicsView::mapToScene(event->pos());
-    TreeModel* model = TreeModel::instance();
+    ShapeModel* model = ShapeModel::instance();
     static uint id = 0;
 
     QGraphicsItem* graphicsItem = scene()->itemAt(point, QTransform());
@@ -93,7 +91,7 @@ void CanvasView::mousePressEvent(QMouseEvent *event)
     }
 
     // Position is always relative to direct parent
-    shapeParent = dynamic_cast<blueprint::Shape*>(graphicsItem);
+    shapeParent = blueprint::Shape::fromQGraphicsItem(*graphicsItem);
     QPointF relPoint(point.x() - shapeParent->posAbsolute().x(),  point.y() - shapeParent->posAbsolute().y());
 
     // Create the right Shape
@@ -123,13 +121,13 @@ void CanvasView::mousePressEvent(QMouseEvent *event)
     mCreatingShape = shape;
     mCreatingLastPosition = point;
     shape->collapse();
-    shape->setParentItem(shapeParent);
+    shape->graphicsItem()->setParentItem(shapeParent->graphicsItem());
     model->addItem(mCreatingShape, shapeParent);
 
     // Select the new Shape
-    QModelIndex index = (QModelIndex)(*shape->parentTreeItem()->modelIndex());
-    int shapeIndex = shape->parentTreeItem()->indexOf(shape);
-    TreeModel::instance()->selectionsChanged(index, shapeIndex, shapeIndex);
+    QModelIndex index = (QModelIndex)(*shape->parentShape()->modelIndex());
+    int shapeIndex = shape->parentShape()->indexOf(shape);
+    ShapeModel::instance()->selectionsChanged(index, shapeIndex, shapeIndex);
 }
 
 void CanvasView::mouseMoveEvent(QMouseEvent *event)
@@ -198,9 +196,9 @@ void CanvasView::onFocusItemChanged(QGraphicsItem* newFocusItem, QGraphicsItem* 
     if (!shape) {
         return;
     }
-    QModelIndex index = (QModelIndex)(*shape->parentTreeItem()->modelIndex());
-    int shapeIndex = shape->parentTreeItem()->indexOf(shape);
-    TreeModel::instance()->selectionsChanged(index, shapeIndex, shapeIndex);
+    QModelIndex index = (QModelIndex)(*shape->parentShape()->modelIndex());
+    int shapeIndex = shape->parentShape()->indexOf(shape);
+    ShapeModel::instance()->selectionsChanged(index, shapeIndex, shapeIndex);
 }
 
 void CanvasView::setScene(QGraphicsScene* scene)

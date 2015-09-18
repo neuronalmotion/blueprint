@@ -1,30 +1,30 @@
-#include "TreeModel.h"
+#include "ShapeModel.h"
 
-#include "TreeItem.h"
+#include "Shape.h"
 
 using namespace blueprint;
 
-TreeModel* TreeModel::sInstance = nullptr;
+ShapeModel* ShapeModel::sInstance = nullptr;
 
-TreeModel::TreeModel()
+ShapeModel::ShapeModel()
     : QAbstractItemModel(),
     mRootItem(nullptr)
 {
 }
 
-TreeModel::~TreeModel()
+ShapeModel::~ShapeModel()
 {
 }
 
-TreeModel* TreeModel::instance()
+ShapeModel* ShapeModel::instance()
 {
     if (!sInstance) {
-        sInstance = new TreeModel();
+        sInstance = new ShapeModel();
     }
     return sInstance;
 }
 
-void TreeModel::addItem(TreeItem* item, TreeItem* parent)
+void ShapeModel::addItem(Shape* item, Shape* parent)
 {
     if (!parent) {
         parent = mRootItem;
@@ -34,14 +34,14 @@ void TreeModel::addItem(TreeItem* item, TreeItem* parent)
                 (QModelIndex)(*parent->modelIndex())
                 : QModelIndex();
     beginInsertRows(parentIndex, childRow, childRow);
-    item->setParentTreeItem(parent);
+    item->setParentShape(parent);
     parent->appendChild(item);
     QModelIndex childIndex = index(childRow, 0, parentIndex);
     item->setModelIndex(childIndex);
     endInsertRows();
 }
 
-QVariant TreeModel::data(const QModelIndex& index, int role) const
+QVariant ShapeModel::data(const QModelIndex& index, int role) const
 {
     if (!index.isValid()) {
         return QVariant();
@@ -51,18 +51,18 @@ QVariant TreeModel::data(const QModelIndex& index, int role) const
         return QVariant();
     }
 
-    TreeItem* item = itemFromIndex(index);
+    Shape* item = itemFromIndex(index);
     return item->name();
 }
 
-QModelIndex TreeModel::index(int row, int column, const QModelIndex& parent) const
+QModelIndex ShapeModel::index(int row, int column, const QModelIndex& parent) const
 {
     if (!hasIndex(row, column, parent)) {
         return QModelIndex();
     }
 
-    TreeItem* parentItem = itemFromIndex(parent);
-    TreeItem* childItem = parentItem->child(row);
+    Shape* parentItem = itemFromIndex(parent);
+    Shape* childItem = parentItem->child(row);
     if (childItem) {
         return createIndex(row, column, childItem);
     } else {
@@ -70,14 +70,14 @@ QModelIndex TreeModel::index(int row, int column, const QModelIndex& parent) con
     }
 }
 
-QModelIndex TreeModel::parent(const QModelIndex& child) const
+QModelIndex ShapeModel::parent(const QModelIndex& child) const
 {
     if (!child.isValid()) {
         return QModelIndex();
     }
 
-    TreeItem* childItem = itemFromIndex(child);
-    TreeItem* parentItem = childItem->parentTreeItem();
+    Shape* childItem = itemFromIndex(child);
+    Shape* parentItem = childItem->parentShape();
 
     if (parentItem == mRootItem) {
         return QModelIndex();
@@ -86,9 +86,9 @@ QModelIndex TreeModel::parent(const QModelIndex& child) const
     return createIndex(parentItem->row(), 0, parentItem);
 }
 
-int TreeModel::rowCount(const QModelIndex& parent) const
+int ShapeModel::rowCount(const QModelIndex& parent) const
 {
-    TreeItem* parentItem;
+    Shape* parentItem;
     if (parent.column() > 0) {
         return 0;
     }
@@ -97,24 +97,24 @@ int TreeModel::rowCount(const QModelIndex& parent) const
     return parentItem->childCount();
 }
 
-int TreeModel::columnCount(const QModelIndex& /*parent*/) const
+int ShapeModel::columnCount(const QModelIndex& /*parent*/) const
 {
     return 1;
 }
 
-bool TreeModel::setData(const QModelIndex& index, const QVariant& value, int role)
+bool ShapeModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
     if (role != Qt::EditRole) {
         return false;
     }
 
-    TreeItem* item = itemFromIndex(index);
+    Shape* item = itemFromIndex(index);
     item->setName(value.toString());
     emit dataChanged(index, index);
     return true;
 }
 
-Qt::ItemFlags TreeModel::flags(const QModelIndex& index) const
+Qt::ItemFlags ShapeModel::flags(const QModelIndex& index) const
 {
     if (!index.isValid()) {
         return 0;
@@ -122,23 +122,23 @@ Qt::ItemFlags TreeModel::flags(const QModelIndex& index) const
     return Qt::ItemIsEditable | QAbstractItemModel::flags(index);
 }
 
-void TreeModel::setRootItem(TreeItem* rootItem)
+void ShapeModel::setRootItem(Shape* rootItem)
 {
     mRootItem = rootItem;
     mRootItem->setModelIndex(index(0, 0));
 }
 
-TreeItem* TreeModel::itemFromIndex(const QModelIndex& index) const
+Shape* ShapeModel::itemFromIndex(const QModelIndex& index) const
 {
     if (index.isValid()) {
-        return static_cast<TreeItem*>(index.internalPointer());
+        return static_cast<Shape*>(index.internalPointer());
     } else {
         return mRootItem;
     }
 }
 
-TreeItem* TreeModel::itemFromParentIndex(const QModelIndex& parentIndex, int row) const
+Shape* ShapeModel::itemFromParentIndex(const QModelIndex& parentIndex, int row) const
 {
-    TreeItem* parentItem = itemFromIndex(parentIndex);
+    Shape* parentItem = itemFromIndex(parentIndex);
     return parentItem->child(row);
 }

@@ -2,10 +2,12 @@
 
 using namespace blueprint;
 
-Page::Page(TreeItem* parentItem)
-    : TreeItem(ItemType::PAGE, parentItem)
+Page::Page(Shape* parentShape)
+    : ShapeRectangle(parentShape, ShapeType::PAGE, 0, 0)
 {
-
+    setBorderColor(QColor(10, 10, 10));
+    setBackgroundColor(QColor(100, 100, 100));
+    boundingBox().boundingBoxPointMoved(BoundingBoxPoint::BOTTOM_RIGHT, QPointF(10000.0, 10000.0));
 }
 
 Page::~Page()

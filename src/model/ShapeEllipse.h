@@ -1,13 +1,13 @@
 #ifndef SHAPEELLIPSE_H
 #define SHAPEELLIPSE_H
 
-#include "Shape.h"
+#include "ShapeBezier.h"
 
 namespace blueprint {
-class ShapeEllipse : public Shape
+class ShapeEllipse : public ShapeBezier
 {
 public:
-    ShapeEllipse(TreeItem* parentTreeItem, qreal x, qreal y);
+    ShapeEllipse(Shape* parentShape, const qreal& x, const qreal& y);
     ~ShapeEllipse();
 
     void collapse() override;

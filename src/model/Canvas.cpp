@@ -4,11 +4,10 @@
 
 using namespace blueprint;
 
-Canvas::Canvas(TreeItem* parentItem, qreal x, qreal y)
-    : ShapeRectangle(parentItem, x, y)
+Canvas::Canvas(Shape* parentShape, const qreal& x, const qreal& y)
+    : ShapeRectangle(parentShape, ShapeType::CANVAS, x, y)
 {
 
-    mItemType = TreeItem::ItemType::CANVAS;
     //setFlag(QGraphicsItem::ItemClipsChildrenToShape);
     setBorderColor(QColor(10, 10, 10));
     setBackgroundColor(QColor(255, 255, 255));

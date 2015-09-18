@@ -5,15 +5,15 @@
 
 using namespace blueprint;
 
-ShapeEllipse::ShapeEllipse(TreeItem* parentItem, qreal x, qreal y)
-    : Shape(parentItem, ShapeType::ELLIPSE, x, y)
+ShapeEllipse::ShapeEllipse(Shape* parentShape, const qreal& x, const qreal& y)
+    : ShapeBezier(parentShape, ShapeType::ELLIPSE, x, y)
 {
     addPath(QPointF(30, 0), QPointF(50, 20), QPointF(50, 50));
     addPath(QPointF(50, 80), QPointF(30, 100), QPointF(0, 100));
     addPath(QPointF(-40, 100), QPointF(-50, 80), QPointF(-50, 50));
     addPath(QPointF(-50, 20), QPointF(-30, 0), QPointF(0, 0));
     closePath();
-    moveBy(50,0);
+    mGraphicsItem->moveBy(50,0);
     mBoundingBox.updateRect();
 }
 

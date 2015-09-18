@@ -4,8 +4,9 @@
 #include <QColorDialog>
 #include <QFileDialog>
 
-#include "model/TreeItem.h"
-#include "model/TreeModel.h"
+#include "model/Shape.h"
+#include "model/ShapeBezier.h"
+#include "model/ShapeModel.h"
 
 
 using namespace blueprint;
@@ -22,8 +23,8 @@ PropertiesWindow::PropertiesWindow(QWidget *parent) :
     connect(mUi->backgroundColor, &QPushButton::clicked, this, &PropertiesWindow::onBackgroundColorClicked);
     connect(mUi->backgroundImage, &QPushButton::clicked, this, &PropertiesWindow::onBackgroundImageClicked);
 
-    connect(TreeModel::instance(), &TreeModel::selectionsChanged, this, &PropertiesWindow::selectionsChanged);
-    connect(TreeModel::instance(), &TreeModel::propertiesChanged, this, &PropertiesWindow::selectionsChanged);
+    connect(ShapeModel::instance(), &ShapeModel::selectionsChanged, this, &PropertiesWindow::selectionsChanged);
+    connect(ShapeModel::instance(), &ShapeModel::propertiesChanged, this, &PropertiesWindow::selectionsChanged);
 }
 
 PropertiesWindow::~PropertiesWindow()
@@ -33,7 +34,7 @@ PropertiesWindow::~PropertiesWindow()
 
 void PropertiesWindow::selectionsChanged(const QModelIndex& parent, int first, int /*last*/)
 {
-    TreeModel* model = TreeModel::instance();
+    ShapeModel* model = ShapeModel::instance();
     mCurrentItem = static_cast<blueprint::Shape*>(model->itemFromParentIndex(parent, first));
     Q_ASSERT(mCurrentItem);
 
@@ -48,9 +49,14 @@ void PropertiesWindow::selectionsChanged(const QModelIndex& parent, int first, i
                                         .arg(backColor.blue()));
 
     // Background image
-    QString backImage = mCurrentItem->backgroundImageFileName();
-    mUi->backgroundImageText->setText(backImage);
-
+    // TODO rather than relying on ugly casts
+    // we should display a "modified" PropertiesWindow
+    // based on the shape type / attributes
+    ShapeBezier* shapeBezier = static_cast<ShapeBezier*>(mCurrentItem);
+    if (shapeBezier) {
+        QString backImage = shapeBezier->backgroundImageFileName();
+        mUi->backgroundImageText->setText(backImage);
+    }
 }
 
 void PropertiesWindow::onBackgroundColorClicked()
@@ -58,20 +64,23 @@ void PropertiesWindow::onBackgroundColorClicked()
     QColor color = QColorDialog::getColor(mCurrentItem->backgroundColor(), this, "Background color", QColorDialog::ShowAlphaChannel);
     mCurrentItem->setBackgroundColor(color);
 
-    QModelIndex index = (QModelIndex)(*mCurrentItem->parentTreeItem()->modelIndex());
-    int shapeIndex = mCurrentItem->parentTreeItem()->indexOf(mCurrentItem);
-    TreeModel::instance()->propertiesChanged(index, shapeIndex, shapeIndex);
+    QModelIndex index = (QModelIndex)(*mCurrentItem->parentShape()->modelIndex());
+    int shapeIndex = mCurrentItem->parentShape()->indexOf(mCurrentItem);
+    ShapeModel::instance()->propertiesChanged(index, shapeIndex, shapeIndex);
 }
 
 void PropertiesWindow::onBackgroundImageClicked()
 {
+    ShapeBezier* shapeBezier = static_cast<ShapeBezier*>(mCurrentItem);
+    if (!shapeBezier) {
+        return;
+    }
     QString fileName = QFileDialog::getOpenFileName(this,
                                             "Open background image",
                                             "Image Files (*.png *.jpg *.bmp)");
 
-    mCurrentItem->setBackgroundImage(fileName);
-
-    QModelIndex index = (QModelIndex)(*mCurrentItem->parentTreeItem()->modelIndex());
-    int shapeIndex = mCurrentItem->parentTreeItem()->indexOf(mCurrentItem);
-    TreeModel::instance()->propertiesChanged(index, shapeIndex, shapeIndex);
+    shapeBezier->setBackgroundImage(fileName);
+    QModelIndex index = (QModelIndex)(*mCurrentItem->parentShape()->modelIndex());
+    int shapeIndex = mCurrentItem->parentShape()->indexOf(mCurrentItem);
+    ShapeModel::instance()->propertiesChanged(index, shapeIndex, shapeIndex);
 }

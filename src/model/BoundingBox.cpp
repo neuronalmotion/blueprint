@@ -7,7 +7,7 @@
 using namespace blueprint;
 
 BoundingBox::BoundingBox(Shape* parent)
-    : QGraphicsRectItem(parent),
+    : QGraphicsRectItem(parent->graphicsItem()),
       mParentShape(parent),
     mBoundingBoxEvent({QPointF(), QPointF(), QPointF()}),
     mHashBoundingBoxPoints()

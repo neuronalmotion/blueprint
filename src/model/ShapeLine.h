@@ -1,13 +1,13 @@
 #ifndef SHAPELINE_H
 #define SHAPELINE_H
 
-#include "Shape.h"
+#include "ShapeBezier.h"
 
 namespace blueprint {
-class ShapeLine : public Shape
+class ShapeLine : public ShapeBezier
 {
 public:
-    ShapeLine(TreeItem* parentTreeItem, qreal x, qreal y);
+    ShapeLine(Shape* parentShape, const qreal& x, const qreal& y);
     ~ShapeLine();
 
     void setEditMode(const EditMode& mode) override;

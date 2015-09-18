@@ -3,11 +3,9 @@
 
 #include <QList>
 
-#include "model/TreeItem.h"
-
 namespace blueprint {
 
-class Blueprint : public TreeItem
+class Blueprint
 {
 public:
     Blueprint();
