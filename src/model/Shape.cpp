@@ -16,10 +16,8 @@ Shape* Shape::fromQGraphicsItem(const QGraphicsItem& item)
 Shape::Shape(TreeItem* parentItem, const ShapeType shapeType, qreal x, qreal y)
     : TreeItem(ItemType::SHAPE, parentItem),
       mShapeType(shapeType),
-      mBoundingBox(this),
       mEditMode(EditMode::BOUNDING_BOX)
 {
-    mBoundingBox.setVisible(false);
 }
 
 Shape::~Shape()
@@ -28,7 +26,7 @@ Shape::~Shape()
 
 void Shape::setSelected(bool selected)
 {
-    QGraphicsPathItem::setSelected(selected);
+    graphicsItem()->setSelected(selected);
 
     TreeItem::setSelected(selected);
     qDebug() << "mIsSelected : " << mIsSelected;
@@ -54,7 +52,7 @@ void Shape::setEditMode(const EditMode& mode)
 
 QPointF Shape::posAbsolute()
 {
-    QPointF position = pos();
+    QPointF position = graphicsItem()->pos();
 
     if (itemType() != TreeItem::ItemType::CANVAS) {
         blueprint::Shape* shapeParent = dynamic_cast<blueprint::Shape*>(mParentItem);

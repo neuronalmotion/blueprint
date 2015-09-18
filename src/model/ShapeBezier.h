@@ -6,6 +6,7 @@
 #include <QImage>
 
 #include "Shape.h"
+#include "BoundingBox.h"
 #include "TreeItem.h"
 #include "BezierElement.h"
 
@@ -19,7 +20,7 @@ public:
     explicit ShapeBezier(TreeItem* parentTreeItem, const ShapeType shapeType, qreal x, qreal y);
     ~ShapeBezier();
 
-    QGraphicsItem* getQGraphicsItem() override;
+    QGraphicsItem* graphicsItem() override;
     void boundingBoxEvent(const BoundingBoxEvent& event);
     QRectF bounds() const override;
     void resizeOnCreation(const QPointF& delta) override;
@@ -30,6 +31,7 @@ public:
     void addPath(const QPointF& c1, const QPointF& c2, const QPointF& endPos);
     void closePath();
     void updateElement(BezierElement* bezierElement, const QPointF& pos);
+    inline BoundingBox& boundingBox() { return mBoundingBox; }
 
     void setBackgroundImage(const QString& fileName);
     inline QImage* backgroundImage() { return mBackgroundImage; }
@@ -43,6 +45,7 @@ protected:
     QList<BezierElement*> mElements;
     bool mIsPathClosed;
     GraphicsItem* mGraphicsItem;
+    BoundingBox mBoundingBox;
     QImage* mBackgroundImage;
     QString mBackgroundImageFileName;
 };

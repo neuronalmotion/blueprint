@@ -44,11 +44,11 @@ MainWindow::MainWindow(QWidget* parent) :
 
     Canvas* c1 = new Canvas(p1, 0, 0);
     c1->setName("Canvas 1");
-    mUi->canvas->scene()->addItem(c1);
+    mScene->addItem(c1->graphicsItem());
 
     Canvas* c2 = new Canvas(p1, 450, 0);
     c2->setName("Canvas 2");
-    mUi->canvas->scene()->addItem(c2);
+    mScene->addItem(c2->graphicsItem());
 
     model->setRootItem(p1);
     model->addItem(c1, p1);

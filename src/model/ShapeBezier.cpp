@@ -12,11 +12,13 @@ blueprint::ShapeBezier::ShapeBezier(TreeItem* parentTreeItem, const Shape::Shape
     : Shape(parentTreeItem, shapeType, x, y),
       mPath(),
       mElements(),
-      mGraphicsItem(new GraphicsItem(this)),
       mIsPathClosed(false),
+      mGraphicsItem(new GraphicsItem(this)),
+      mBoundingBox(this), // Depends on mGraphicsItem, has to be after!!
       mBackgroundImage(nullptr),
       mBackgroundImageFileName()
 {
+    mBoundingBox.setVisible(false);
     setBorderColor(QColor(40, 40, 40));
 
     // fast random color
@@ -36,7 +38,7 @@ blueprint::ShapeBezier::~ShapeBezier()
     qDeleteAll(mElements);
 }
 
-QGraphicsItem* ShapeBezier::getQGraphicsItem()
+QGraphicsItem* ShapeBezier::graphicsItem()
 {
     return mGraphicsItem;
 }
@@ -72,7 +74,7 @@ void ShapeBezier::setBackgroundColor(const QColor& color)
 
 QColor ShapeBezier::backgroundColor() const
 {
-    mGraphicsItem->brush().color();
+    return mGraphicsItem->brush().color();
 }
 
 void ShapeBezier::setBorderColor(const QColor& color)
@@ -177,7 +179,7 @@ void ShapeBezier::addPath(const QPointF& c1, const QPointF& c2, const QPointF& e
          mElements.append(bezierElement);
     }
 
-    setPath(mPath);
+    mGraphicsItem->setPath(mPath);
 }
 
 void ShapeBezier::closePath()
@@ -243,7 +245,7 @@ void ShapeBezier::updateElement(BezierElement* bezierElement, const QPointF& pos
 
 
     // Update path
-    setPath(mPath);
+    mGraphicsItem->setPath(mPath);
 
     // Update bounding box and handles positions
     mBoundingBox.updateRect();
@@ -283,7 +285,7 @@ void GraphicsItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* opti
 
         // Parent bounds (in shape coordinate!)
         blueprint::Shape* parentShape = dynamic_cast<blueprint::Shape*>(mShape->parentTreeItem());
-        QRectF parentBounds = parentShape->boundingRect();
+        QRectF parentBounds = parentShape->graphicsItem()->boundingRect();
         parentBounds.moveTo(-pos().x() - shapeBounds.x(), -pos().y() - shapeBounds.y());
 
         // Temp buffer

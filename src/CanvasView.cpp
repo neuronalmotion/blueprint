@@ -57,7 +57,7 @@ void CanvasView::propertiesChanged(const QModelIndex& parent, int first, int /*l
     blueprint::Shape* item = static_cast<blueprint::Shape*>(model->itemFromParentIndex(parent, first));
     Q_ASSERT(item);
 
-    item->update();
+    item->graphicsItem()->update();
 }
 
 void CanvasView::setTool(Tool::Type toolType)
@@ -93,7 +93,7 @@ void CanvasView::mousePressEvent(QMouseEvent *event)
     }
 
     // Position is always relative to direct parent
-    shapeParent = dynamic_cast<blueprint::Shape*>(graphicsItem);
+    shapeParent = blueprint::Shape::fromQGraphicsItem(*graphicsItem);
     QPointF relPoint(point.x() - shapeParent->posAbsolute().x(),  point.y() - shapeParent->posAbsolute().y());
 
     // Create the right Shape
@@ -123,7 +123,7 @@ void CanvasView::mousePressEvent(QMouseEvent *event)
     mCreatingShape = shape;
     mCreatingLastPosition = point;
     shape->collapse();
-    shape->setParentItem(shapeParent);
+    shape->graphicsItem()->setParentItem(shapeParent->graphicsItem());
     model->addItem(mCreatingShape, shapeParent);
 
     // Select the new Shape

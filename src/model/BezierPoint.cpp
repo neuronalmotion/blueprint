@@ -8,7 +8,7 @@ using namespace blueprint;
 
 BezierPoint::BezierPoint(ShapeBezier* parent, const int index)
     : BezierElement(ElementType::POINT, parent, index),
-    QGraphicsEllipseItem(parent)
+    QGraphicsEllipseItem(parent->graphicsItem())
 {
     setFlag(QGraphicsItem::ItemIsMovable);
     setFlag(QGraphicsItem::ItemSendsGeometryChanges);

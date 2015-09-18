@@ -8,7 +8,7 @@ using namespace blueprint;
 
 BezierControlPoint::BezierControlPoint(ShapeBezier* parent, int index)
     : BezierElement(ElementType::CONTROL_POINT, parent, index),
-    QGraphicsRectItem(parent->getQGraphicsItem())
+    QGraphicsRectItem(parent->graphicsItem())
 {
     setFlag(QGraphicsItem::ItemIsMovable);
     setFlag(QGraphicsItem::ItemSendsGeometryChanges);
