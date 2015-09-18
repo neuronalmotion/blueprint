@@ -3,7 +3,7 @@
 
 #include <QWidget>
 
-#include "model/ShapeBezier.h"
+#include "model/Shape.h"
 
 namespace Ui {
 class PropertiesWindow;
@@ -24,7 +24,7 @@ public slots:
 
 private:
     Ui::PropertiesWindow *mUi;
-    blueprint::ShapeBezier* mCurrentItem;
+    blueprint::Shape* mCurrentItem;
 };
 
 #endif // PROPERTIESWINDOW_H

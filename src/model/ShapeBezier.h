@@ -7,7 +7,6 @@
 
 #include "Shape.h"
 #include "BoundingBox.h"
-#include "TreeItem.h"
 #include "BezierElement.h"
 
 namespace blueprint {
@@ -17,7 +16,7 @@ class GraphicsItem;
 class ShapeBezier : public Shape
 {
 public:
-    explicit ShapeBezier(TreeItem* parentTreeItem, const ShapeType shapeType, qreal x, qreal y);
+    explicit ShapeBezier(Shape* parentShape, const ShapeType& shapeType, const qreal& x, const qreal& y);
     ~ShapeBezier();
 
     QGraphicsItem* graphicsItem() override;

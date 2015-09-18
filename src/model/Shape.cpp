@@ -13,24 +13,69 @@ Shape* Shape::fromQGraphicsItem(const QGraphicsItem& item)
     return static_cast<Shape*>(itemVariant.value<void *>());
 }
 
-Shape::Shape(TreeItem* parentItem, const ShapeType shapeType, qreal x, qreal y)
-    : TreeItem(ItemType::SHAPE, parentItem),
+static int id = 1;
+Shape::Shape(Shape* parentShape, const ShapeType& shapeType)
+    :
+      mParentShape(parentShape),
       mShapeType(shapeType),
-      mEditMode(EditMode::BOUNDING_BOX)
+      mName(QString("GraphicalItem #%1").arg(id++)),
+      mEditMode(EditMode::BOUNDING_BOX),
+      mChildItems(),
+      mModelIndex(nullptr),
+      mIsSelected(false)
 {
 }
 
 Shape::~Shape()
 {
+    delete mModelIndex;
+    qDeleteAll(mChildItems);
+}
+
+
+void Shape::appendChild(Shape* child)
+{
+    mChildItems.append(child);
+}
+
+Shape*Shape::child(int row)
+{
+    return mChildItems.at(row);
+}
+
+int Shape::indexOf(const Shape* child) const
+{
+    for (int i = 0; i < mChildItems.length(); ++i) {
+        if (mChildItems[i] == child) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+int Shape::childCount() const
+{
+    return mChildItems.length();
+}
+
+int Shape::columnCount() const
+{
+    return 1;
+}
+
+int Shape::row() const
+{
+    if (mParentShape) {
+        return mParentShape->mChildItems.indexOf((const_cast<Shape*>(this)));
+    }
+    return 0;
 }
 
 void Shape::setSelected(bool selected)
 {
     graphicsItem()->setSelected(selected);
-
-    TreeItem::setSelected(selected);
+    mIsSelected = selected;
     qDebug() << "mIsSelected : " << mIsSelected;
-
     updateBoundingBoxBezierVisibility();
 }
 
@@ -54,10 +99,15 @@ QPointF Shape::posAbsolute()
 {
     QPointF position = graphicsItem()->pos();
 
-    if (itemType() != TreeItem::ItemType::CANVAS) {
-        blueprint::Shape* shapeParent = dynamic_cast<blueprint::Shape*>(mParentItem);
+    if (shapeType() != ShapeType::CANVAS) {
+        blueprint::Shape* shapeParent = dynamic_cast<blueprint::Shape*>(mParentShape);
         position = position + shapeParent->posAbsolute();
     }
 
     return position;
+}
+
+void Shape::setParentShape(Shape* parentShape)
+{
+    mParentShape = parentShape;
 }

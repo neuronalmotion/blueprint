@@ -4,8 +4,23 @@
 
 using namespace blueprint;
 
-ShapeRectangle::ShapeRectangle(TreeItem* parentItem, qreal x, qreal y)
-    : ShapeBezier(parentItem, ShapeType::RECTANGLE, x, y)
+ShapeRectangle::ShapeRectangle(Shape* parentShape, const qreal& x, const qreal& y)
+    : ShapeBezier(parentShape, ShapeType::RECTANGLE, x, y)
+{
+    init();
+}
+
+ShapeRectangle::ShapeRectangle(Shape* parentShape, const ShapeType& shapeType, const qreal& x, const qreal& y)
+    : ShapeBezier(parentShape, shapeType, x, y)
+{
+    init();
+}
+
+ShapeRectangle::~ShapeRectangle()
+{
+}
+
+void ShapeRectangle::init()
 {
     addPath(QPointF(40, 0), QPointF(60, 0), QPointF(100, 0));
     addPath(QPointF(100, 20), QPointF(100, 40), QPointF(100, 50));
@@ -13,10 +28,6 @@ ShapeRectangle::ShapeRectangle(TreeItem* parentItem, qreal x, qreal y)
     addPath(QPointF(0, 40), QPointF(0, 20), QPointF(0, 0));
     closePath();
     mBoundingBox.updateRect();
-}
-
-ShapeRectangle::~ShapeRectangle()
-{
 }
 
 void ShapeRectangle::collapse()

@@ -2,8 +2,8 @@
 
 using namespace blueprint;
 
-ShapeLine::ShapeLine(blueprint::TreeItem* parentTreeItem, qreal x, qreal y)
-    : ShapeBezier(parentTreeItem, ShapeType::LINE, x, y)
+ShapeLine::ShapeLine(Shape* parentShape, const qreal& x, const qreal& y)
+    : ShapeBezier(parentShape, ShapeType::LINE, x, y)
 {
     addPath(QPointF(10, 0), QPointF(20, 0), QPointF(30, 0));
 

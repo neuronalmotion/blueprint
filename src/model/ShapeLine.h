@@ -7,7 +7,7 @@ namespace blueprint {
 class ShapeLine : public ShapeBezier
 {
 public:
-    ShapeLine(TreeItem* parentTreeItem, qreal x, qreal y);
+    ShapeLine(Shape* parentShape, const qreal& x, const qreal& y);
     ~ShapeLine();
 
     void setEditMode(const EditMode& mode) override;

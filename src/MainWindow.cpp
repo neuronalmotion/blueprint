@@ -12,8 +12,7 @@
 #include "model/ShapeEllipse.h"
 #include "model/BezierPoint.h"
 #include "model/BezierControlPoint.h"
-#include "model/TreeItem.h"
-#include "model/TreeModel.h"
+#include "model/ShapeModel.h"
 
 using namespace blueprint;
 
@@ -32,14 +31,13 @@ MainWindow::MainWindow(QWidget* parent) :
     // All drawn TreeItems (Shapes) are derived classes
     // of QGraphicsItem, which would delete our items before us
     mScene = new QGraphicsScene();
-    TreeModel* model = TreeModel::instance();
+    ShapeModel* model = ShapeModel::instance();
     mUi->canvas->setScene(mScene);
     mUi->treeView->setModel(model);
 
     mCurrentBlueprint = new Blueprint();
-    mCurrentBlueprint->setName("Blueprint");
 
-    Page* p1 = new Page(mCurrentBlueprint);
+    Page* p1 = new Page();
     p1->setName("Page 1");
 
     Canvas* c1 = new Canvas(p1, 0, 0);
@@ -56,26 +54,26 @@ MainWindow::MainWindow(QWidget* parent) :
 
     connect(model, &QAbstractItemModel::rowsInserted,
             [this, model](const QModelIndex& parent, int first, int /*last*/) {
-        TreeItem* parentItem = model->itemFromIndex(parent);
-        TreeItem* childItem = parentItem->child(first);
+        Shape* parentItem = model->itemFromIndex(parent);
+        Shape* childItem = parentItem->child(first);
         mUi->statusBar->showMessage(QString("Created item ") + childItem->name());
     });
 
     connect(mUi->treeView->selectionModel(), &QItemSelectionModel::currentChanged,
             [this, model] (const QModelIndex& current,const QModelIndex&/* previous*/) {
-        TreeItem* item = model->itemFromIndex(current);
-        if (!item->parentTreeItem()) {
+        Shape* item = model->itemFromIndex(current);
+        if (!item->parentShape()) {
             return;
         }
-        model->selectionsChanged(((QModelIndex)*item->parentTreeItem()->modelIndex()),
-                                             item->parentTreeItem()->indexOf(item),
-                                             item->parentTreeItem()->indexOf(item));
+        model->selectionsChanged(((QModelIndex)*item->parentShape()->modelIndex()),
+                                             item->parentShape()->indexOf(item),
+                                             item->parentShape()->indexOf(item));
     });
 
-    connect(model, &TreeModel::selectionsChanged,
+    connect(model, &ShapeModel::selectionsChanged,
             [this, model](const QModelIndex& parent, int first, int /*last*/) {
-        TreeItem* parentItem = model->itemFromIndex(parent);
-        TreeItem* childItem = parentItem->child(first);
+        Shape* parentItem = model->itemFromIndex(parent);
+        Shape* childItem = parentItem->child(first);
         mUi->treeView->selectionModel()->select(*childItem->modelIndex(),
                                                 QItemSelectionModel::ClearAndSelect);
     });
@@ -89,7 +87,7 @@ MainWindow::~MainWindow()
         mScene->removeItem(item);
     }
     delete mCurrentBlueprint;
-    delete TreeModel::instance();
+    delete ShapeModel::instance();
     delete mUi;
     qDeleteAll(mTools);
 }
