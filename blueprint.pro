@@ -25,7 +25,8 @@ SOURCES += src/main.cpp\
     src/model/TreeItem.cpp \
     src/model/Shape.cpp \
     src/PropertiesWindow.cpp \
-    src/model/ShapeLine.cpp
+    src/model/ShapeLine.cpp \
+    src/model/ShapeBezier.cpp
 
 HEADERS  += src/MainWindow.h \
     src/CanvasView.h \
@@ -44,7 +45,8 @@ HEADERS  += src/MainWindow.h \
     src/model/TreeItem.h \
     src/model/Shape.h \
     src/PropertiesWindow.h \
-    src/model/ShapeLine.h
+    src/model/ShapeLine.h \
+    src/model/ShapeBezier.h
 
 FORMS    += src/MainWindow.ui \
     src/PropertiesWindow.ui

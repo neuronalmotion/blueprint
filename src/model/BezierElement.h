@@ -4,7 +4,7 @@
 #include <QGraphicsItem>
 
 namespace blueprint {
-class Shape;
+class ShapeBezier;
 
 class BezierElement
 {
@@ -15,7 +15,7 @@ public:
         CONTROL_POINT
     };
 
-    BezierElement(ElementType elementType, Shape* parent, int index);
+    BezierElement(ElementType elementType, ShapeBezier* parent, int index);
     virtual ~BezierElement();
 
     virtual QPointF pos() const = 0;
@@ -31,7 +31,7 @@ protected:
 
 protected:
     ElementType mElementType;
-    Shape* mParentShape;
+    ShapeBezier* mParentShape;
     const int mIndex;
 };
 

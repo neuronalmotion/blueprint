@@ -2,11 +2,11 @@
 
 #include <QGraphicsItem>
 
-#include "Shape.h"
+#include "ShapeBezier.h"
 
 using namespace blueprint;
 
-BezierElement::BezierElement(ElementType elementType, Shape* parent, int index)
+BezierElement::BezierElement(ElementType elementType, ShapeBezier* parent, int index)
     : mElementType(elementType),
     mParentShape(parent),
     mIndex(index)

@@ -34,7 +34,9 @@ PropertiesWindow::~PropertiesWindow()
 void PropertiesWindow::selectionsChanged(const QModelIndex& parent, int first, int /*last*/)
 {
     TreeModel* model = TreeModel::instance();
-    mCurrentItem = static_cast<blueprint::Shape*>(model->itemFromParentIndex(parent, first));
+    // FIXME Here it should be a Shape, not a ShapeBezier
+    // ONCE REFACTORING IS FINISHED
+    mCurrentItem = static_cast<blueprint::ShapeBezier*>(model->itemFromParentIndex(parent, first));
     Q_ASSERT(mCurrentItem);
 
     // Name

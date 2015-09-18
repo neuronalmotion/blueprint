@@ -1,11 +1,11 @@
 #ifndef SHAPERECTANGLE_H
 #define SHAPERECTANGLE_H
 
-#include "Shape.h"
+#include "ShapeBezier.h"
 
 namespace blueprint {
 
-class ShapeRectangle : public Shape
+class ShapeRectangle : public ShapeBezier
 {
 public:
     ShapeRectangle(TreeItem* parentTreeItem, qreal x, qreal y);

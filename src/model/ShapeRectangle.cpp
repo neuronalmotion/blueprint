@@ -5,7 +5,7 @@
 using namespace blueprint;
 
 ShapeRectangle::ShapeRectangle(TreeItem* parentItem, qreal x, qreal y)
-    : Shape(parentItem, ShapeType::RECTANGLE, x, y)
+    : ShapeBezier(parentItem, ShapeType::RECTANGLE, x, y)
 {
     addPath(QPointF(40, 0), QPointF(60, 0), QPointF(100, 0));
     addPath(QPointF(100, 20), QPointF(100, 40), QPointF(100, 50));

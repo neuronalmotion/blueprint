@@ -2,13 +2,13 @@
 
 #include <QPen>
 
-#include "Shape.h"
+#include "ShapeBezier.h"
 
 using namespace blueprint;
 
-BezierControlPoint::BezierControlPoint(Shape* parent, int index)
+BezierControlPoint::BezierControlPoint(ShapeBezier* parent, int index)
     : BezierElement(ElementType::CONTROL_POINT, parent, index),
-    QGraphicsRectItem(parent)
+    QGraphicsRectItem(parent->getQGraphicsItem())
 {
     setFlag(QGraphicsItem::ItemIsMovable);
     setFlag(QGraphicsItem::ItemSendsGeometryChanges);
