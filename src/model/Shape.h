@@ -35,6 +35,7 @@ public:
     // hierarchy stuff
     Shape* child(int row);
     void appendChild(Shape* child);
+    bool removeChild(Shape* child);
     int indexOf(const Shape* child) const;
     int childCount() const;
     int columnCount() const;

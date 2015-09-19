@@ -38,6 +38,11 @@ void Shape::appendChild(Shape* child)
     mChildItems.append(child);
 }
 
+bool Shape::removeChild(Shape* child)
+{
+    return mChildItems.removeOne(child);
+}
+
 Shape*Shape::child(int row)
 {
     return mChildItems.at(row);

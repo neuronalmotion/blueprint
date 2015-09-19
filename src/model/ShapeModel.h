@@ -17,6 +17,8 @@ public:
     ~ShapeModel();
 
     void addItem(Shape* item, Shape* parent = 0);
+    void removeItem(Shape* item);
+
     Shape* itemFromIndex(const QModelIndex& index) const;
     Shape* itemFromParentIndex(const QModelIndex& parentIndex, int row) const;
 
@@ -34,8 +36,10 @@ public:
     void setRootItem(Shape* rootItem);
 
 signals:
-    void selectionsChanged(const QModelIndex& parent, int first, int last);
-    void propertiesChanged(const QModelIndex& parent, int first, int last);
+    void shapeAdded(Shape* shape);
+    void shapeRemoved(Shape* shape);
+    void shapeSelected(Shape* shape);
+    void shapePropertiesChanged(Shape* shape);
 
 private:
     Shape* mRootItem;

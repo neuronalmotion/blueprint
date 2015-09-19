@@ -2,6 +2,8 @@
 #include "ui_MainWindow.h"
 
 #include <QDebug>
+#include <QWidget>
+#include <QKeyEvent>
 
 #include "CanvasView.h"
 #include "model/Blueprint.h"
@@ -52,32 +54,7 @@ MainWindow::MainWindow(QWidget* parent) :
     model->addItem(c1, p1);
     model->addItem(c2, p1);
 
-    connect(model, &QAbstractItemModel::rowsInserted,
-            [this, model](const QModelIndex& parent, int first, int /*last*/) {
-        Shape* parentItem = model->itemFromIndex(parent);
-        Shape* childItem = parentItem->child(first);
-        mUi->statusBar->showMessage(QString("Created item ") + childItem->name());
-    });
-
-    connect(mUi->treeView->selectionModel(), &QItemSelectionModel::currentChanged,
-            [this, model] (const QModelIndex& current,const QModelIndex&/* previous*/) {
-        Shape* item = model->itemFromIndex(current);
-        if (!item->parentShape()) {
-            return;
-        }
-        model->selectionsChanged(((QModelIndex)*item->parentShape()->modelIndex()),
-                                             item->parentShape()->indexOf(item),
-                                             item->parentShape()->indexOf(item));
-    });
-
-    connect(model, &ShapeModel::selectionsChanged,
-            [this, model](const QModelIndex& parent, int first, int /*last*/) {
-        Shape* parentItem = model->itemFromIndex(parent);
-        Shape* childItem = parentItem->child(first);
-        mUi->treeView->selectionModel()->select(*childItem->modelIndex(),
-                                                QItemSelectionModel::ClearAndSelect);
-    });
-
+    initSignalSlots();
 }
 
 MainWindow::~MainWindow()
@@ -106,6 +83,38 @@ void MainWindow::initToolbar()
             setTool(tool->getType());
         });
     }
+}
+
+void MainWindow::initSignalSlots()
+{
+    ShapeModel* model = ShapeModel::instance();
+    connect(model, &ShapeModel::shapeAdded,
+            [this](Shape* shape) {
+        mUi->statusBar->showMessage(QString("Created shape ") + shape->name());
+    });
+
+    connect(mUi->treeView->selectionModel(), &QItemSelectionModel::currentChanged,
+            [this, model] (const QModelIndex& current,const QModelIndex&/* previous*/) {
+        Shape* item = model->itemFromIndex(current);
+        if (!item->parentShape()) {
+            return;
+        }
+        model->shapeSelected(item);
+    });
+
+    connect(model, &ShapeModel::shapeSelected,
+            [this](Shape* shape) {
+        mUi->treeView->selectionModel()->select(*shape->modelIndex(),
+                                                QItemSelectionModel::ClearAndSelect);
+    });
+
+    connect(model, &ShapeModel::shapeRemoved,
+            [this](Shape* shape) {
+        mUi->statusBar->showMessage(QString("Deleted shape ") + shape->name());
+        mScene->removeItem(shape->graphicsItem());
+        delete shape;
+    });
+
 }
 
 void MainWindow::setTool(Tool::Type toolType)
