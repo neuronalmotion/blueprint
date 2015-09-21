@@ -25,38 +25,32 @@ CanvasView::CanvasView(QWidget* parent)
     mCreatingLastPosition(0, 0),
     mZoomFactor(1.0f)
 {
-    connect(ShapeModel::instance(), &ShapeModel::selectionsChanged, this, &CanvasView::selectionsChanged);
-    connect(ShapeModel::instance(), &ShapeModel::propertiesChanged, this, &CanvasView::propertiesChanged);
+    connect(ShapeModel::instance(), &ShapeModel::shapeSelected, this, &CanvasView::shapeSelected);
+    connect(ShapeModel::instance(), &ShapeModel::shapePropertiesChanged, this, &CanvasView::shapePropertiesChanged);
 }
 
 CanvasView::~CanvasView()
 {
 }
 
-void CanvasView::selectionsChanged(const QModelIndex& parent, int first, int /*last*/)
+void CanvasView::shapeSelected(blueprint::Shape* shape)
 {
-    ShapeModel* model = ShapeModel::instance();
-    blueprint::Shape* item = static_cast<blueprint::Shape*>(model->itemFromParentIndex(parent, first));
-    Q_ASSERT(item);
-
-    if (item == mSelectedShape) {
+    if (shape == mSelectedShape) {
        return;
     }
     if (mSelectedShape) {
        mSelectedShape->setSelected(false);
     }
-    item->setSelected(true);
-    mSelectedShape = item;
+    shape->setSelected(true);
+    mSelectedShape = shape;
     qDebug() << "Selected item " << mSelectedShape->name();
+
 }
 
-void CanvasView::propertiesChanged(const QModelIndex& parent, int first, int /*last*/)
+void CanvasView::shapePropertiesChanged(blueprint::Shape* shape)
 {
-    ShapeModel* model = ShapeModel::instance();
-    blueprint::Shape* item = static_cast<blueprint::Shape*>(model->itemFromParentIndex(parent, first));
-    Q_ASSERT(item);
-
-    item->graphicsItem()->update();
+    Q_ASSERT(shape);
+    shape->graphicsItem()->update();
 }
 
 void CanvasView::setTool(Tool::Type toolType)
@@ -125,9 +119,7 @@ void CanvasView::mousePressEvent(QMouseEvent *event)
     model->addItem(mCreatingShape, shapeParent);
 
     // Select the new Shape
-    QModelIndex index = (QModelIndex)(*shape->parentShape()->modelIndex());
-    int shapeIndex = shape->parentShape()->indexOf(shape);
-    ShapeModel::instance()->selectionsChanged(index, shapeIndex, shapeIndex);
+    ShapeModel::instance()->shapeSelected(shape);
 }
 
 void CanvasView::mouseMoveEvent(QMouseEvent *event)
@@ -181,10 +173,24 @@ void CanvasView::keyPressEvent(QKeyEvent *event)
 
 void CanvasView::keyReleaseEvent(QKeyEvent *event)
 {
-    if (!event->isAutoRepeat() && (
-                event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return)) {
-        if (mSelectedShape){
-            mSelectedShape->toggleEditMode();
+    if (!event->isAutoRepeat()) {
+        switch (event->key()) {
+        case Qt::Key_Enter:
+        case Qt::Key_Return:
+            if (mSelectedShape){
+                mSelectedShape->toggleEditMode();
+            }
+        break;
+
+        case Qt::Key_Delete:
+        case Qt::Key_Backspace:
+            if (mSelectedShape){
+                ShapeModel::instance()->removeItem(mSelectedShape);
+                mSelectedShape = nullptr;
+            }
+        break;
+        default:
+        break;
         }
     }
     QGraphicsView::keyReleaseEvent(event);
@@ -196,9 +202,7 @@ void CanvasView::onFocusItemChanged(QGraphicsItem* newFocusItem, QGraphicsItem* 
     if (!shape) {
         return;
     }
-    QModelIndex index = (QModelIndex)(*shape->parentShape()->modelIndex());
-    int shapeIndex = shape->parentShape()->indexOf(shape);
-    ShapeModel::instance()->selectionsChanged(index, shapeIndex, shapeIndex);
+    ShapeModel::instance()->shapeSelected(shape);
 }
 
 void CanvasView::setScene(QGraphicsScene* scene)

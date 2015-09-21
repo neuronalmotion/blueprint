@@ -28,8 +28,8 @@ public:
 public slots:
     void setTool(blueprint::Tool::Type toolType);
     void onFocusItemChanged(QGraphicsItem* newFocusItem, QGraphicsItem* oldFocusItem, Qt::FocusReason reason);
-    void selectionsChanged(const QModelIndex& parent, int first, int last);
-    void propertiesChanged(const QModelIndex& parent, int first, int last);
+    void shapeSelected(blueprint::Shape* shape);
+    void shapePropertiesChanged(blueprint::Shape* shape);
 
 protected:
     // from QGraphicsView

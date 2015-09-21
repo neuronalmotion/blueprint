@@ -1,5 +1,7 @@
 #include "ShapeModel.h"
 
+#include <QDebug>
+
 #include "Shape.h"
 
 using namespace blueprint;
@@ -10,6 +12,13 @@ ShapeModel::ShapeModel()
     : QAbstractItemModel(),
     mRootItem(nullptr)
 {
+    connect(this, &QAbstractItemModel::rowsInserted, this,
+            [this](const QModelIndex& parent, int first, int /*last*/) {
+        Shape* parentItem = itemFromIndex(parent);
+        Shape* childItem = parentItem->child(first);
+        emit shapeAdded(childItem);
+    });
+
 }
 
 ShapeModel::~ShapeModel()
@@ -39,6 +48,27 @@ void ShapeModel::addItem(Shape* item, Shape* parent)
     QModelIndex childIndex = index(childRow, 0, parentIndex);
     item->setModelIndex(childIndex);
     endInsertRows();
+}
+
+void ShapeModel::removeItem(Shape* item)
+{
+    if (item == mRootItem) {
+        // you wanted to delete root item? really??
+        return;
+    }
+    Shape* parent = item->parentShape();
+    if (!parent) {
+        parent = mRootItem;
+    }
+
+    qDebug() << "Removing shape" << item->name();
+
+    int childRow = parent->indexOf(item);
+    const QModelIndex parentIndex = *parent->modelIndex();
+    beginRemoveRows(parentIndex, childRow, childRow);
+    parent->removeChild(item);
+    endRemoveRows();
+    emit shapeRemoved(item);
 }
 
 QVariant ShapeModel::data(const QModelIndex& index, int role) const

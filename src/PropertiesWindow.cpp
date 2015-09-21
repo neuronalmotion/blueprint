@@ -23,8 +23,8 @@ PropertiesWindow::PropertiesWindow(QWidget *parent) :
     connect(mUi->backgroundColor, &QPushButton::clicked, this, &PropertiesWindow::onBackgroundColorClicked);
     connect(mUi->backgroundImage, &QPushButton::clicked, this, &PropertiesWindow::onBackgroundImageClicked);
 
-    connect(ShapeModel::instance(), &ShapeModel::selectionsChanged, this, &PropertiesWindow::selectionsChanged);
-    connect(ShapeModel::instance(), &ShapeModel::propertiesChanged, this, &PropertiesWindow::selectionsChanged);
+    connect(ShapeModel::instance(), &ShapeModel::shapeSelected, this, &PropertiesWindow::shapeSelected);
+    connect(ShapeModel::instance(), &ShapeModel::shapePropertiesChanged, this, &PropertiesWindow::shapeSelected);
 }
 
 PropertiesWindow::~PropertiesWindow()
@@ -32,10 +32,9 @@ PropertiesWindow::~PropertiesWindow()
     delete mUi;
 }
 
-void PropertiesWindow::selectionsChanged(const QModelIndex& parent, int first, int /*last*/)
+void PropertiesWindow::shapeSelected(blueprint::Shape* shape)
 {
-    ShapeModel* model = ShapeModel::instance();
-    mCurrentItem = static_cast<blueprint::Shape*>(model->itemFromParentIndex(parent, first));
+    mCurrentItem = shape;
     Q_ASSERT(mCurrentItem);
 
     // Name
@@ -63,10 +62,7 @@ void PropertiesWindow::onBackgroundColorClicked()
 {
     QColor color = QColorDialog::getColor(mCurrentItem->backgroundColor(), this, "Background color", QColorDialog::ShowAlphaChannel);
     mCurrentItem->setBackgroundColor(color);
-
-    QModelIndex index = (QModelIndex)(*mCurrentItem->parentShape()->modelIndex());
-    int shapeIndex = mCurrentItem->parentShape()->indexOf(mCurrentItem);
-    ShapeModel::instance()->propertiesChanged(index, shapeIndex, shapeIndex);
+    ShapeModel::instance()->shapePropertiesChanged(mCurrentItem);
 }
 
 void PropertiesWindow::onBackgroundImageClicked()
@@ -80,7 +76,5 @@ void PropertiesWindow::onBackgroundImageClicked()
                                             "Image Files (*.png *.jpg *.bmp)");
 
     shapeBezier->setBackgroundImage(fileName);
-    QModelIndex index = (QModelIndex)(*mCurrentItem->parentShape()->modelIndex());
-    int shapeIndex = mCurrentItem->parentShape()->indexOf(mCurrentItem);
-    ShapeModel::instance()->propertiesChanged(index, shapeIndex, shapeIndex);
+    ShapeModel::instance()->shapePropertiesChanged(mCurrentItem);
 }

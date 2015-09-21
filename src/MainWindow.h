@@ -27,6 +27,7 @@ public:
 
 private:
     void initToolbar();
+    void initSignalSlots();
 
 private slots:
     void setTool(blueprint::Tool::Type toolType);

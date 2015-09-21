@@ -18,7 +18,7 @@ public:
     ~PropertiesWindow();
 
 public slots:
-    void selectionsChanged(const QModelIndex& parent, int first, int last);
+    void shapeSelected(blueprint::Shape* shape);
     void onBackgroundColorClicked();
     void onBackgroundImageClicked();
 
