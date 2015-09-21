@@ -28,6 +28,7 @@ public:
     void setBorderColor(const QColor& color);
 
     void addPath(const QPointF& c1, const QPointF& c2, const QPointF& endPos);
+    void addSegment(const QPointF& point);
     void closePath();
     void updateElement(BezierElement* bezierElement, const QPointF& pos);
     inline BoundingBox& boundingBox() { return mBoundingBox; }

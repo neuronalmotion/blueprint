@@ -1,7 +1,6 @@
 #include "ShapeBezier.h"
 
 #include <QDebug>
-#include <QtMath>
 #include <QBrush>
 #include <QPen>
 #include <QPainter>
@@ -185,6 +184,15 @@ void ShapeBezier::addPath(const QPointF& c1, const QPointF& c2, const QPointF& e
     mGraphicsItem->setPath(mPath);
 }
 
+void ShapeBezier::addSegment(const QPointF& point)
+{
+    QPointF lastPointPos(0 ,0);
+    if (!mElements.empty()) {
+        lastPointPos = mElements.last()->pos();
+    }
+    addPath(lastPointPos, point, point);
+}
+
 void ShapeBezier::closePath()
 {
     qDebug() << "Closing path";
@@ -210,29 +218,6 @@ void ShapeBezier::updateElement(BezierElement* bezierElement, const QPointF& pos
     if (listIndex >= 0
             && bezierElement->elementType() == BezierElement::POINT
             && mEditMode == EditMode::BEZIER) {
-
-        if (mShapeType == ShapeType::LINE) {
-
-            // Get Slope
-            QPointF refPos = mElements.first()->pos();
-            QPointF firstElementPos = mElements.first()->pos();
-            QPointF lastElementPos = mElements.last()->pos();
-            firstElementPos -= refPos;
-            lastElementPos -= refPos;
-
-            float distance = qSqrt(qPow(lastElementPos.x(), 2) + qPow(lastElementPos.y(), 2));
-            QPointF slope = lastElementPos / distance;
-
-            // Update new control first point position
-            float firstControlPointDistance = distance * 0.1f;
-            mElements[1]->setPos((slope * firstControlPointDistance) + refPos);
-
-            // Update new control last point position
-            float lastControlPointDistance = distance * 0.9f;
-            mElements[mElements.length() - 2]->setPos((slope * lastControlPointDistance) + refPos);
-
-        } else {
-
             if (bezierElement == mElements.first()) {
                 mElements[listIndex + 1]->moveBy(delta);
 
@@ -243,9 +228,7 @@ void ShapeBezier::updateElement(BezierElement* bezierElement, const QPointF& pos
                 mElements[listIndex - 1]->moveBy(delta);
                 mElements[listIndex + 1]->moveBy(delta);
             }
-        }
     }
-
 
     // Update path
     mGraphicsItem->setPath(mPath);
