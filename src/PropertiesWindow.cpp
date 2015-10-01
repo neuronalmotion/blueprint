@@ -35,7 +35,9 @@ PropertiesWindow::~PropertiesWindow()
 void PropertiesWindow::shapeSelected(blueprint::Shape* shape)
 {
     mCurrentItem = shape;
-    Q_ASSERT(mCurrentItem);
+    if (!mCurrentItem) {
+        return;
+    }
 
     // Name
     mUi->name->setText(mCurrentItem->name());

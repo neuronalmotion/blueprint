@@ -23,7 +23,7 @@ public:
     ~CanvasView();
 
     void setScene(QGraphicsScene *scene);
-
+    inline blueprint::Shape* selectedShape() const { return mSelectedShape; }
 
 public slots:
     void setTool(blueprint::Tool::Type toolType);

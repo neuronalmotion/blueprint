@@ -41,10 +41,12 @@ void CanvasView::shapeSelected(blueprint::Shape* shape)
     if (mSelectedShape) {
        mSelectedShape->setSelected(false);
     }
-    shape->setSelected(true);
-    mSelectedShape = shape;
-    qDebug() << "Selected item " << mSelectedShape->name();
 
+    mSelectedShape = shape;
+    if (mSelectedShape) {
+        shape->setSelected(true);
+        qDebug() << "Selected item " << mSelectedShape->name();
+    }
 }
 
 void CanvasView::shapePropertiesChanged(blueprint::Shape* shape)
@@ -119,7 +121,7 @@ void CanvasView::mousePressEvent(QMouseEvent *event)
     model->addItem(mCreatingShape, shapeParent);
 
     // Select the new Shape
-    ShapeModel::instance()->shapeSelected(shape);
+    ShapeModel::instance()->selectShape(shape);
 }
 
 void CanvasView::mouseMoveEvent(QMouseEvent *event)
@@ -130,7 +132,6 @@ void CanvasView::mouseMoveEvent(QMouseEvent *event)
     if (mCreatingShape) {
         QPointF delta = point - mCreatingLastPosition;
         mCreatingLastPosition = point;
-
         mCreatingShape->resizeOnCreation(delta);
     }
 }
@@ -185,8 +186,8 @@ void CanvasView::keyReleaseEvent(QKeyEvent *event)
         case Qt::Key_Delete:
         case Qt::Key_Backspace:
             if (mSelectedShape){
-                ShapeModel::instance()->removeItem(mSelectedShape);
-                mSelectedShape = nullptr;
+                ShapeModel* model = ShapeModel::instance();
+                model->removeItem(mSelectedShape);
             }
         break;
         default:
@@ -202,7 +203,7 @@ void CanvasView::onFocusItemChanged(QGraphicsItem* newFocusItem, QGraphicsItem* 
     if (!shape) {
         return;
     }
-    ShapeModel::instance()->shapeSelected(shape);
+    ShapeModel::instance()->selectShape(shape);
 }
 
 void CanvasView::setScene(QGraphicsScene* scene)

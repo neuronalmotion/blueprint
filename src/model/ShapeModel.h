@@ -18,6 +18,9 @@ public:
 
     void addItem(Shape* item, Shape* parent = 0);
     void removeItem(Shape* item);
+    void selectShape(Shape* shape);
+    void clearSelectedShape();
+    inline Shape* selectedShape() { return mSelectedShape; }
 
     Shape* itemFromIndex(const QModelIndex& index) const;
     Shape* itemFromParentIndex(const QModelIndex& parentIndex, int row) const;
@@ -33,6 +36,7 @@ public:
 
     Qt::ItemFlags flags(const QModelIndex& index) const override;
 
+    inline Shape* rootItem() const { return mRootItem; }
     void setRootItem(Shape* rootItem);
 
 signals:
@@ -43,6 +47,7 @@ signals:
 
 private:
     Shape* mRootItem;
+    Shape* mSelectedShape;
     static ShapeModel* sInstance;
 };
 }
