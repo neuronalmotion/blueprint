@@ -46,13 +46,14 @@
      <x>0</x>
      <y>0</y>
      <width>1200</width>
-     <height>23</height>
+     <height>40</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">
      <string>Fi&amp;le</string>
     </property>
+    <addaction name="actionExport_Shape_to_Image"/>
    </widget>
    <widget class="QMenu" name="menuTools">
     <property name="title">
@@ -123,6 +124,11 @@
    </property>
    <property name="text">
     <string>&amp;Selection</string>
+   </property>
+  </action>
+  <action name="actionExport_Shape_to_Image">
+   <property name="text">
+    <string>&amp;Export Shape to Image</string>
    </property>
   </action>
  </widget>

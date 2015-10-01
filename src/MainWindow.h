@@ -15,6 +15,7 @@ namespace blueprint {
 class Blueprint;
 class Canvas;
 class Tool;
+class Shape;
 }
 
 class MainWindow : public QMainWindow
@@ -28,9 +29,11 @@ public:
 private:
     void initToolbar();
     void initSignalSlots();
+    void saveShapeToImage(blueprint::Shape& shape, const QString& filepath);
 
 private slots:
     void setTool(blueprint::Tool::Type toolType);
+    void exportShapeToImage();
 
 private:
     Ui::MainWindow* mUi;

@@ -69,6 +69,27 @@ void ShapeModel::removeItem(Shape* item)
     parent->removeChild(item);
     endRemoveRows();
     emit shapeRemoved(item);
+    if (item == mSelectedShape) {
+        clearSelectedShape();
+    }
+}
+
+void ShapeModel::selectShape(Shape* shape)
+{
+    if (shape == mSelectedShape) {
+        return;
+    }
+    mSelectedShape = shape;
+    emit shapeSelected(shape);
+}
+
+void ShapeModel::clearSelectedShape()
+{
+    if (!mSelectedShape) {
+        return;
+    }
+    mSelectedShape = nullptr;
+    emit shapeSelected(mSelectedShape);
 }
 
 QVariant ShapeModel::data(const QModelIndex& index, int role) const
