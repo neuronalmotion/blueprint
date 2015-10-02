@@ -1,6 +1,7 @@
 #include "ShapeModel.h"
 
 #include <QDebug>
+#include <algorithm>
 
 #include "Shape.h"
 
@@ -45,7 +46,7 @@ void ShapeModel::addItem(Shape* item, Shape* parent)
                 (QModelIndex)(*parent->modelIndex())
                 : QModelIndex();
     beginInsertRows(parentIndex, childRow, childRow);
-    item->setParentShape(parent);
+    item->setZValue(parent->zValue() + parent->childCount());
     parent->insertChild(childRow, item);
     QModelIndex childIndex = index(childRow, 0, parentIndex);
     item->setModelIndex(childIndex);
@@ -68,7 +69,9 @@ void ShapeModel::removeItem(Shape* item)
     int childRow = parent->indexOf(item);
     const QModelIndex parentIndex = *parent->modelIndex();
     beginRemoveRows(parentIndex, childRow, childRow);
-    parent->removeChild(item);
+    if(parent->removeChild(item)) {
+        item->setParentShape(nullptr);
+    }
     endRemoveRows();
     emit shapeRemoved(item);
     if (item == mSelectedShape) {
@@ -100,16 +103,22 @@ void ShapeModel::moveShape(Shape* shape, Shape* destinationParent, int destinati
     int sourceIndex = sourceParent->indexOf(shape);
     QModelIndex sourceParentIndex = *sourceParent->modelIndex();
     QModelIndex destinationParentIndex = *destinationParent->modelIndex();
+    int modelRowIndex = destinationIndex;
 
-    beginMoveRows(sourceParentIndex, sourceIndex, sourceIndex, destinationParentIndex, destinationIndex);
-    Shape* sourceShape = sourceParent->takeChildAt(sourceIndex);
-    destinationParent->insertChild(destinationIndex, sourceShape);
-    if (destinationIndex < destinationParent->childCount() - 1) {
-        QGraphicsItem* nextItem = destinationParent->child(destinationIndex + 1)->graphicsItem();
-        sourceShape->graphicsItem()->stackBefore(nextItem);
-    } else {
-        QGraphicsItem* precedingItem = destinationParent->child(destinationIndex - 1)->graphicsItem();
-        precedingItem->stackBefore(sourceShape->graphicsItem());
+    if (sourceParent == destinationParent) {
+        if (sourceIndex < destinationIndex) {
+            modelRowIndex = std::min(destinationIndex + 1, destinationParent->childCount());
+        }
+    }
+
+    qDebug() << "Moving shape from index" << sourceIndex << "to index" << destinationIndex;
+
+    beginMoveRows(sourceParentIndex, sourceIndex, sourceIndex, destinationParentIndex, modelRowIndex);
+    sourceParent->removeChildAt(sourceIndex);
+    destinationParent->insertChild(destinationIndex, shape);
+    int childCount = destinationParent->childCount();
+    for (int i = 0; i < childCount; ++i) {
+        destinationParent->child(i)->setZValue(destinationParent->zValue() + (childCount - i));
     }
     endMoveRows();
 }

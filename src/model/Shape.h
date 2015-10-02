@@ -36,7 +36,7 @@ public:
     Shape* child(int row);
     void insertChild(int index, Shape* child);
     bool removeChild(Shape* child);
-    Shape* takeChildAt(int index);
+    void removeChildAt(int index);
     int indexOf(const Shape* child) const;
     int childCount() const;
     int columnCount() const;
@@ -59,13 +59,15 @@ public:
     virtual void setEditMode(const EditMode& mode);
     QPointF posAbsolute();
 
+    qreal zValue();
+    void setZValue(qreal zValue);
+
     inline QString name() const { return mName; }
     inline void setName(const QString& name) { mName = name; }
     inline Shape* parentShape() const {return mParentShape; }
     void setParentShape(Shape* parentShape);
     inline QPersistentModelIndex* modelIndex() const { return mModelIndex; }
     inline void setModelIndex(const QModelIndex& index) { mModelIndex = new QPersistentModelIndex(index); }
-
 
 protected:
     virtual void updateBoundingBoxBezierVisibility() = 0;

@@ -36,6 +36,7 @@ Shape::~Shape()
 void Shape::insertChild(int index, Shape* child)
 {
     mChildItems.insert(index, child);
+    child->setParentShape(this);
 }
 
 bool Shape::removeChild(Shape* child)
@@ -43,9 +44,9 @@ bool Shape::removeChild(Shape* child)
     return mChildItems.removeOne(child);
 }
 
-Shape*Shape::takeChildAt(int index)
+void Shape::removeChildAt(int index)
 {
-    return mChildItems.takeAt(index);
+    mChildItems.removeAt(index);
 }
 
 Shape*Shape::child(int row)
@@ -109,12 +110,23 @@ QPointF Shape::posAbsolute()
 {
     QPointF position = graphicsItem()->pos();
 
+    // FIXME function name is a misnomer, position is not always absolute!
     if (shapeType() != ShapeType::CANVAS) {
         blueprint::Shape* shapeParent = dynamic_cast<blueprint::Shape*>(mParentShape);
         position = position + shapeParent->posAbsolute();
     }
 
     return position;
+}
+
+qreal Shape::zValue()
+{
+    return graphicsItem()->zValue();
+}
+
+void Shape::setZValue(qreal zValue)
+{
+    graphicsItem()->setZValue(zValue);
 }
 
 void Shape::setParentShape(Shape* parentShape)
