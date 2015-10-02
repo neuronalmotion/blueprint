@@ -23,6 +23,9 @@ public slots:
     void onBackgroundImageClicked();
 
 private:
+    void reset();
+
+private:
     Ui::PropertiesWindow *mUi;
     blueprint::Shape* mCurrentItem;
 };

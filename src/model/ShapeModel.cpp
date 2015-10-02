@@ -84,6 +84,10 @@ void ShapeModel::selectShape(Shape* shape)
     if (shape == mSelectedShape) {
         return;
     }
+    if (mSelectedShape) {
+        mSelectedShape->setSelected(false);
+    }
+    shape->setSelected(true);
     mSelectedShape = shape;
     emit shapeSelected(shape);
 }
