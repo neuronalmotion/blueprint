@@ -33,9 +33,9 @@ Shape::~Shape()
 }
 
 
-void Shape::appendChild(Shape* child)
+void Shape::insertChild(int index, Shape* child)
 {
-    mChildItems.append(child);
+    mChildItems.insert(index, child);
 }
 
 bool Shape::removeChild(Shape* child)

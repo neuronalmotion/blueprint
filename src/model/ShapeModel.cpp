@@ -38,13 +38,15 @@ void ShapeModel::addItem(Shape* item, Shape* parent)
     if (!parent) {
         parent = mRootItem;
     }
-    int childRow = parent->childCount();
+    // 0 because it should be displayed first in the treeview list
+    // to respect z-index ordering
+    int childRow = 0;
     QModelIndex parentIndex = parent->modelIndex() ?
                 (QModelIndex)(*parent->modelIndex())
                 : QModelIndex();
     beginInsertRows(parentIndex, childRow, childRow);
     item->setParentShape(parent);
-    parent->appendChild(item);
+    parent->insertChild(childRow, item);
     QModelIndex childIndex = index(childRow, 0, parentIndex);
     item->setModelIndex(childIndex);
     endInsertRows();
