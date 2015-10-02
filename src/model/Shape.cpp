@@ -43,6 +43,11 @@ bool Shape::removeChild(Shape* child)
     return mChildItems.removeOne(child);
 }
 
+Shape*Shape::takeChildAt(int index)
+{
+    return mChildItems.takeAt(index);
+}
+
 Shape*Shape::child(int row)
 {
     return mChildItems.at(row);

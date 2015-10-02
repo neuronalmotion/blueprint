@@ -36,6 +36,7 @@ public:
     Shape* child(int row);
     void insertChild(int index, Shape* child);
     bool removeChild(Shape* child);
+    Shape* takeChildAt(int index);
     int indexOf(const Shape* child) const;
     int childCount() const;
     int columnCount() const;

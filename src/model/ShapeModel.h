@@ -21,6 +21,7 @@ public:
     void selectShape(Shape* shape);
     void clearSelectedShape();
     inline Shape* selectedShape() { return mSelectedShape; }
+    void moveShape(Shape* shape, Shape* destinationParent, int destinationIndex);
 
     Shape* itemFromIndex(const QModelIndex& index) const;
     Shape* itemFromParentIndex(const QModelIndex& parentIndex, int row) const;
@@ -35,6 +36,7 @@ public:
     int columnCount(const QModelIndex& parent) const override;
 
     Qt::ItemFlags flags(const QModelIndex& index) const override;
+    Qt::DropActions supportedDropActions() const override;
 
     inline Shape* rootItem() const { return mRootItem; }
     void setRootItem(Shape* rootItem);

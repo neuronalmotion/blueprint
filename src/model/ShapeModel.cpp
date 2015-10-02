@@ -94,6 +94,26 @@ void ShapeModel::clearSelectedShape()
     emit shapeSelected(mSelectedShape);
 }
 
+void ShapeModel::moveShape(Shape* shape, Shape* destinationParent, int destinationIndex)
+{
+    Shape* sourceParent = shape->parentShape();
+    int sourceIndex = sourceParent->indexOf(shape);
+    QModelIndex sourceParentIndex = *sourceParent->modelIndex();
+    QModelIndex destinationParentIndex = *destinationParent->modelIndex();
+
+    beginMoveRows(sourceParentIndex, sourceIndex, sourceIndex, destinationParentIndex, destinationIndex);
+    Shape* sourceShape = sourceParent->takeChildAt(sourceIndex);
+    destinationParent->insertChild(destinationIndex, sourceShape);
+    if (destinationIndex < destinationParent->childCount() - 1) {
+        QGraphicsItem* nextItem = destinationParent->child(destinationIndex + 1)->graphicsItem();
+        sourceShape->graphicsItem()->stackBefore(nextItem);
+    } else {
+        QGraphicsItem* precedingItem = destinationParent->child(destinationIndex - 1)->graphicsItem();
+        precedingItem->stackBefore(sourceShape->graphicsItem());
+    }
+    endMoveRows();
+}
+
 QVariant ShapeModel::data(const QModelIndex& index, int role) const
 {
     if (!index.isValid()) {
@@ -172,7 +192,16 @@ Qt::ItemFlags ShapeModel::flags(const QModelIndex& index) const
     if (!index.isValid()) {
         return 0;
     }
-    return Qt::ItemIsEditable | QAbstractItemModel::flags(index);
+    return Qt::ItemIsEditable
+           | Qt::ItemIsDragEnabled
+           | Qt::ItemIsDropEnabled
+           | Qt::ItemIsSelectable
+            | QAbstractItemModel::flags(index);
+}
+
+Qt::DropActions ShapeModel::supportedDropActions() const
+{
+    return Qt::MoveAction;
 }
 
 void ShapeModel::setRootItem(Shape* rootItem)
