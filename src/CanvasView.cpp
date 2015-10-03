@@ -20,33 +20,15 @@ using namespace blueprint;
 CanvasView::CanvasView(QWidget* parent)
     : QGraphicsView(parent),
     mCurrentTool(Tool::Type::SELECTION),
-    mSelectedShape(nullptr),
     mCreatingShape(nullptr),
     mCreatingLastPosition(0, 0),
     mZoomFactor(1.0f)
 {
-    connect(ShapeModel::instance(), &ShapeModel::shapeSelected, this, &CanvasView::shapeSelected);
     connect(ShapeModel::instance(), &ShapeModel::shapePropertiesChanged, this, &CanvasView::shapePropertiesChanged);
 }
 
 CanvasView::~CanvasView()
 {
-}
-
-void CanvasView::shapeSelected(blueprint::Shape* shape)
-{
-    if (shape == mSelectedShape) {
-       return;
-    }
-    if (mSelectedShape) {
-       mSelectedShape->setSelected(false);
-    }
-
-    mSelectedShape = shape;
-    if (mSelectedShape) {
-        shape->setSelected(true);
-        qDebug() << "Selected item " << mSelectedShape->name();
-    }
 }
 
 void CanvasView::shapePropertiesChanged(blueprint::Shape* shape)
@@ -145,8 +127,9 @@ void CanvasView::mouseReleaseEvent(QMouseEvent *event)
 
 void CanvasView::mouseDoubleClickEvent(QMouseEvent* /*event*/)
 {
-    if (mSelectedShape) {
-        mSelectedShape->toggleEditMode();
+    ShapeModel* model = ShapeModel::instance();
+    if (model->selectedShape()) {
+        model->selectedShape()->toggleEditMode();
     }
 }
 
@@ -174,20 +157,20 @@ void CanvasView::keyPressEvent(QKeyEvent *event)
 
 void CanvasView::keyReleaseEvent(QKeyEvent *event)
 {
+    ShapeModel* model = ShapeModel::instance();
     if (!event->isAutoRepeat()) {
         switch (event->key()) {
         case Qt::Key_Enter:
         case Qt::Key_Return:
-            if (mSelectedShape){
-                mSelectedShape->toggleEditMode();
+            if (model->selectedShape()){
+                model->selectedShape()->toggleEditMode();
             }
         break;
 
         case Qt::Key_Delete:
         case Qt::Key_Backspace:
-            if (mSelectedShape){
-                ShapeModel* model = ShapeModel::instance();
-                model->removeItem(mSelectedShape);
+            if (model->selectedShape()){
+                model->removeItem(model->selectedShape());
             }
         break;
         default:

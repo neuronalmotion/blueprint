@@ -23,12 +23,10 @@ public:
     ~CanvasView();
 
     void setScene(QGraphicsScene *scene);
-    inline blueprint::Shape* selectedShape() const { return mSelectedShape; }
 
 public slots:
     void setTool(blueprint::Tool::Type toolType);
     void onFocusItemChanged(QGraphicsItem* newFocusItem, QGraphicsItem* oldFocusItem, Qt::FocusReason reason);
-    void shapeSelected(blueprint::Shape* shape);
     void shapePropertiesChanged(blueprint::Shape* shape);
 
 protected:
@@ -48,7 +46,6 @@ private:
 
 private:
     blueprint::Tool::Type mCurrentTool;
-    blueprint::Shape* mSelectedShape;
     blueprint::Shape* mCreatingShape;
     QPointF mCreatingLastPosition;
     float mZoomFactor;

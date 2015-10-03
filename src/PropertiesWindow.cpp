@@ -36,6 +36,7 @@ void PropertiesWindow::shapeSelected(blueprint::Shape* shape)
 {
     mCurrentItem = shape;
     if (!mCurrentItem) {
+        reset();
         return;
     }
 
@@ -44,6 +45,7 @@ void PropertiesWindow::shapeSelected(blueprint::Shape* shape)
 
     // Background color
     QColor backColor = mCurrentItem->backgroundColor();
+    mUi->backgroundColor->setEnabled(true);
     mUi->backgroundColor->setStyleSheet(QString("background-color: rgb(%1, %2, %3);")
                                         .arg(backColor.red())
                                         .arg(backColor.green())
@@ -79,4 +81,15 @@ void PropertiesWindow::onBackgroundImageClicked()
 
     shapeBezier->setBackgroundImage(fileName);
     ShapeModel::instance()->shapePropertiesChanged(mCurrentItem);
+}
+
+void PropertiesWindow::reset()
+{
+    mUi->name->clear();
+    mUi->backgroundColor->setEnabled(false);
+    mUi->backgroundImageText->clear();
+    mUi->backgroundColor->setStyleSheet(QString("background-color: rgb(%1, %2, %3);")
+                                        .arg(0)
+                                        .arg(0)
+                                        .arg(0));
 }

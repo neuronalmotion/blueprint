@@ -1,6 +1,7 @@
 #include "ShapeModel.h"
 
 #include <QDebug>
+#include <algorithm>
 
 #include "Shape.h"
 
@@ -38,13 +39,15 @@ void ShapeModel::addItem(Shape* item, Shape* parent)
     if (!parent) {
         parent = mRootItem;
     }
-    int childRow = parent->childCount();
+    // 0 because it should be displayed first in the treeview list
+    // to respect z-index ordering
+    int childRow = 0;
     QModelIndex parentIndex = parent->modelIndex() ?
                 (QModelIndex)(*parent->modelIndex())
                 : QModelIndex();
     beginInsertRows(parentIndex, childRow, childRow);
-    item->setParentShape(parent);
-    parent->appendChild(item);
+    item->setZValue(parent->zValue() + parent->childCount());
+    parent->insertChild(childRow, item);
     QModelIndex childIndex = index(childRow, 0, parentIndex);
     item->setModelIndex(childIndex);
     endInsertRows();
@@ -66,7 +69,9 @@ void ShapeModel::removeItem(Shape* item)
     int childRow = parent->indexOf(item);
     const QModelIndex parentIndex = *parent->modelIndex();
     beginRemoveRows(parentIndex, childRow, childRow);
-    parent->removeChild(item);
+    if(parent->removeChild(item)) {
+        item->setParentShape(nullptr);
+    }
     endRemoveRows();
     emit shapeRemoved(item);
     if (item == mSelectedShape) {
@@ -79,6 +84,10 @@ void ShapeModel::selectShape(Shape* shape)
     if (shape == mSelectedShape) {
         return;
     }
+    if (mSelectedShape) {
+        mSelectedShape->setSelected(false);
+    }
+    shape->setSelected(true);
     mSelectedShape = shape;
     emit shapeSelected(shape);
 }
@@ -90,6 +99,32 @@ void ShapeModel::clearSelectedShape()
     }
     mSelectedShape = nullptr;
     emit shapeSelected(mSelectedShape);
+}
+
+void ShapeModel::moveShape(Shape* shape, Shape* destinationParent, int destinationIndex)
+{
+    Shape* sourceParent = shape->parentShape();
+    int sourceIndex = sourceParent->indexOf(shape);
+    QModelIndex sourceParentIndex = *sourceParent->modelIndex();
+    QModelIndex destinationParentIndex = *destinationParent->modelIndex();
+    int modelRowIndex = destinationIndex;
+
+    if (sourceParent == destinationParent) {
+        if (sourceIndex < destinationIndex) {
+            modelRowIndex = std::min(destinationIndex + 1, destinationParent->childCount());
+        }
+    }
+
+    qDebug() << "Moving shape from index" << sourceIndex << "to index" << destinationIndex;
+
+    beginMoveRows(sourceParentIndex, sourceIndex, sourceIndex, destinationParentIndex, modelRowIndex);
+    sourceParent->removeChildAt(sourceIndex);
+    destinationParent->insertChild(destinationIndex, shape);
+    int childCount = destinationParent->childCount();
+    for (int i = 0; i < childCount; ++i) {
+        destinationParent->child(i)->setZValue(destinationParent->zValue() + (childCount - i));
+    }
+    endMoveRows();
 }
 
 QVariant ShapeModel::data(const QModelIndex& index, int role) const
@@ -170,7 +205,16 @@ Qt::ItemFlags ShapeModel::flags(const QModelIndex& index) const
     if (!index.isValid()) {
         return 0;
     }
-    return Qt::ItemIsEditable | QAbstractItemModel::flags(index);
+    return Qt::ItemIsEditable
+           | Qt::ItemIsDragEnabled
+           | Qt::ItemIsDropEnabled
+           | Qt::ItemIsSelectable
+            | QAbstractItemModel::flags(index);
+}
+
+Qt::DropActions ShapeModel::supportedDropActions() const
+{
+    return Qt::MoveAction;
 }
 
 void ShapeModel::setRootItem(Shape* rootItem)

@@ -56,8 +56,8 @@ MainWindow::MainWindow(QWidget* parent) :
     mScene->addItem(c2->graphicsItem());
 
     model->setRootItem(p1);
-    model->addItem(c1, p1);
     model->addItem(c2, p1);
+    model->addItem(c1, p1);
 
     initSignalSlots();
 }
