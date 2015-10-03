@@ -21,6 +21,7 @@ public:
         ELLIPSE,
         LINE,
         RECTANGLE,
+        TEXT,
     };
 
     enum EditMode {
