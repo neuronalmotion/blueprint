@@ -26,7 +26,7 @@ public:
     void setBackgroundColor(const QColor& color) override;
     QColor backgroundColor() const override;
     void setBorderColor(const QColor& color);
-    int borderWidth() override;
+    int borderWidth() const override;
     void setBorderWidth(int width) override;
 
     void addPath(const QPointF& c1, const QPointF& c2, const QPointF& endPos);

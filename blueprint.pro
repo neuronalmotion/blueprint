@@ -27,7 +27,8 @@ SOURCES += src/main.cpp\
     src/model/ShapeBezier.cpp \
     src/model/ShapeModel.cpp \
     src/TreeView.cpp \
-    src/model/ShapeFactory.cpp
+    src/model/ShapeFactory.cpp \
+    src/model/ShapeText.cpp
 
 HEADERS  += src/MainWindow.h \
     src/CanvasView.h \
@@ -48,7 +49,8 @@ HEADERS  += src/MainWindow.h \
     src/model/ShapeBezier.h \
     src/model/ShapeModel.h \
     src/TreeView.h \
-    src/model/ShapeFactory.h
+    src/model/ShapeFactory.h \
+    src/model/ShapeText.h
 
 FORMS    += src/MainWindow.ui \
     src/PropertiesWindow.ui

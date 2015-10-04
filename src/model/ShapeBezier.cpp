@@ -10,7 +10,9 @@
 
 using namespace blueprint;
 
-blueprint::ShapeBezier::ShapeBezier(Shape* parentShape, const ShapeType& shapeType, const qreal& x, const qreal& y)
+blueprint::ShapeBezier::ShapeBezier(Shape* parentShape,
+                                    const ShapeType& shapeType,
+                                    const qreal& x, const qreal& y)
     : Shape(parentShape, shapeType),
       mPath(),
       mElements(),
@@ -86,7 +88,7 @@ void ShapeBezier::setBorderColor(const QColor& color)
     mGraphicsItem->setPen(pen);
 }
 
-int ShapeBezier::borderWidth()
+int ShapeBezier::borderWidth() const
 {
     return mGraphicsItem->pen().width();
 }

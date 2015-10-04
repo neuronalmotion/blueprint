@@ -56,7 +56,6 @@ void CanvasView::mousePressEvent(QMouseEvent *event)
     // Search the parent item
     QPointF point = QGraphicsView::mapToScene(event->pos());
     blueprint::Shape* shapeParent = shapeFromScenePoint(point);
-    Q_ASSERT(shapeParent);
 
     // Position is always relative to direct parent
     QPointF relPoint(point.x() - shapeParent->posAbsolute().x(),

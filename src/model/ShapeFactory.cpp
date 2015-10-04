@@ -4,6 +4,7 @@
 #include "ShapeRectangle.h"
 #include "ShapeEllipse.h"
 #include "ShapeLine.h"
+#include "ShapeText.h"
 
 using namespace blueprint;
 
@@ -35,6 +36,10 @@ Shape* ShapeFactory::createShape(const Shape::ShapeType shapeType,
     case Shape::ShapeType::LINE:
         shape = new ShapeLine(&shapeParent, position.x(), position.y());
         name = "Line";
+        break;
+    case Shape::ShapeType::TEXT:
+        shape = new ShapeText(&shapeParent, position.x(), position.y());
+        name = "Text";
         break;
     default:
         break;
