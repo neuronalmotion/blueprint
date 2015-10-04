@@ -81,7 +81,21 @@ QColor ShapeBezier::backgroundColor() const
 
 void ShapeBezier::setBorderColor(const QColor& color)
 {
-    mGraphicsItem->setPen(QPen(color, 1, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
+    QPen pen = mGraphicsItem->pen();
+    pen.setColor(color);
+    mGraphicsItem->setPen(pen);
+}
+
+int ShapeBezier::borderWidth()
+{
+    return mGraphicsItem->pen().width();
+}
+
+void ShapeBezier::setBorderWidth(int width)
+{
+    QPen pen = mGraphicsItem->pen();
+    pen.setWidth(width);
+    mGraphicsItem->setPen(pen);
 }
 
 QRectF ShapeBezier::bounds() const

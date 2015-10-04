@@ -51,6 +51,8 @@ public:
     virtual void setBackgroundColor(const QColor& color) = 0;
     virtual QColor backgroundColor() const = 0;
     virtual void setBorderColor(const QColor& color) = 0;
+    virtual int borderWidth() = 0;
+    virtual void setBorderWidth(int width) = 0;
 
     inline ShapeType shapeType() const { return mShapeType; }
     void setSelected(bool selected);
