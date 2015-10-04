@@ -22,6 +22,7 @@ PropertiesWindow::PropertiesWindow(QWidget *parent) :
 
     connect(mUi->backgroundColor, &QPushButton::clicked, this, &PropertiesWindow::onBackgroundColorClicked);
     connect(mUi->backgroundImage, &QPushButton::clicked, this, &PropertiesWindow::onBackgroundImageClicked);
+    connect(mUi->thickness, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &PropertiesWindow::onThicknessValueChanged);
 
     connect(ShapeModel::instance(), &ShapeModel::shapeSelected, this, &PropertiesWindow::shapeSelected);
     connect(ShapeModel::instance(), &ShapeModel::shapePropertiesChanged, this, &PropertiesWindow::shapeSelected);
@@ -60,6 +61,9 @@ void PropertiesWindow::shapeSelected(blueprint::Shape* shape)
         QString backImage = shapeBezier->backgroundImageFileName();
         mUi->backgroundImageText->setText(backImage);
     }
+
+    // Border width
+    mUi->thickness->setValue(mCurrentItem->borderWidth());
 }
 
 void PropertiesWindow::onBackgroundColorClicked()
@@ -83,6 +87,12 @@ void PropertiesWindow::onBackgroundImageClicked()
     ShapeModel::instance()->shapePropertiesChanged(mCurrentItem);
 }
 
+void PropertiesWindow::onThicknessValueChanged(int val)
+{
+    mCurrentItem->setBorderWidth(val);
+    ShapeModel::instance()->shapePropertiesChanged(mCurrentItem);
+}
+
 void PropertiesWindow::reset()
 {
     mUi->name->clear();
@@ -92,4 +102,5 @@ void PropertiesWindow::reset()
                                         .arg(0)
                                         .arg(0)
                                         .arg(0));
+    mUi->thickness->clear();
 }

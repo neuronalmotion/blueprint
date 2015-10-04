@@ -56,13 +56,20 @@ color: rgb(86, 86, 86);</string>
     </widget>
    </item>
    <item row="2" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Thickness</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
     <widget class="QLabel" name="label_2">
      <property name="text">
       <string>Image</string>
      </property>
     </widget>
    </item>
-   <item row="2" column="1">
+   <item row="3" column="1">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QLineEdit" name="backgroundImageText">
@@ -98,6 +105,19 @@ color: rgb(86, 86, 86);</string>
       </widget>
      </item>
     </layout>
+   </item>
+   <item row="2" column="1">
+    <widget class="QSpinBox" name="thickness">
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="suffix">
+      <string> px</string>
+     </property>
+     <property name="value">
+      <number>1</number>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

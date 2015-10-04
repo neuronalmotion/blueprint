@@ -21,6 +21,7 @@ public slots:
     void shapeSelected(blueprint::Shape* shape);
     void onBackgroundColorClicked();
     void onBackgroundImageClicked();
+    void onThicknessValueChanged(int val);
 
 private:
     void reset();
