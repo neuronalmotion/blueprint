@@ -80,6 +80,7 @@ void MainWindow::initToolbar()
     mTools.append(new Tool(Tool::Type::ELLIPSE, mUi->actionCircle));
     mTools.append(new Tool(Tool::Type::LINE, mUi->actionLine));
     mTools.append(new Tool(Tool::Type::RECTANGLE, mUi->actionRectangle));
+    mTools.append(new Tool(Tool::Type::TEXT, mUi->actionText));
     mUi->canvas->setTool(Tool::Type::SELECTION);
 
     for(Tool* tool : mTools) {

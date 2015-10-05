@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>226</width>
+    <width>236</width>
     <height>433</height>
    </rect>
   </property>
@@ -33,7 +33,7 @@ color: rgb(86, 86, 86);</string>
     </widget>
    </item>
    <item row="1" column="0">
-    <widget class="QLabel" name="label">
+    <widget class="QLabel" name="labelBackground">
      <property name="text">
       <string>Background</string>
      </property>
@@ -56,14 +56,27 @@ color: rgb(86, 86, 86);</string>
     </widget>
    </item>
    <item row="2" column="0">
-    <widget class="QLabel" name="label_3">
+    <widget class="QLabel" name="labelThickness">
      <property name="text">
       <string>Thickness</string>
      </property>
     </widget>
    </item>
+   <item row="2" column="1">
+    <widget class="QSpinBox" name="thickness">
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="suffix">
+      <string> px</string>
+     </property>
+     <property name="value">
+      <number>1</number>
+     </property>
+    </widget>
+   </item>
    <item row="3" column="0">
-    <widget class="QLabel" name="label_2">
+    <widget class="QLabel" name="labelImage">
      <property name="text">
       <string>Image</string>
      </property>
@@ -106,16 +119,75 @@ color: rgb(86, 86, 86);</string>
      </item>
     </layout>
    </item>
-   <item row="2" column="1">
-    <widget class="QSpinBox" name="thickness">
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+   <item row="4" column="1">
+    <widget class="QLineEdit" name="lineEditText">
+     <property name="placeholderText">
+      <string/>
      </property>
-     <property name="suffix">
-      <string> px</string>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="labelText">
+     <property name="text">
+      <string>Text</string>
      </property>
-     <property name="value">
-      <number>1</number>
+    </widget>
+   </item>
+   <item row="6" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Style</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="1">
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QPushButton" name="buttonTextBold">
+       <property name="text">
+        <string>B</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <property name="checked">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="buttonTextItalic">
+       <property name="text">
+        <string>I</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="buttonTextUnderline">
+       <property name="text">
+        <string>U</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="5" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Font</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1">
+    <widget class="QPushButton" name="buttonTextFont">
+     <property name="text">
+      <string>Arial</string>
      </property>
     </widget>
    </item>

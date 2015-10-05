@@ -47,6 +47,7 @@
     <addaction name="actionLine"/>
     <addaction name="actionCircle"/>
     <addaction name="actionRectangle"/>
+    <addaction name="actionText"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuTools"/>
@@ -144,6 +145,14 @@
   <action name="actionExport_Shape_to_Image">
    <property name="text">
     <string>&amp;Export Shape to Image</string>
+   </property>
+  </action>
+  <action name="actionText">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Text</string>
    </property>
   </action>
  </widget>

@@ -16,6 +16,7 @@ class PropertiesWindow : public QWidget
 public:
     explicit PropertiesWindow(QWidget *parent = 0);
     ~PropertiesWindow();
+    void initSignalSlot();
 
 public slots:
     void shapeSelected(blueprint::Shape* shape);
@@ -23,8 +24,14 @@ public slots:
     void onBackgroundImageClicked();
     void onThicknessValueChanged(int val);
 
+    // ShapeText
+    void onTextChanged(const QString& text);
+    void displayFontDialog();
+
 private:
     void reset();
+    void updateTextProperties();
+    void updateShapeTextFromProperties();
 
 private:
     Ui::PropertiesWindow *mUi;

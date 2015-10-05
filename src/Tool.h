@@ -3,6 +3,8 @@
 
 #include <QAction>
 
+#include "model/Shape.h"
+
 namespace blueprint {
 
 class Tool
@@ -13,11 +15,15 @@ public:
         SELECTION,
         ELLIPSE,
         LINE,
-        RECTANGLE
+        RECTANGLE,
+        TEXT,
     };
 
     Tool(const Type& type, QAction* action);
     ~Tool();
+
+    static Shape::ShapeType shapeType(const Tool::Type& toolType);
+    Shape::ShapeType shapeType() const;
 
     inline Type getType() const { return mType; }
     inline QAction* getAction() const { return mAction; }

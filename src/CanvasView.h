@@ -43,6 +43,7 @@ protected:
 
 private:
     void fitView();
+    blueprint::Shape* shapeFromScenePoint(const QPointF& point);
 
 private:
     blueprint::Tool::Type mCurrentTool;

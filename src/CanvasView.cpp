@@ -1,4 +1,4 @@
-#include "CanvasView.h"
+ #include "CanvasView.h"
 
 #include <QDebug>
 #include <QMouseEvent>
@@ -14,6 +14,7 @@
 #include "model/ShapeRectangle.h"
 #include "model/ShapeEllipse.h"
 #include "model/ShapeModel.h"
+#include "model/ShapeFactory.h"
 
 using namespace blueprint;
 
@@ -52,58 +53,21 @@ void CanvasView::mousePressEvent(QMouseEvent *event)
         return;
     }
 
-    // ::: Shape Creation tool actions :::
-    blueprint::Shape* shape = nullptr;
-
     // Search the parent item
-    blueprint::Shape* shapeParent = nullptr;
     QPointF point = QGraphicsView::mapToScene(event->pos());
-    ShapeModel* model = ShapeModel::instance();
-    static uint id = 0;
-
-    QGraphicsItem* graphicsItem = scene()->itemAt(point, QTransform());
-
-    // Can't add a shape outside of another Shape (or a Canvas)
-    if (graphicsItem == nullptr) {
-          return;
-    }
+    blueprint::Shape* shapeParent = shapeFromScenePoint(point);
 
     // Position is always relative to direct parent
-    shapeParent = blueprint::Shape::fromQGraphicsItem(*graphicsItem);
-    QPointF relPoint(point.x() - shapeParent->posAbsolute().x(),  point.y() - shapeParent->posAbsolute().y());
+    QPointF relPoint(point.x() - shapeParent->posAbsolute().x(),
+                     point.y() - shapeParent->posAbsolute().y());
 
-    // Create the right Shape
-    QString name;
-    switch (mCurrentTool) {
-    case Tool::Type::RECTANGLE:
-        shape = new ShapeRectangle(shapeParent, relPoint.x(), relPoint.y());
-        name = "Rectangle";
-        break;
-
-    case Tool::Type::ELLIPSE:
-        shape = new ShapeEllipse(shapeParent, relPoint.x(), relPoint.y());
-        name = "Ellipse";
-        break;
-
-    case Tool::Type::LINE:
-        shape = new ShapeLine(shapeParent, relPoint.x(), relPoint.y());
-        name = "Line";
-        break;
-    default:
-        break;
-    }
-    Q_ASSERT(shape != nullptr);
-    shape->setName(QString("%1 %2").arg(name).arg(id++));
-
-    // Do common stuff
-    mCreatingShape = shape;
+    mCreatingShape = ShapeFactory::createShape(Tool::shapeType(mCurrentTool),
+                                               *shapeParent,
+                                               relPoint);
     mCreatingLastPosition = point;
-    shape->collapse();
-    shape->graphicsItem()->setParentItem(shapeParent->graphicsItem());
+    ShapeModel* model = ShapeModel::instance();
     model->addItem(mCreatingShape, shapeParent);
-
-    // Select the new Shape
-    ShapeModel::instance()->selectShape(shape);
+    model->selectShape(mCreatingShape);
 }
 
 void CanvasView::mouseMoveEvent(QMouseEvent *event)
@@ -178,6 +142,16 @@ void CanvasView::keyReleaseEvent(QKeyEvent *event)
         }
     }
     QGraphicsView::keyReleaseEvent(event);
+}
+
+blueprint::Shape*CanvasView::shapeFromScenePoint(const QPointF& point)
+{
+    QGraphicsItem* graphicsItem = scene()->itemAt(point, QTransform());
+    if (graphicsItem == nullptr) {
+          return nullptr;
+    }
+    // Position is always relative to direct parent
+    return blueprint::Shape::fromQGraphicsItem(*graphicsItem);
 }
 
 void CanvasView::onFocusItemChanged(QGraphicsItem* newFocusItem, QGraphicsItem* /*oldFocusItem*/, Qt::FocusReason /*reason*/)
