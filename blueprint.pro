@@ -7,6 +7,28 @@ TEMPLATE = app
 
 INCLUDEPATH += "src"
 
+HEADERS  += src/MainWindow.h \
+    src/CanvasView.h \
+    src/Tool.h \
+    src/model/BezierControlPoint.h \
+    src/model/BezierPoint.h \
+    src/model/Page.h \
+    src/model/Blueprint.h \
+    src/model/BezierElement.h \
+    src/model/BoundingBox.h \
+    src/model/BoundingBoxPoint.h \
+    src/model/Canvas.h \
+    src/model/ShapeEllipse.h \
+    src/model/ShapeRectangle.h \
+    src/model/Shape.h \
+    src/PropertiesWindow.h \
+    src/model/ShapeLine.h \
+    src/model/ShapeBezier.h \
+    src/model/ShapeModel.h \
+    src/TreeView.h \
+    src/model/ShapeFactory.h \
+    src/model/ShapeText.h
+
 SOURCES += src/main.cpp\
         src/MainWindow.cpp \
     src/CanvasView.cpp \
@@ -30,27 +52,31 @@ SOURCES += src/main.cpp\
     src/model/ShapeFactory.cpp \
     src/model/ShapeText.cpp
 
-HEADERS  += src/MainWindow.h \
-    src/CanvasView.h \
-    src/Tool.h \
-    src/model/BezierControlPoint.h \
-    src/model/BezierPoint.h \
-    src/model/Page.h \
-    src/model/Blueprint.h \
-    src/model/BezierElement.h \
-    src/model/BoundingBox.h \
-    src/model/BoundingBoxPoint.h \
-    src/model/Canvas.h \
-    src/model/ShapeEllipse.h \
-    src/model/ShapeRectangle.h \
-    src/model/Shape.h \
-    src/PropertiesWindow.h \
-    src/model/ShapeLine.h \
-    src/model/ShapeBezier.h \
-    src/model/ShapeModel.h \
-    src/TreeView.h \
-    src/model/ShapeFactory.h \
-    src/model/ShapeText.h
-
 FORMS    += src/MainWindow.ui \
     src/PropertiesWindow.ui
+
+############################################
+# Test section
+############################################
+
+test {
+    message(Test build)
+
+    QT += testlib
+    TARGET = blueprint-test
+    SOURCES -= src/main.cpp
+
+    INCLUDEPATH += "test"
+
+    HEADERS += \
+        test/TestUtils.h \
+        test/TestExample.h
+
+    SOURCES += \
+        test/main_test.cpp \
+        test/TestUtils.cpp \
+        test/TestExample.cpp
+
+} else {
+    message(Normal build)
+}
