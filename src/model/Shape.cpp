@@ -133,3 +133,16 @@ void Shape::setParentShape(Shape* parentShape)
 {
     mParentShape = parentShape;
 }
+
+SerializeInfo* Shape::serialize() const
+{
+    SerializeInfo* serializeInfo = new SerializeInfo("shape");
+    serializeInfo->addValue("name", mName);
+    serializeInfo->addValue("type", mShapeType);
+    return serializeInfo;
+}
+
+void Shape::deserialize(const SerializeInfo& serializeInfo)
+{
+
+}

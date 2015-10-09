@@ -27,7 +27,10 @@ HEADERS  += src/MainWindow.h \
     src/model/ShapeModel.h \
     src/TreeView.h \
     src/model/ShapeFactory.h \
-    src/model/ShapeText.h
+    src/model/ShapeText.h \
+    src/io/SerializeInfo.h \
+    src/io/Serializable.h \
+    src/io/XmlInputOutput.h
 
 SOURCES += src/main.cpp\
         src/MainWindow.cpp \
@@ -50,7 +53,9 @@ SOURCES += src/main.cpp\
     src/model/ShapeModel.cpp \
     src/TreeView.cpp \
     src/model/ShapeFactory.cpp \
-    src/model/ShapeText.cpp
+    src/model/ShapeText.cpp \
+    src/io/SerializeInfo.cpp \
+    src/io/XmlInputOutput.cpp
 
 FORMS    += src/MainWindow.ui \
     src/PropertiesWindow.ui
@@ -70,12 +75,14 @@ test {
 
     HEADERS += \
         test/TestUtils.h \
-        test/TestExample.h
+        test/TestExample.h \
+        test/TestSerialization.h
 
     SOURCES += \
         test/main_test.cpp \
         test/TestUtils.cpp \
-        test/TestExample.cpp
+        test/TestExample.cpp \
+        test/TestSerialization.cpp
 
 } else {
     message(Normal build)

@@ -4,6 +4,7 @@
 #include <QColor>
 #include <QPersistentModelIndex>
 
+#include "io/Serializable.h"
 #include "BoundingBox.h"
 
 class QPointF;
@@ -11,7 +12,7 @@ class QPointF;
 namespace blueprint {
 class BezierPath;
 
-class Shape
+class Shape : public Serializable
 {
 public:
 
@@ -71,6 +72,9 @@ public:
     void setParentShape(Shape* parentShape);
     inline QPersistentModelIndex* modelIndex() const { return mModelIndex; }
     inline void setModelIndex(const QModelIndex& index) { mModelIndex = new QPersistentModelIndex(index); }
+
+    SerializeInfo* serialize() const override;
+    void deserialize(const SerializeInfo& serializeInfo) override;
 
 protected:
     virtual void updateBoundingBoxBezierVisibility() = 0;

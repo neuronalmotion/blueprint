@@ -1,10 +1,10 @@
 #include <QTest>
 #include <QDebug>
 
-#include "TestExample.h"
+#include "TestSerialization.h"
 
 int main(int argc, char *argv[])
 {
-    TestExample testExample;
-    return QTest::qExec(&testExample, argc, argv);
+    TestSerialization testSerialization;
+    return QTest::qExec(&testSerialization, argc, argv);
 }
