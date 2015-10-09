@@ -7,34 +7,45 @@
 
 #include "TestUtils.h"
 #include "model/Canvas.h"
+#include "model/Page.h"
 #include "model/Shape.h"
 #include "model/ShapeFactory.h"
 #include "model/ShapeRectangle.h"
 
 using namespace blueprint;
 
-TestSerialization::TestSerialization(QObject *parent) : QObject(parent)
+TestSerialization::TestSerialization(QObject *parent)
+    : QObject(parent),
+      mBlueprint()
 {
 
+}
+
+TestSerialization::~TestSerialization()
+{
 }
 
 void TestSerialization::initTestCase()
 {
     TestUtils::toggleLogOutput(false);
+
+    mBlueprint.setName("Test Project");
+
+    Page* page = new Page();
+    page->setName("Page 1");
+    mBlueprint.addPage(page);
+
+    page = new Page();
+    page->setName("Page 2");
+    mBlueprint.addPage(page);
 }
 
 void TestSerialization::testSerialization()
 {
-    Canvas canvas(nullptr, 0, 0);
-    Shape* shape = ShapeFactory::createShape(Shape::ShapeType::RECTANGLE,
-                                         canvas,
-                                         QPointF(0, 0));
-    shape->setName("MyRectangle");
+    SerializeInfo* serializeInfo = mBlueprint.serialize();
 
-    SerializeInfo* serializeInfo = shape->serialize();
-
-    QCOMPARE(serializeInfo->value("name").toString(), shape->name());
-    QCOMPARE(serializeInfo->value("type").toInt(), static_cast<int>(shape->shapeType()));
+//    QCOMPARE(serializeInfo->value("name").toString(), shape->name());
+//    QCOMPARE(serializeInfo->value("type").toInt(), static_cast<int>(shape->shapeType()));
 
     QFile output("test.xml");
     output.open(QIODevice::ReadWrite);
@@ -49,6 +60,5 @@ void TestSerialization::testSerialization()
 
     output.close();
     delete serializeInfo;
-    delete shape;
 }
 

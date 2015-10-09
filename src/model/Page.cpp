@@ -14,3 +14,10 @@ Page::~Page()
 {
 }
 
+SerializeInfo* Page::serialize() const
+{
+    SerializeInfo* serializeInfo = Shape::serialize();
+    serializeInfo->setName("page");
+    return serializeInfo;
+}
+

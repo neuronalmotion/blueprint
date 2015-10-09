@@ -9,6 +9,11 @@ SerializeInfo::SerializeInfo(const QString& name)
 
 }
 
+SerializeInfo::~SerializeInfo()
+{
+    qDeleteAll(mChildren);
+}
+
 void SerializeInfo::addValue(const QString& key, const QVariant& value)
 {
     mData[key] = value;

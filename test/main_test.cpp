@@ -5,6 +5,6 @@
 
 int main(int argc, char *argv[])
 {
-    TestSerialization testSerialization;
+    blueprint::TestSerialization testSerialization;
     return QTest::qExec(&testSerialization, argc, argv);
 }

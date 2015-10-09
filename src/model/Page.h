@@ -14,6 +14,8 @@ public:
     Page(Shape* parentShape = 0);
     ~Page();
 
+    SerializeInfo* serialize() const override;
+
 };
 }
 

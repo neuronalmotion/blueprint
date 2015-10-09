@@ -2,6 +2,8 @@
 #define XMLWRITER_H
 
 #include <QIODevice>
+#include <QXmlStreamWriter>
+
 #include "SerializeInfo.h"
 
 namespace blueprint
@@ -13,6 +15,10 @@ public:
     XmlInputOutput();
 
     static void write(QIODevice& output, const SerializeInfo& serializeInfo);
+
+private:
+    static void write(QXmlStreamWriter& stream, const SerializeInfo& serializeInfo);
+
 
 };
 }
