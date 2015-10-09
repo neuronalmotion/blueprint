@@ -9,6 +9,11 @@
 namespace blueprint
 {
 
+const QString IO_NAME_BLUEPRINT = QString("blueprint");
+const QString IO_NAME_PAGE = QString("page");
+const QString IO_NAME_CANVAS = QString("canvas");
+const QString IO_NAME_SHAPE = QString("shape");
+
 class SerializeInfo
 {
 public:
@@ -28,7 +33,11 @@ public:
 
 private:
     QString mName;
-    QMap<QString, QVariant> mData;
+
+    // contains only simple properties
+    QMap<QString, QVariant> mProperties;
+
+    // contains complex properties
     QList<SerializeInfo*> mChildren;
 };
 }

@@ -16,7 +16,7 @@ Blueprint::~Blueprint()
 
 SerializeInfo* Blueprint::serialize() const
 {
-    SerializeInfo* serializeInfo = new SerializeInfo("blueprint");
+    SerializeInfo* serializeInfo = new SerializeInfo(IO_NAME_BLUEPRINT);
     serializeInfo->addValue("name", mName);
     for(Page* p : mPages)  {
         serializeInfo->addChild(p->serialize());

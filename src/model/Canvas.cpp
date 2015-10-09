@@ -17,3 +17,10 @@ Canvas::Canvas(Shape* parentShape, const qreal& x, const qreal& y)
 Canvas::~Canvas()
 {
 }
+
+SerializeInfo* Canvas::serialize() const
+{
+    SerializeInfo* serializeInfo = Shape::serialize();
+    serializeInfo->setName(IO_NAME_CANVAS);
+    return serializeInfo;
+}

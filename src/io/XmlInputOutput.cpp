@@ -28,7 +28,7 @@ SerializeInfo* XmlInputOutput::read(QXmlStreamReader& stream)
         QString name(stream.name().toString());
 
         if (isProperty(name)) {
-            serializeInfo->addValue(name, stream.readElementText());
+            serializeInfo->putValue(name, stream.readElementText());
         } else {
             serializeInfo->addChild(read(stream));
         }
@@ -50,9 +50,10 @@ void blueprint::XmlInputOutput::write(QIODevice& output, const blueprint::Serial
 
 bool XmlInputOutput::isProperty(const QString& tagName)
 {
-    return ! (tagName == "blueprint"
-                | tagName == "page"
-                | tagName == "canvas"
+    return ! (tagName == IO_NAME_BLUEPRINT
+                | tagName == IO_NAME_PAGE
+                | tagName == IO_NAME_CANVAS
+                | tagName == IO_NAME_SHAPE
     );
 }
 

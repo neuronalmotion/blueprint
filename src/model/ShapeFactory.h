@@ -8,9 +8,14 @@
 
 namespace blueprint {
 
+class Page;
+
 class ShapeFactory
 {
 public:
+    static Shape* createShape(const Shape::ShapeType shapeType,
+                              Shape& shapeParent);
+
     static Shape* createShape(const Shape::ShapeType shapeType,
                               Shape& shapeParent,
                               const QPointF& position);

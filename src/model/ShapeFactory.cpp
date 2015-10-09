@@ -1,5 +1,7 @@
 #include "ShapeFactory.h"
 
+#include "Canvas.h"
+#include "Page.h"
 #include "Shape.h"
 #include "ShapeRectangle.h"
 #include "ShapeEllipse.h"
@@ -13,6 +15,10 @@ ShapeFactory::ShapeFactory()
 
 }
 
+Shape* ShapeFactory::createShape(const Shape::ShapeType shapeType, Shape& shapeParent)
+{
+    return ShapeFactory::createShape(shapeType, shapeParent, QPointF(0, 0));
+}
 
 static uint id = 0;
 Shape* ShapeFactory::createShape(const Shape::ShapeType shapeType,
@@ -23,6 +29,16 @@ Shape* ShapeFactory::createShape(const Shape::ShapeType shapeType,
     Shape* shape = nullptr;
     QString name;
     switch (shapeType) {
+    case Shape::ShapeType::PAGE:
+        shape = new Page();
+        name = "Page";
+        break;
+
+    case Shape::ShapeType::CANVAS:
+        shape = new Canvas(&shapeParent, position.x(), position.y());
+        name = "Canvas";
+        break;
+
     case Shape::ShapeType::RECTANGLE:
         shape = new ShapeRectangle(&shapeParent, position.x(), position.y());
         name = "Rectangle";
@@ -49,5 +65,4 @@ Shape* ShapeFactory::createShape(const Shape::ShapeType shapeType,
     shape->collapse();
     shape->graphicsItem()->setParentItem(shapeParent.graphicsItem());
     return shape;
-
 }

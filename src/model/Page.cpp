@@ -17,7 +17,7 @@ Page::~Page()
 SerializeInfo* Page::serialize() const
 {
     SerializeInfo* serializeInfo = Shape::serialize();
-    serializeInfo->setName("page");
+    serializeInfo->setName(IO_NAME_PAGE);
     return serializeInfo;
 }
 

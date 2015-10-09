@@ -4,7 +4,7 @@ using namespace blueprint;
 
 SerializeInfo::SerializeInfo(const QString& name)
     : mName(name),
-      mData()
+      mProperties()
 {
 
 }
@@ -16,17 +16,17 @@ SerializeInfo::~SerializeInfo()
 
 void SerializeInfo::addValue(const QString& key, const QVariant& value)
 {
-    mData[key] = value;
+    mProperties[key] = value;
 }
 
 QVariant SerializeInfo::value(const QString& key) const
 {
-    return mData[key];
+    return mProperties[key];
 }
 
 QMapIterator<QString, QVariant> SerializeInfo::iterator() const
 {
-   return QMapIterator<QString, QVariant>(mData);
+   return QMapIterator<QString, QVariant>(mProperties);
 }
 
 

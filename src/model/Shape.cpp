@@ -56,6 +56,11 @@ Shape*Shape::child(int row)
     return mChildItems.at(row);
 }
 
+void Shape::appendChild(Shape* child)
+{
+    mChildItems.append(child);
+}
+
 int Shape::indexOf(const Shape* child) const
 {
     for (int i = 0; i < mChildItems.length(); ++i) {
@@ -138,7 +143,7 @@ void Shape::setParentShape(Shape* parentShape)
 
 SerializeInfo* Shape::serialize() const
 {
-    SerializeInfo* serializeInfo = new SerializeInfo("shape");
+    SerializeInfo* serializeInfo = new SerializeInfo(IO_NAME_SHAPE);
     serializeInfo->addValue("name", mName);
     serializeInfo->addValue("type", mShapeType);
 

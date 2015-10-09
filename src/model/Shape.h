@@ -36,6 +36,7 @@ public:
 
     // hierarchy stuff
     Shape* child(int row);
+    void appendChild(Shape* child);
     void insertChild(int index, Shape* child);
     bool removeChild(Shape* child);
     void removeChildAt(int index);

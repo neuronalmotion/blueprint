@@ -33,6 +33,13 @@ void TestSerialization::initTestCase()
 
     Page* page = new Page();
     page->setName("Page 1");
+
+    page->appendChild(ShapeFactory::createShape(Shape::ShapeType::CANVAS, *page));
+    page->appendChild(ShapeFactory::createShape(Shape::ShapeType::CANVAS, *page));
+
+    Shape* canvas = page->child(0);
+    Shape* rectangle = ShapeFactory::createShape(Shape::ShapeType::RECTANGLE, *canvas);
+    canvas->appendChild(rectangle);
     mBlueprint.addPage(page);
 
     page = new Page();
