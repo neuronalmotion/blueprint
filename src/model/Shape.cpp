@@ -5,6 +5,8 @@
 #include <QPen>
 #include <QPointF>
 
+#include "ShapeFactory.h"
+
 using namespace blueprint;
 
 Shape* Shape::fromQGraphicsItem(const QGraphicsItem& item)
@@ -139,10 +141,24 @@ SerializeInfo* Shape::serialize() const
     SerializeInfo* serializeInfo = new SerializeInfo("shape");
     serializeInfo->addValue("name", mName);
     serializeInfo->addValue("type", mShapeType);
+
+    for(auto child : mChildItems) {
+        serializeInfo->addChild(child->serialize());
+    }
+
     return serializeInfo;
 }
 
 void Shape::deserialize(const SerializeInfo& serializeInfo)
 {
+    mName = serializeInfo.value("name").toString();
+    mShapeType = static_cast<ShapeType>(serializeInfo.value("type").toInt());
 
+    for(auto child : serializeInfo.children()) {
+        ShapeType childShapeType = static_cast<ShapeType>(child->value("type").toInt());
+        // FIXME child coordinates should not be mandatory in Factory
+        Shape* childShape = ShapeFactory::createShape(childShapeType, *this, QPointF(0, 0));
+        childShape->deserialize(*child);
+        insertChild(0, childShape);
+    }
 }

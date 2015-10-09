@@ -2,22 +2,27 @@
 #define XMLWRITER_H
 
 #include <QIODevice>
+#include <QXmlStreamReader>
 #include <QXmlStreamWriter>
-
-#include "SerializeInfo.h"
 
 namespace blueprint
 {
 
+class SerializeInfo;
+
 class XmlInputOutput
 {
 public:
-    XmlInputOutput();
+    explicit XmlInputOutput();
+    ~XmlInputOutput();
 
-    static void write(QIODevice& output, const SerializeInfo& serializeInfo);
+    SerializeInfo* read(QIODevice& input);
+    void write(QIODevice& output, const SerializeInfo& serializeInfo);
 
 private:
-    static void write(QXmlStreamWriter& stream, const SerializeInfo& serializeInfo);
+    bool isProperty(const QString& tagName);
+    SerializeInfo* read(QXmlStreamReader& stream);
+    void write(QXmlStreamWriter& stream, const SerializeInfo& serializeInfo);
 
 
 };

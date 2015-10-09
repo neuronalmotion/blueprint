@@ -18,6 +18,7 @@ public:
 private slots:
     void initTestCase();
     void testSerialization();
+    void testDeserialization();
 
 private:
     Blueprint mBlueprint;

@@ -11,6 +11,7 @@ Blueprint::Blueprint()
 
 Blueprint::~Blueprint()
 {
+    qDeleteAll(mPages);
 }
 
 SerializeInfo* Blueprint::serialize() const
@@ -25,6 +26,11 @@ SerializeInfo* Blueprint::serialize() const
 
 void Blueprint::deserialize(const SerializeInfo& serializeInfo)
 {
-
+    mName = serializeInfo.value("name").toString();
+    for(auto child : serializeInfo.children()) {
+        Page* page = new Page();
+        page->deserialize(*child);
+        addPage(page);
+    }
 }
 

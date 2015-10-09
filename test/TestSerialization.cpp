@@ -49,7 +49,8 @@ void TestSerialization::testSerialization()
 
     QFile output("test.xml");
     output.open(QIODevice::ReadWrite);
-    XmlInputOutput::write(output, *serializeInfo);
+    XmlInputOutput xml;
+    xml.write(output, *serializeInfo);
 
     output.seek(0);
     QString result(output.readAll());
@@ -59,6 +60,21 @@ void TestSerialization::testSerialization()
     TestUtils::toggleLogOutput(false);
 
     output.close();
+    delete serializeInfo;
+}
+
+void TestSerialization::testDeserialization()
+{
+    QFile input("test.xml");
+    input.open(QIODevice::ReadOnly);
+    XmlInputOutput xml;
+    SerializeInfo* serializeInfo = xml.read(input);
+    input.close();
+
+    Blueprint blueprint;
+    blueprint.deserialize(*serializeInfo);
+    QCOMPARE(blueprint.name(), mBlueprint.name());
+
     delete serializeInfo;
 }
 
