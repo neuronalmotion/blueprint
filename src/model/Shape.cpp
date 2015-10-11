@@ -144,23 +144,23 @@ void Shape::setParentShape(Shape* parentShape)
 SerializeInfo* Shape::serialize() const
 {
     SerializeInfo* serializeInfo = new SerializeInfo(IO_NAME_SHAPE);
-    serializeInfo->addValue("name", mName);
-    serializeInfo->addValue("type", mShapeType);
+    serializeInfo->putProperty("name", mName);
+    serializeInfo->putProperty("type", mShapeType);
 
     for(auto child : mChildItems) {
-        serializeInfo->addChild(child->serialize());
+        serializeInfo->addPropertyToKey("children", child->serialize());
     }
-
     return serializeInfo;
 }
 
 void Shape::deserialize(const SerializeInfo& serializeInfo)
 {
-    mName = serializeInfo.value("name").toString();
-    mShapeType = static_cast<ShapeType>(serializeInfo.value("type").toInt());
+    mName = serializeInfo.propertyValue("name").toString();
+    mShapeType = static_cast<ShapeType>(serializeInfo.propertyValue("type").toInt());
+    SerializeInfo* children = serializeInfo.at("children");
 
-    for(auto child : serializeInfo.children()) {
-        ShapeType childShapeType = static_cast<ShapeType>(child->value("type").toInt());
+    for(auto child : children->list()) {
+        ShapeType childShapeType = static_cast<ShapeType>(child->propertyValue("type").toInt());
         // FIXME child coordinates should not be mandatory in Factory
         Shape* childShape = ShapeFactory::createShape(childShapeType, *this, QPointF(0, 0));
         childShape->deserialize(*child);

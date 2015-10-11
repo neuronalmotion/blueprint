@@ -20,8 +20,9 @@ public:
     void write(QIODevice& output, const SerializeInfo& serializeInfo);
 
 private:
-    bool isProperty(const QString& tagName);
+    bool isObject(const QString& tagName);
     SerializeInfo* read(QXmlStreamReader& stream);
+    SerializeInfo* readForParent(QXmlStreamReader& stream, SerializeInfo* parentSerializeInfo);
     void write(QXmlStreamWriter& stream, const SerializeInfo& serializeInfo);
 
 

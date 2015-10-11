@@ -17,7 +17,6 @@ XmlInputOutput::~XmlInputOutput()
 SerializeInfo* XmlInputOutput::read(QIODevice& input)
 {
     QXmlStreamReader stream(&input);
-    stream.readNextStartElement();
     return XmlInputOutput::read(stream);
 }
 
@@ -26,16 +25,24 @@ SerializeInfo* XmlInputOutput::read(QXmlStreamReader& stream)
     SerializeInfo* serializeInfo = new SerializeInfo(stream.name().toString());
     while (stream.readNextStartElement()) {
         QString name(stream.name().toString());
-
-        if (isProperty(name)) {
-            serializeInfo->putValue(name, stream.readElementText());
-        } else {
-            serializeInfo->addChild(read(stream));
+        QXmlStreamAttributes attributes = stream.attributes();
+        SerializeInfo::Type type = SerializeInfo::stringToType(attributes.value("type").toString());
+        switch (type) {
+        case SerializeInfo::Type::VALUE:
+            serializeInfo->setValue(stream.readElementText());
+        break;
+        case SerializeInfo::Type::LIST:
+           serializeInfo->addPropertyToKey(name, read(stream, serializeInfo));
+        break;
+        case SerializeInfo::Type::OBJECT:
+           serializeInfo->putProperty(name, read(stream, serializeInfo));
+        break;
+        default:
+        break;
         }
     }
     return serializeInfo;
 }
-
 
 void blueprint::XmlInputOutput::write(QIODevice& output, const blueprint::SerializeInfo& serializeInfo)
 {
@@ -48,9 +55,9 @@ void blueprint::XmlInputOutput::write(QIODevice& output, const blueprint::Serial
     stream.writeEndDocument();
 }
 
-bool XmlInputOutput::isProperty(const QString& tagName)
+bool XmlInputOutput::isObject(const QString& tagName)
 {
-    return ! (tagName == IO_NAME_BLUEPRINT
+    return (tagName == IO_NAME_BLUEPRINT
                 | tagName == IO_NAME_PAGE
                 | tagName == IO_NAME_CANVAS
                 | tagName == IO_NAME_SHAPE
@@ -59,18 +66,39 @@ bool XmlInputOutput::isProperty(const QString& tagName)
 
 void XmlInputOutput::write(QXmlStreamWriter& stream, const SerializeInfo& serializeInfo)
 {
-    // write properties
-    auto i = serializeInfo.iterator();
-    stream.writeStartElement(serializeInfo.name());
-    while (i.hasNext()) {
-        i.next();
-        stream.writeTextElement(i.key(), i.value().toString());
-    }
+    switch (serializeInfo.type()) {
+    case SerializeInfo::Type::VALUE:
+        stream.writeTextElement(serializeInfo.name(), serializeInfo.value().toString());
 
-    // write children
-    for(auto child : serializeInfo.children()) {
-        XmlInputOutput::write(stream, *child);
-    }
+    break;
+    case SerializeInfo::Type::LIST:
+        for (auto child : serializeInfo.list()) {
+            XmlInputOutput::write(stream, *child);
+        }
 
-    stream.writeEndElement();
+    break;
+    case SerializeInfo::Type::OBJECT: {
+        stream.writeStartElement(serializeInfo.name());
+        stream.writeAttribute("type", serializeInfo.typeToString());
+        auto i = serializeInfo.propertiesIterator();
+        while (i.hasNext()) {
+            i.next();
+            SerializeInfo* property = i.value();
+            SerializeInfo::Type type = property->type();
+            if (type == SerializeInfo::Type::LIST) {
+                stream.writeStartElement(i.key());
+                stream.writeAttribute("type", property->typeToString());
+            }
+            XmlInputOutput::write(stream, *property);
+            if (type == SerializeInfo::Type::LIST) {
+                stream.writeEndElement();
+            }
+        }
+        stream.writeEndElement();
+    }
+    break;
+    default:
+        qFatal("Undefined Parcel type");
+    break;
+    }
 }

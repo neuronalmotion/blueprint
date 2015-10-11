@@ -2,8 +2,45 @@
 
 using namespace blueprint;
 
+SerializeInfo::Type SerializeInfo::stringToType(const QString& string)
+{
+    Type type;
+    if (string == "property" || string.isEmpty()) {
+         type = VALUE;
+    } else if (string == "list") {
+        type = LIST;
+
+    } else if (string == "object") {
+        type = OBJECT;
+    }
+    return type;
+}
+
+QString SerializeInfo::typeToString(const SerializeInfo::Type& type)
+{
+    QString string;
+    switch (type) {
+    case VALUE:
+        string = "";
+    break;
+    case LIST:
+        string = "list";
+    break;
+    case OBJECT:
+        string = "object";
+    break;
+    default:
+    case UNDEFINED:
+        string = "undefined";
+    break;
+    }
+    return string;
+}
+
 SerializeInfo::SerializeInfo(const QString& name)
     : mName(name),
+      mValue(),
+      mList(),
       mProperties()
 {
 
@@ -11,22 +48,71 @@ SerializeInfo::SerializeInfo(const QString& name)
 
 SerializeInfo::~SerializeInfo()
 {
-    qDeleteAll(mChildren);
+    qDeleteAll(mList);
+    qDeleteAll(mProperties);
 }
 
-void SerializeInfo::addValue(const QString& key, const QVariant& value)
+void SerializeInfo::setValue(const QVariant& value)
 {
-    mProperties[key] = value;
+    mValue = value;
 }
 
-QVariant SerializeInfo::value(const QString& key) const
+void SerializeInfo::putProperty(const QString& key, const QVariant& value)
+{
+    SerializeInfo* serializeInfo = new SerializeInfo(key);
+    serializeInfo->setValue(value);
+    mProperties[key] = serializeInfo;
+}
+
+void SerializeInfo::putProperty(const QString& key, SerializeInfo* info)
+{
+    mProperties[key] = info;
+}
+
+void SerializeInfo::addPropertyToKey(const QString& key, SerializeInfo* info)
+{
+    SerializeInfo* serializeInfo = nullptr;
+    if (mProperties.contains(key)) {
+        serializeInfo = mProperties[key];
+    } else {
+        serializeInfo = new SerializeInfo(key);
+        mProperties[key] = serializeInfo;
+    }
+    serializeInfo->addElement(info);
+}
+
+SerializeInfo*SerializeInfo::at(const QString& key) const
 {
     return mProperties[key];
 }
 
-QMapIterator<QString, QVariant> SerializeInfo::iterator() const
+QVariant SerializeInfo::propertyValue(const QString& key) const
 {
-   return QMapIterator<QString, QVariant>(mProperties);
+    return at(key)->value();
+}
+
+QMapIterator<QString, SerializeInfo*> SerializeInfo::propertiesIterator() const
+{
+    return QMapIterator<QString, SerializeInfo*>(mProperties);
+}
+
+SerializeInfo::Type SerializeInfo::type() const
+{
+    if (!mValue.isNull()
+            && mList.isEmpty()
+            && mProperties.isEmpty()) {
+        return VALUE;
+    } else if (mValue.isNull()
+            && !mList.isEmpty()
+            && mProperties.isEmpty()) {
+        return LIST;
+    } else if (mValue.isNull()
+            && mList.isEmpty()
+            && !mProperties.isEmpty()) {
+        return OBJECT;
+    }
+    return UNDEFINED;
+
 }
 
 

@@ -17,28 +17,46 @@ const QString IO_NAME_SHAPE = QString("shape");
 class SerializeInfo
 {
 public:
+
+    enum Type {
+        UNDEFINED,
+        VALUE,
+        LIST,
+        OBJECT,
+    };
+
+    static Type stringToType(const QString& string);
+    static QString typeToString(const Type& type);
+
     explicit SerializeInfo(const QString& name);
     ~SerializeInfo();
 
-    void addValue(const QString& key, const QVariant& value);
-    QVariant value(const QString& key) const;
+    void putProperty(const QString& key, const QVariant& value);
+    void putProperty(const QString& key, SerializeInfo* info);
+    void addPropertyToKey(const QString& key, SerializeInfo* info);
 
-    inline void addChild(SerializeInfo* child) { mChildren.append(child); }
-    inline const QList<SerializeInfo*>& children() const { return mChildren; }
+    SerializeInfo* at(const QString& key) const;
+    QVariant propertyValue(const QString& key) const;
+    inline QVariant value() const { return mValue; }
+    void setValue(const QVariant& value);
 
-    QMapIterator<QString, QVariant> iterator() const;
+    inline void addElement(SerializeInfo* element) { mList.append(element); }
+    inline const QList<SerializeInfo*>& list() const { return mList; }
+
+    QMapIterator<QString, SerializeInfo*> propertiesIterator() const;
+
+    Type type() const;
+    QString typeToString() const { return SerializeInfo::typeToString(type()); }
 
     inline QString name() const { return mName; }
     inline void setName(const QString& name) { mName = name; }
 
 private:
     QString mName;
+    QVariant mValue;
+    QList<SerializeInfo*> mList;
 
-    // contains only simple properties
-    QMap<QString, QVariant> mProperties;
-
-    // contains complex properties
-    QList<SerializeInfo*> mChildren;
+    QMap<QString, SerializeInfo*> mProperties;
 };
 }
 
