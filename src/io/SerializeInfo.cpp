@@ -61,7 +61,7 @@ void SerializeInfo::putProperty(const QString& key, const QVariant& value)
 {
     SerializeInfo* serializeInfo = new SerializeInfo(key);
     serializeInfo->setValue(value);
-    mProperties[key] = serializeInfo;
+    putProperty(key, serializeInfo);
 }
 
 void SerializeInfo::putProperty(const QString& key, SerializeInfo* info)
@@ -84,6 +84,11 @@ void SerializeInfo::addPropertyToKey(const QString& key, SerializeInfo* info)
 SerializeInfo*SerializeInfo::at(const QString& key) const
 {
     return mProperties[key];
+}
+
+bool SerializeInfo::contains(const QString& key) const
+{
+    return mProperties.contains(key);
 }
 
 QVariant SerializeInfo::propertyValue(const QString& key) const

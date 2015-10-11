@@ -17,29 +17,32 @@ XmlInputOutput::~XmlInputOutput()
 SerializeInfo* XmlInputOutput::read(QIODevice& input)
 {
     QXmlStreamReader stream(&input);
+    stream.readNextStartElement();
     return XmlInputOutput::read(stream);
 }
 
 SerializeInfo* XmlInputOutput::read(QXmlStreamReader& stream)
 {
     SerializeInfo* serializeInfo = new SerializeInfo(stream.name().toString());
-    while (stream.readNextStartElement()) {
-        QString name(stream.name().toString());
-        QXmlStreamAttributes attributes = stream.attributes();
-        SerializeInfo::Type type = SerializeInfo::stringToType(attributes.value("type").toString());
-        switch (type) {
-        case SerializeInfo::Type::VALUE:
-            serializeInfo->setValue(stream.readElementText());
-        break;
-        case SerializeInfo::Type::LIST:
-           serializeInfo->addPropertyToKey(name, read(stream, serializeInfo));
-        break;
-        case SerializeInfo::Type::OBJECT:
-           serializeInfo->putProperty(name, read(stream, serializeInfo));
-        break;
-        default:
-        break;
+    QXmlStreamAttributes attributes = stream.attributes();
+    SerializeInfo::Type type = SerializeInfo::stringToType(attributes.value("type").toString());
+    switch (type) {
+    case SerializeInfo::Type::VALUE:
+        serializeInfo->setValue(stream.readElementText());
+    break;
+    case SerializeInfo::Type::LIST:
+        while (stream.readNextStartElement()) {
+            serializeInfo->addElement(read(stream));
         }
+    break;
+    case SerializeInfo::Type::OBJECT:
+        while (stream.readNextStartElement()) {
+            auto child = read(stream);
+            serializeInfo->putProperty(child->name(), child);
+        }
+    break;
+    default:
+    break;
     }
     return serializeInfo;
 }
@@ -53,15 +56,6 @@ void blueprint::XmlInputOutput::write(QIODevice& output, const blueprint::Serial
     XmlInputOutput::write(stream, serializeInfo);
 
     stream.writeEndDocument();
-}
-
-bool XmlInputOutput::isObject(const QString& tagName)
-{
-    return (tagName == IO_NAME_BLUEPRINT
-                | tagName == IO_NAME_PAGE
-                | tagName == IO_NAME_CANVAS
-                | tagName == IO_NAME_SHAPE
-    );
 }
 
 void XmlInputOutput::write(QXmlStreamWriter& stream, const SerializeInfo& serializeInfo)

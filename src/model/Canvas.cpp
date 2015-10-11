@@ -21,6 +21,6 @@ Canvas::~Canvas()
 SerializeInfo* Canvas::serialize() const
 {
     SerializeInfo* serializeInfo = Shape::serialize();
-    serializeInfo->setName(IO_NAME_CANVAS);
+    serializeInfo->setName("canvas");
     return serializeInfo;
 }

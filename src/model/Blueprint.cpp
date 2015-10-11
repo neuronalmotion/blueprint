@@ -16,7 +16,7 @@ Blueprint::~Blueprint()
 
 SerializeInfo* Blueprint::serialize() const
 {
-    SerializeInfo* serializeInfo = new SerializeInfo(IO_NAME_BLUEPRINT);
+    SerializeInfo* serializeInfo = new SerializeInfo("blueprint");
     serializeInfo->putProperty("name", mName);
     for(Page* p : mPages)  {
         serializeInfo->addPropertyToKey("children", p->serialize());
@@ -27,11 +27,13 @@ SerializeInfo* Blueprint::serialize() const
 void Blueprint::deserialize(const SerializeInfo& serializeInfo)
 {
     mName = serializeInfo.propertyValue("name").toString();
-    SerializeInfo* children = serializeInfo.at("children");
-    for(auto child : children->list()) {
-        Page* page = new Page();
-        page->deserialize(*child);
-        addPage(page);
+    if (serializeInfo.contains("children")) {
+        SerializeInfo* children = serializeInfo.at("children");
+        for(auto child : children->list()) {
+            Page* page = new Page();
+            page->deserialize(*child);
+            addPage(page);
+        }
     }
 }
 
