@@ -39,6 +39,9 @@ public:
     inline QImage* backgroundImage() { return mBackgroundImage; }
     inline QString backgroundImageFileName() { return mBackgroundImageFileName; }
 
+    Parcel* toParcel() const override;
+    void fromParcel(const Parcel& parcel) override;
+
 protected:
     void updateBoundingBoxBezierVisibility();
 

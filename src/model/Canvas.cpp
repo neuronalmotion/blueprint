@@ -18,9 +18,9 @@ Canvas::~Canvas()
 {
 }
 
-SerializeInfo* Canvas::serialize() const
+Parcel* Canvas::toParcel() const
 {
-    SerializeInfo* serializeInfo = Shape::serialize();
-    serializeInfo->setName("canvas");
-    return serializeInfo;
+    Parcel* parcel = Shape::toParcel();
+    parcel->setName("canvas");
+    return parcel;
 }

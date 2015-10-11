@@ -8,7 +8,7 @@
 namespace blueprint
 {
 
-class SerializeInfo;
+class Parcel;
 
 class XmlInputOutput
 {
@@ -16,15 +16,19 @@ public:
     explicit XmlInputOutput();
     ~XmlInputOutput();
 
-    SerializeInfo* read(QIODevice& input);
-    void write(QIODevice& output, const SerializeInfo& serializeInfo);
+    Parcel* read(QIODevice& input);
+    void write(QIODevice& output, const Parcel& parcel);
 
 private:
-    SerializeInfo* read(QXmlStreamReader& stream);
-    SerializeInfo* readForParent(QXmlStreamReader& stream, SerializeInfo* parentSerializeInfo);
-    void write(QXmlStreamWriter& stream, const SerializeInfo& serializeInfo);
+    Parcel* read(QXmlStreamReader& stream);
+    void readValue(QXmlStreamReader& stream, Parcel& parcel);
+    void readList(QXmlStreamReader& stream, Parcel& parcel);
+    void readObject(QXmlStreamReader& stream, Parcel& parcel);
 
-
+    void write(QXmlStreamWriter& stream, const Parcel& parcel);
+    void writeValue(QXmlStreamWriter& stream, const Parcel& parcel);
+    void writeList(QXmlStreamWriter& stream, const Parcel& parcel);
+    void writeObject(QXmlStreamWriter& stream, const Parcel& parcel);
 };
 }
 

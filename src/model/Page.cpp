@@ -14,10 +14,10 @@ Page::~Page()
 {
 }
 
-SerializeInfo* Page::serialize() const
+Parcel* Page::toParcel() const
 {
-    SerializeInfo* serializeInfo = Shape::serialize();
-    serializeInfo->setName("page");
-    return serializeInfo;
+    Parcel* parcel = Shape::toParcel();
+    parcel->setName("page");
+    return parcel;
 }
 

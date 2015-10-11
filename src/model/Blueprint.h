@@ -3,12 +3,12 @@
 
 #include <QList>
 
-#include "io/Serializable.h"
+#include "io/Parcelable.h"
 #include "model/Page.h"
 
 namespace blueprint {
 
-class Blueprint : public Serializable
+class Blueprint : public Parcelable
 {
 public:
     Blueprint();
@@ -18,8 +18,8 @@ public:
     inline QString name() { return mName; }
     inline void setName(const QString& name) { mName = name; }
 
-    SerializeInfo* serialize() const override;
-    void deserialize(const SerializeInfo& serializeInfo) override;
+    Parcel* toParcel() const override;
+    void fromParcel(const Parcel& parcel) override;
 
 private:
     QString mName;

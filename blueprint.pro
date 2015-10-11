@@ -28,9 +28,9 @@ HEADERS  += src/MainWindow.h \
     src/TreeView.h \
     src/model/ShapeFactory.h \
     src/model/ShapeText.h \
-    src/io/SerializeInfo.h \
-    src/io/Serializable.h \
-    src/io/XmlInputOutput.h
+    src/io/XmlInputOutput.h \
+    src/io/Parcelable.h \
+    src/io/Parcel.h
 
 SOURCES += src/main.cpp\
         src/MainWindow.cpp \
@@ -54,8 +54,8 @@ SOURCES += src/main.cpp\
     src/TreeView.cpp \
     src/model/ShapeFactory.cpp \
     src/model/ShapeText.cpp \
-    src/io/SerializeInfo.cpp \
-    src/io/XmlInputOutput.cpp
+    src/io/XmlInputOutput.cpp \
+    src/io/Parcel.cpp
 
 FORMS    += src/MainWindow.ui \
     src/PropertiesWindow.ui

@@ -1,6 +1,6 @@
 #include "XmlInputOutput.h"
 
-#include "SerializeInfo.h"
+#include "Parcel.h"
 
 using namespace blueprint;
 
@@ -14,85 +14,118 @@ XmlInputOutput::~XmlInputOutput()
 
 }
 
-SerializeInfo* XmlInputOutput::read(QIODevice& input)
+Parcel* XmlInputOutput::read(QIODevice& input)
 {
     QXmlStreamReader stream(&input);
     stream.readNextStartElement();
     return XmlInputOutput::read(stream);
 }
 
-SerializeInfo* XmlInputOutput::read(QXmlStreamReader& stream)
+Parcel* XmlInputOutput::read(QXmlStreamReader& stream)
 {
-    SerializeInfo* serializeInfo = new SerializeInfo(stream.name().toString());
+    Parcel* parcel = new Parcel(stream.name().toString());
     QXmlStreamAttributes attributes = stream.attributes();
-    SerializeInfo::Type type = SerializeInfo::stringToType(attributes.value("type").toString());
+    Parcel::Type type = Parcel::stringToType(attributes.value("type").toString());
     switch (type) {
-    case SerializeInfo::Type::VALUE:
-        serializeInfo->setValue(stream.readElementText());
+    case Parcel::Type::VALUE:
+        readValue(stream, *parcel);
     break;
-    case SerializeInfo::Type::LIST:
-        while (stream.readNextStartElement()) {
-            serializeInfo->addElement(read(stream));
-        }
+
+    case Parcel::Type::LIST:
+        readList(stream, *parcel);
     break;
-    case SerializeInfo::Type::OBJECT:
-        while (stream.readNextStartElement()) {
-            auto child = read(stream);
-            serializeInfo->putProperty(child->name(), child);
-        }
+
+    case Parcel::Type::OBJECT:
+        readObject(stream, *parcel);
     break;
+
     default:
     break;
     }
-    return serializeInfo;
+    return parcel;
 }
 
-void blueprint::XmlInputOutput::write(QIODevice& output, const blueprint::SerializeInfo& serializeInfo)
+void XmlInputOutput::readValue(QXmlStreamReader& stream, Parcel& parcel)
+{
+    parcel.setValue(stream.readElementText());
+}
+
+void XmlInputOutput::readList(QXmlStreamReader& stream, Parcel& parcel)
+{
+    while (stream.readNextStartElement()) {
+        parcel.addElement(read(stream));
+    }
+}
+
+void XmlInputOutput::readObject(QXmlStreamReader& stream, Parcel& parcel)
+{
+    while (stream.readNextStartElement()) {
+        auto child = read(stream);
+        parcel.putProperty(child->name(), child);
+    }
+}
+
+void blueprint::XmlInputOutput::write(QIODevice& output, const blueprint::Parcel& parcel)
 {
     QXmlStreamWriter stream(&output);
     stream.setAutoFormatting(true);
     stream.writeStartDocument();
 
-    XmlInputOutput::write(stream, serializeInfo);
+    XmlInputOutput::write(stream, parcel);
 
     stream.writeEndDocument();
 }
 
-void XmlInputOutput::write(QXmlStreamWriter& stream, const SerializeInfo& serializeInfo)
+void XmlInputOutput::write(QXmlStreamWriter& stream, const Parcel& parcel)
 {
-    switch (serializeInfo.type()) {
-    case SerializeInfo::Type::VALUE:
-        stream.writeTextElement(serializeInfo.name(), serializeInfo.value().toString());
-
+    switch (parcel.type()) {
+    case Parcel::Type::VALUE:
+        writeValue(stream, parcel);
     break;
-    case SerializeInfo::Type::LIST:
-        for (auto child : serializeInfo.list()) {
-            XmlInputOutput::write(stream, *child);
-        }
 
+    case Parcel::Type::LIST:
+        writeList(stream, parcel);
     break;
-    case SerializeInfo::Type::OBJECT: {
-        stream.writeStartElement(serializeInfo.name());
-        stream.writeAttribute("type", serializeInfo.typeToString());
-        auto i = serializeInfo.propertiesIterator();
-        while (i.hasNext()) {
-            i.next();
-            SerializeInfo* property = i.value();
-            SerializeInfo::Type type = property->type();
-            if (type == SerializeInfo::Type::LIST) {
-                stream.writeStartElement(i.key());
-                stream.writeAttribute("type", property->typeToString());
-            }
-            XmlInputOutput::write(stream, *property);
-            if (type == SerializeInfo::Type::LIST) {
-                stream.writeEndElement();
-            }
-        }
-        stream.writeEndElement();
+
+    case Parcel::Type::OBJECT: {
+        writeObject(stream, parcel);
     }
     break;
     default:
         qFatal("Undefined Parcel type");
     break;
     }
+}
+
+void XmlInputOutput::writeValue(QXmlStreamWriter& stream, const Parcel& parcel)
+{
+    stream.writeTextElement(parcel.name(), parcel.value().toString());
+}
+
+void XmlInputOutput::writeList(QXmlStreamWriter& stream, const Parcel& parcel)
+{
+    for (auto child : parcel.list()) {
+        XmlInputOutput::write(stream, *child);
+    }
+}
+
+void XmlInputOutput::writeObject(QXmlStreamWriter& stream, const Parcel& parcel)
+{
+    stream.writeStartElement(parcel.name());
+    stream.writeAttribute("type", parcel.typeToString());
+    auto i = parcel.propertiesIterator();
+    while (i.hasNext()) {
+        i.next();
+        Parcel* property = i.value();
+        Parcel::Type type = property->type();
+        if (type == Parcel::Type::LIST) {
+            stream.writeStartElement(i.key());
+            stream.writeAttribute("type", property->typeToString());
+        }
+        XmlInputOutput::write(stream, *property);
+        if (type == Parcel::Type::LIST) {
+            stream.writeEndElement();
+        }
+    }
+    stream.writeEndElement();
 }

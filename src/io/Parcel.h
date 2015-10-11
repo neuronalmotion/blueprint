@@ -1,5 +1,5 @@
-#ifndef SERIALIZEINFO_H
-#define SERIALIZEINFO_H
+#ifndef PARCEL_H
+#define PARCEL_H
 
 #include <QList>
 #include <QMap>
@@ -9,7 +9,7 @@
 namespace blueprint
 {
 
-class SerializeInfo
+class Parcel
 {
 public:
 
@@ -23,26 +23,26 @@ public:
     static Type stringToType(const QString& string);
     static QString typeToString(const Type& type);
 
-    explicit SerializeInfo(const QString& name);
-    ~SerializeInfo();
+    explicit Parcel(const QString& name);
+    ~Parcel();
 
     void putProperty(const QString& key, const QVariant& value);
-    void putProperty(const QString& key, SerializeInfo* info);
-    void addPropertyToKey(const QString& key, SerializeInfo* info);
+    void putProperty(const QString& key, Parcel* info);
+    void addPropertyToKey(const QString& key, Parcel* info);
 
-    SerializeInfo* at(const QString& key) const;
+    Parcel* at(const QString& key) const;
     bool contains(const QString& key) const;
     QVariant propertyValue(const QString& key) const;
     inline QVariant value() const { return mValue; }
     void setValue(const QVariant& value);
 
-    inline void addElement(SerializeInfo* element) { mList.append(element); }
-    inline const QList<SerializeInfo*>& list() const { return mList; }
+    inline void addElement(Parcel* element) { mList.append(element); }
+    inline const QList<Parcel*>& list() const { return mList; }
 
-    QMapIterator<QString, SerializeInfo*> propertiesIterator() const;
+    QMapIterator<QString, Parcel*> propertiesIterator() const;
 
     Type type() const;
-    QString typeToString() const { return SerializeInfo::typeToString(type()); }
+    QString typeToString() const { return Parcel::typeToString(type()); }
 
     inline QString name() const { return mName; }
     inline void setName(const QString& name) { mName = name; }
@@ -50,10 +50,9 @@ public:
 private:
     QString mName;
     QVariant mValue;
-    QList<SerializeInfo*> mList;
-
-    QMap<QString, SerializeInfo*> mProperties;
+    QList<Parcel*> mList;
+    QMap<QString, Parcel*> mProperties;
 };
 }
 
-#endif // SERIALIZEINFO_H
+#endif // PARCEL_H

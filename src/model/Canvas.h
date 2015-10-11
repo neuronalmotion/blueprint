@@ -13,7 +13,7 @@ public:
     Canvas(Shape* parentShape, const qreal& x, const qreal& y);
     ~Canvas();
 
-    SerializeInfo* serialize() const override;
+    Parcel* toParcel() const override;
 
 };
 }

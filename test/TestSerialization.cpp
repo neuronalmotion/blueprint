@@ -2,7 +2,7 @@
 
 #include <QFile>
 
-#include "io/SerializeInfo.h"
+#include "io/Parcel.h"
 #include "io/XmlInputOutput.h"
 
 #include "TestUtils.h"
@@ -49,15 +49,15 @@ void TestSerialization::initTestCase()
 
 void TestSerialization::testSerialization()
 {
-    SerializeInfo* serializeInfo = mBlueprint.serialize();
+    Parcel* parcel = mBlueprint.toParcel();
 
-//    QCOMPARE(serializeInfo->value("name").toString(), shape->name());
-//    QCOMPARE(serializeInfo->value("type").toInt(), static_cast<int>(shape->shapeType()));
+//    QCOMPARE(parcel->value("name").toString(), shape->name());
+//    QCOMPARE(parcel->value("type").toInt(), static_cast<int>(shape->shapeType()));
 
     QFile output("test.xml");
     output.open(QIODevice::ReadWrite);
     XmlInputOutput xml;
-    xml.write(output, *serializeInfo);
+    xml.write(output, *parcel);
 
     output.seek(0);
     QString result(output.readAll());
@@ -67,7 +67,7 @@ void TestSerialization::testSerialization()
     TestUtils::toggleLogOutput(false);
 
     output.close();
-    delete serializeInfo;
+    delete parcel;
 }
 
 void TestSerialization::testDeserialization()
@@ -75,13 +75,13 @@ void TestSerialization::testDeserialization()
     QFile input("test.xml");
     input.open(QIODevice::ReadOnly);
     XmlInputOutput xml;
-    SerializeInfo* serializeInfo = xml.read(input);
+    Parcel* parcel = xml.read(input);
     input.close();
 
     Blueprint blueprint;
-    blueprint.deserialize(*serializeInfo);
+    blueprint.fromParcel(*parcel);
     QCOMPARE(blueprint.name(), mBlueprint.name());
 
-    delete serializeInfo;
+    delete parcel;
 }
 

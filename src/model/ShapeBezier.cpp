@@ -145,12 +145,30 @@ QRectF ShapeBezier::bounds() const
 void ShapeBezier::setBackgroundImage(const QString& fileName)
 {
     mBackgroundImageFileName = fileName;
-
     if (mBackgroundImage){
         delete mBackgroundImage;
     }
-
     mBackgroundImage = new QImage(fileName);
+}
+
+Parcel* ShapeBezier::toParcel() const
+{
+    Parcel* parcel = Shape::toParcel();
+    for (auto element : mElements) {
+        parcel->addPropertyToKey("elements", element->toParcel());
+    }
+    return parcel;
+}
+
+void ShapeBezier::fromParcel(const Parcel& parcel)
+{
+    Shape::fromParcel(parcel);
+    if (parcel.contains("elements")) {
+        Parcel* children = parcel.at("elements");
+        for (auto child : children->list()) {
+            mElements.append(BezierElement::bezierElementFromParcel(*child, this));
+        }
+    }
 }
 
 void ShapeBezier::updateBoundingBoxBezierVisibility()
@@ -253,6 +271,9 @@ void ShapeBezier::updateElement(BezierElement* bezierElement, const QPointF& pos
     mBoundingBox.updateRect();
 }
 
+// ----------------------------------------------------------------------------
+// GraphicsItem
+// ----------------------------------------------------------------------------
 
 GraphicsItem::GraphicsItem(ShapeBezier* shape, QGraphicsItem* parent)
     : QGraphicsPathItem(parent),

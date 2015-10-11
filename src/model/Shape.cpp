@@ -141,30 +141,30 @@ void Shape::setParentShape(Shape* parentShape)
     mParentShape = parentShape;
 }
 
-SerializeInfo* Shape::serialize() const
+Parcel* Shape::toParcel() const
 {
-    SerializeInfo* serializeInfo = new SerializeInfo("shape");
-    serializeInfo->putProperty("name", mName);
-    serializeInfo->putProperty("type", mShapeType);
+    Parcel* parcel = new Parcel("shape");
+    parcel->putProperty("name", mName);
+    parcel->putProperty("type", mShapeType);
 
     for(auto child : mChildItems) {
-        serializeInfo->addPropertyToKey("children", child->serialize());
+        parcel->addPropertyToKey("children", child->toParcel());
     }
-    return serializeInfo;
+    return parcel;
 }
 
-void Shape::deserialize(const SerializeInfo& serializeInfo)
+void Shape::fromParcel(const Parcel& parcel)
 {
-    mName = serializeInfo.propertyValue("name").toString();
-    mShapeType = static_cast<ShapeType>(serializeInfo.propertyValue("type").toInt());
-    if (serializeInfo.contains("children")) {
-        SerializeInfo* children = serializeInfo.at("children");
+    mName = parcel.propertyValue("name").toString();
+    mShapeType = static_cast<ShapeType>(parcel.propertyValue("type").toInt());
+    if (parcel.contains("children")) {
+        Parcel* children = parcel.at("children");
 
         for(auto child : children->list()) {
             ShapeType childShapeType = static_cast<ShapeType>(child->propertyValue("type").toInt());
             // FIXME child coordinates should not be mandatory in Factory
             Shape* childShape = ShapeFactory::createShape(childShapeType, *this, QPointF(0, 0));
-            childShape->deserialize(*child);
+            childShape->fromParcel(*child);
             insertChild(0, childShape);
         }
     }

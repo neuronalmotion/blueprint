@@ -1,8 +1,8 @@
-#include "SerializeInfo.h"
+#include "Parcel.h"
 
 using namespace blueprint;
 
-SerializeInfo::Type SerializeInfo::stringToType(const QString& string)
+Parcel::Type Parcel::stringToType(const QString& string)
 {
     Type type;
     if (string == "property" || string.isEmpty()) {
@@ -16,7 +16,7 @@ SerializeInfo::Type SerializeInfo::stringToType(const QString& string)
     return type;
 }
 
-QString SerializeInfo::typeToString(const SerializeInfo::Type& type)
+QString Parcel::typeToString(const Parcel::Type& type)
 {
     QString string;
     switch (type) {
@@ -37,7 +37,7 @@ QString SerializeInfo::typeToString(const SerializeInfo::Type& type)
     return string;
 }
 
-SerializeInfo::SerializeInfo(const QString& name)
+Parcel::Parcel(const QString& name)
     : mName(name),
       mValue(),
       mList(),
@@ -46,62 +46,62 @@ SerializeInfo::SerializeInfo(const QString& name)
 
 }
 
-SerializeInfo::~SerializeInfo()
+Parcel::~Parcel()
 {
     qDeleteAll(mList);
     qDeleteAll(mProperties);
 }
 
-void SerializeInfo::setValue(const QVariant& value)
+void Parcel::setValue(const QVariant& value)
 {
     mValue = value;
 }
 
-void SerializeInfo::putProperty(const QString& key, const QVariant& value)
+void Parcel::putProperty(const QString& key, const QVariant& value)
 {
-    SerializeInfo* serializeInfo = new SerializeInfo(key);
-    serializeInfo->setValue(value);
-    putProperty(key, serializeInfo);
+    Parcel* parcel = new Parcel(key);
+    parcel->setValue(value);
+    putProperty(key, parcel);
 }
 
-void SerializeInfo::putProperty(const QString& key, SerializeInfo* info)
+void Parcel::putProperty(const QString& key, Parcel* info)
 {
     mProperties[key] = info;
 }
 
-void SerializeInfo::addPropertyToKey(const QString& key, SerializeInfo* info)
+void Parcel::addPropertyToKey(const QString& key, Parcel* info)
 {
-    SerializeInfo* serializeInfo = nullptr;
+    Parcel* parcel = nullptr;
     if (mProperties.contains(key)) {
-        serializeInfo = mProperties[key];
+        parcel = mProperties[key];
     } else {
-        serializeInfo = new SerializeInfo(key);
-        mProperties[key] = serializeInfo;
+        parcel = new Parcel(key);
+        mProperties[key] = parcel;
     }
-    serializeInfo->addElement(info);
+    parcel->addElement(info);
 }
 
-SerializeInfo*SerializeInfo::at(const QString& key) const
+Parcel*Parcel::at(const QString& key) const
 {
     return mProperties[key];
 }
 
-bool SerializeInfo::contains(const QString& key) const
+bool Parcel::contains(const QString& key) const
 {
     return mProperties.contains(key);
 }
 
-QVariant SerializeInfo::propertyValue(const QString& key) const
+QVariant Parcel::propertyValue(const QString& key) const
 {
     return at(key)->value();
 }
 
-QMapIterator<QString, SerializeInfo*> SerializeInfo::propertiesIterator() const
+QMapIterator<QString, Parcel*> Parcel::propertiesIterator() const
 {
-    return QMapIterator<QString, SerializeInfo*>(mProperties);
+    return QMapIterator<QString, Parcel*>(mProperties);
 }
 
-SerializeInfo::Type SerializeInfo::type() const
+Parcel::Type Parcel::type() const
 {
     if (!mValue.isNull()
             && mList.isEmpty()

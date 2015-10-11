@@ -14,24 +14,24 @@ Blueprint::~Blueprint()
     qDeleteAll(mPages);
 }
 
-SerializeInfo* Blueprint::serialize() const
+Parcel* Blueprint::toParcel() const
 {
-    SerializeInfo* serializeInfo = new SerializeInfo("blueprint");
-    serializeInfo->putProperty("name", mName);
+    Parcel* parcel = new Parcel("blueprint");
+    parcel->putProperty("name", mName);
     for(Page* p : mPages)  {
-        serializeInfo->addPropertyToKey("children", p->serialize());
+        parcel->addPropertyToKey("children", p->toParcel());
     }
-    return serializeInfo;
+    return parcel;
 }
 
-void Blueprint::deserialize(const SerializeInfo& serializeInfo)
+void Blueprint::fromParcel(const Parcel& parcel)
 {
-    mName = serializeInfo.propertyValue("name").toString();
-    if (serializeInfo.contains("children")) {
-        SerializeInfo* children = serializeInfo.at("children");
+    mName = parcel.propertyValue("name").toString();
+    if (parcel.contains("children")) {
+        Parcel* children = parcel.at("children");
         for(auto child : children->list()) {
             Page* page = new Page();
-            page->deserialize(*child);
+            page->fromParcel(*child);
             addPage(page);
         }
     }
