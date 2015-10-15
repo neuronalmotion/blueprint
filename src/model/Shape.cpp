@@ -51,7 +51,7 @@ void Shape::removeChildAt(int index)
     mChildItems.removeAt(index);
 }
 
-Shape*Shape::child(int row)
+Shape*Shape::child(int row) const
 {
     return mChildItems.at(row);
 }
@@ -165,7 +165,7 @@ void Shape::fromParcel(const Parcel& parcel)
             // FIXME child coordinates should not be mandatory in Factory
             Shape* childShape = ShapeFactory::createShape(childShapeType, *this, QPointF(0, 0));
             childShape->fromParcel(*child);
-            insertChild(0, childShape);
+            appendChild(childShape);
         }
     }
 }

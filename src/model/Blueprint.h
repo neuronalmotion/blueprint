@@ -14,9 +14,11 @@ public:
     Blueprint();
     ~Blueprint();
 
-    inline void addPage(Page* page) { mPages.append(page); }
     inline QString name() { return mName; }
     inline void setName(const QString& name) { mName = name; }
+    inline Page* page(const int& index) { return mPages[index]; }
+    inline void addPage(Page* page) { mPages.append(page); }
+    int pageCount() const { return mPages.length(); }
 
     Parcel* toParcel() const override;
     void fromParcel(const Parcel& parcel) override;

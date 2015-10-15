@@ -9,6 +9,8 @@
 #include "model/Canvas.h"
 #include "model/Page.h"
 #include "model/Shape.h"
+#include "model/ShapeBezier.h"
+#include "model/BezierElement.h"
 #include "model/ShapeFactory.h"
 #include "model/ShapeRectangle.h"
 
@@ -63,7 +65,7 @@ void TestSerialization::testSerialization()
     QString result(output.readAll());
 
     TestUtils::toggleLogOutput(true);
-    qDebug() << "Result" << result;
+//    qDebug() << "Result" << result;
     TestUtils::toggleLogOutput(false);
 
     output.close();
@@ -81,7 +83,39 @@ void TestSerialization::testDeserialization()
     Blueprint blueprint;
     blueprint.fromParcel(*parcel);
     QCOMPARE(blueprint.name(), mBlueprint.name());
+    QCOMPARE(blueprint.pageCount(), mBlueprint.pageCount());
+
+    Page* parsedPage = blueprint.page(0);
+    Page* originalPage = mBlueprint.page(0);
+    compareShapesBezier(*parsedPage, *originalPage);
 
     delete parcel;
+}
+
+void TestSerialization::compareShapes(const Shape& lhs, const Shape& rhs)
+{
+    QCOMPARE(lhs.name(), rhs.name());
+    QCOMPARE(lhs.childCount(), rhs.childCount());
+    QCOMPARE(lhs.shapeType(), rhs.shapeType());
+    QCOMPARE(lhs.backgroundColor(), rhs.backgroundColor());
+    QCOMPARE(lhs.borderWidth(), rhs.borderWidth());
+}
+
+void TestSerialization::compareShapesBezier(const ShapeBezier& lhs, const ShapeBezier& rhs)
+{
+   compareShapes(lhs, rhs);
+   QCOMPARE(lhs.elementCount(), rhs.elementCount());
+   for (int i = 0; i < lhs.elementCount(); ++i) {
+        const BezierElement* leftElement = lhs.element(i);
+        const BezierElement* rightElement = rhs.element(i);
+        QCOMPARE(leftElement->index(), rightElement->index());
+        QCOMPARE(leftElement->elementType(), rightElement->elementType());
+        QCOMPARE(leftElement->pos(), rightElement->pos());
+   }
+    for (int i = 0; i < lhs.childCount(); ++i) {
+        ShapeBezier* s1 = static_cast<ShapeBezier*>(lhs.child(i));
+        ShapeBezier* s2 = static_cast<ShapeBezier*>(rhs.child(i));
+        compareShapesBezier(*s1, *s2);
+    }
 }
 

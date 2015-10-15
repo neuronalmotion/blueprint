@@ -32,6 +32,8 @@ public:
     void addPath(const QPointF& c1, const QPointF& c2, const QPointF& endPos);
     void addSegment(const QPointF& point);
     void closePath();
+    inline int elementCount() const { return mElements.length(); }
+    inline const BezierElement* element(const int& index) const { return mElements[index]; }
     void updateElement(BezierElement* bezierElement, const QPointF& pos);
     inline BoundingBox& boundingBox() { return mBoundingBox; }
 

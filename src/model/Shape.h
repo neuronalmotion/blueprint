@@ -35,7 +35,7 @@ public:
     virtual ~Shape();
 
     // hierarchy stuff
-    Shape* child(int row);
+    Shape* child(int row) const;
     void appendChild(Shape* child);
     void insertChild(int index, Shape* child);
     bool removeChild(Shape* child);

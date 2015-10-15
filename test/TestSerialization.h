@@ -8,6 +8,8 @@
 namespace blueprint
 {
 
+class Shape;
+
 class TestSerialization : public QObject
 {
     Q_OBJECT
@@ -20,6 +22,9 @@ private slots:
     void testSerialization();
     void testDeserialization();
 
+private:
+    void compareShapes(const Shape& lhs, const Shape& rhs);
+    void compareShapesBezier(const ShapeBezier& lhs, const ShapeBezier& rhs);
 private:
     Blueprint mBlueprint;
 
