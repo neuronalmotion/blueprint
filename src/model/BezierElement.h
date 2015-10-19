@@ -3,10 +3,12 @@
 
 #include <QGraphicsItem>
 
+#include "io/Parcelable.h"
+
 namespace blueprint {
 class ShapeBezier;
 
-class BezierElement
+class BezierElement : public Parcelable
 {
 public:
 
@@ -14,6 +16,8 @@ public:
         POINT,
         CONTROL_POINT
     };
+
+    static BezierElement* bezierElementFromParcel(const Parcel& parcel, ShapeBezier* parent);
 
     BezierElement(ElementType elementType, ShapeBezier* parent, int index);
     virtual ~BezierElement();
@@ -26,13 +30,16 @@ public:
     inline ElementType elementType() const { return mElementType; }
     inline int index() const { return mIndex; }
 
+    Parcel* toParcel() const override;
+    void fromParcel(const Parcel& parcel) override;
+
 protected:
     void propagateItemChange(QGraphicsItem::GraphicsItemChange change, const QVariant& value);
 
 protected:
     ElementType mElementType;
     ShapeBezier* mParentShape;
-    const int mIndex;
+    int mIndex;
 };
 
 }

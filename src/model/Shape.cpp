@@ -5,6 +5,9 @@
 #include <QPen>
 #include <QPointF>
 
+#include "ShapeFactory.h"
+#include "BoundingBoxPoint.h"
+
 using namespace blueprint;
 
 Shape* Shape::fromQGraphicsItem(const QGraphicsItem& item)
@@ -49,9 +52,14 @@ void Shape::removeChildAt(int index)
     mChildItems.removeAt(index);
 }
 
-Shape*Shape::child(int row)
+Shape*Shape::child(int row) const
 {
     return mChildItems.at(row);
+}
+
+void Shape::appendChild(Shape* child)
+{
+    mChildItems.append(child);
 }
 
 int Shape::indexOf(const Shape* child) const
@@ -92,9 +100,9 @@ void Shape::setSelected(bool selected)
 
 void Shape::toggleEditMode()
 {
-    EditMode nextEditMode = editMode() == EditMode::BEZIER ?
+    EditMode nextEditMode = editMode() == EditMode::PATH ?
                 EditMode::BOUNDING_BOX
-              : EditMode::BEZIER;
+              : EditMode::PATH;
     setEditMode(nextEditMode);
 }
 
@@ -111,12 +119,24 @@ QPointF Shape::posAbsolute()
     QPointF position = graphicsItem()->pos();
 
     // FIXME function name is a misnomer, position is not always absolute!
-    if (shapeType() != ShapeType::CANVAS) {
+    if (shapeType() != ShapeType::CANVAS && mParentShape) {
         blueprint::Shape* shapeParent = dynamic_cast<blueprint::Shape*>(mParentShape);
         position = position + shapeParent->posAbsolute();
     }
 
     return position;
+}
+
+void Shape::collapse()
+{
+    const BoundingBoxPoint* topLeft = boundingBox().boundingBoxPoint(BoundingBoxPoint::TOP_LEFT);
+    const BoundingBoxPoint* bottomRight = boundingBox().boundingBoxPoint(BoundingBoxPoint::BOTTOM_RIGHT);
+    QPointF delta = topLeft->pos() - bottomRight->pos();
+
+    // Add 1 to be able to move the bounding box
+    delta.setX(delta.x() + 1);
+    delta.setY(delta.y() + 1);
+    boundingBox().boundingBoxPointMoved(bottomRight->translationDirection(), delta);
 }
 
 qreal Shape::zValue()
@@ -132,4 +152,33 @@ void Shape::setZValue(qreal zValue)
 void Shape::setParentShape(Shape* parentShape)
 {
     mParentShape = parentShape;
+}
+
+Parcel* Shape::toParcel() const
+{
+    Parcel* parcel = new Parcel("shape");
+    parcel->putProperty("name", mName);
+    parcel->putProperty("type", mShapeType);
+
+    for(auto child : mChildItems) {
+        parcel->addPropertyToKey("children", child->toParcel());
+    }
+    return parcel;
+}
+
+void Shape::fromParcel(const Parcel& parcel)
+{
+    mName = parcel.propertyValue("name").toString();
+    mShapeType = static_cast<ShapeType>(parcel.propertyValue("type").toInt());
+    if (parcel.contains("children")) {
+        Parcel* children = parcel.at("children");
+
+        for(auto child : children->list()) {
+            ShapeType childShapeType = static_cast<ShapeType>(child->propertyValue("type").toInt());
+            // FIXME child coordinates should not be mandatory in Factory
+            Shape* childShape = ShapeFactory::createShape(childShapeType, this);
+            childShape->fromParcel(*child);
+            appendChild(childShape);
+        }
+    }
 }

@@ -180,3 +180,8 @@ void BoundingBox::boundingBoxPointMoved(BoundingBoxPoint::TranslationDirection d
     updateRect();
 }
 
+const BoundingBoxPoint*BoundingBox::boundingBoxPoint(BoundingBoxPoint::TranslationDirection direction) const
+{
+    return mHashBoundingBoxPoints[direction];
+}
+

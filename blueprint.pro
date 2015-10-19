@@ -18,8 +18,6 @@ HEADERS  += src/MainWindow.h \
     src/model/BoundingBox.h \
     src/model/BoundingBoxPoint.h \
     src/model/Canvas.h \
-    src/model/ShapeEllipse.h \
-    src/model/ShapeRectangle.h \
     src/model/Shape.h \
     src/PropertiesWindow.h \
     src/model/ShapeLine.h \
@@ -27,7 +25,10 @@ HEADERS  += src/MainWindow.h \
     src/model/ShapeModel.h \
     src/TreeView.h \
     src/model/ShapeFactory.h \
-    src/model/ShapeText.h
+    src/model/ShapeText.h \
+    src/io/XmlInputOutput.h \
+    src/io/Parcelable.h \
+    src/io/Parcel.h
 
 SOURCES += src/main.cpp\
         src/MainWindow.cpp \
@@ -41,8 +42,6 @@ SOURCES += src/main.cpp\
     src/model/BoundingBox.cpp \
     src/model/BoundingBoxPoint.cpp \
     src/model/Canvas.cpp \
-    src/model/ShapeEllipse.cpp \
-    src/model/ShapeRectangle.cpp \
     src/model/Shape.cpp \
     src/PropertiesWindow.cpp \
     src/model/ShapeLine.cpp \
@@ -50,7 +49,9 @@ SOURCES += src/main.cpp\
     src/model/ShapeModel.cpp \
     src/TreeView.cpp \
     src/model/ShapeFactory.cpp \
-    src/model/ShapeText.cpp
+    src/model/ShapeText.cpp \
+    src/io/XmlInputOutput.cpp \
+    src/io/Parcel.cpp
 
 FORMS    += src/MainWindow.ui \
     src/PropertiesWindow.ui
@@ -70,12 +71,14 @@ test {
 
     HEADERS += \
         test/TestUtils.h \
-        test/TestExample.h
+        test/TestExample.h \
+        test/TestSerialization.h
 
     SOURCES += \
         test/main_test.cpp \
         test/TestUtils.cpp \
-        test/TestExample.cpp
+        test/TestExample.cpp \
+        test/TestSerialization.cpp
 
 } else {
     message(Normal build)

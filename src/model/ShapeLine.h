@@ -7,11 +7,10 @@ namespace blueprint {
 class ShapeLine : public ShapeBezier
 {
 public:
-    ShapeLine(Shape* parentShape, const qreal& x, const qreal& y);
+    ShapeLine(Shape* parentShape);
     ~ShapeLine();
 
     void setEditMode(const EditMode& mode) override;
-    void collapse() override;
     void resizeOnCreation(const QPointF& delta) override;
 
 protected:

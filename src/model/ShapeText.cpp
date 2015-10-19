@@ -5,11 +5,11 @@
 
 using namespace blueprint;
 
-ShapeText::ShapeText(Shape* parentShape, const qreal& x, const qreal& y)
+ShapeText::ShapeText(Shape* parentShape)
     : Shape(parentShape, Shape::ShapeType::TEXT),
-      mGraphicsItem(new QGraphicsTextItem(parentShape->graphicsItem()))
+      mGraphicsItem(new QGraphicsTextItem(parentShape->graphicsItem())),
+      mBoundingBox(this)
 {
-    mGraphicsItem->setPos(x, y);
     mGraphicsItem->setPlainText(name());
     mGraphicsItem->adjustSize();
     setBackgroundColor(QColor(0, 0, 0));
@@ -24,11 +24,6 @@ ShapeText::~ShapeText()
 QGraphicsItem* ShapeText::graphicsItem()
 {
     return mGraphicsItem;
-}
-
-void ShapeText::collapse()
-{
-
 }
 
 QRectF ShapeText::bounds() const

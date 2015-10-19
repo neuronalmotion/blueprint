@@ -26,6 +26,7 @@ public:
     void updateRect(BoundingBoxPoint::TranslationDirection ignoredDirection = BoundingBoxPoint::NONE);
     void boundingBoxPointMoved(BoundingBoxPoint::TranslationDirection direction, QPointF delta);
     Shape* parentShape() const { return mParentShape; }
+    const BoundingBoxPoint* boundingBoxPoint(BoundingBoxPoint::TranslationDirection direction) const;
 
 private:
     Shape* mParentShape;

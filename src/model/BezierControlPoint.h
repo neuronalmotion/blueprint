@@ -11,7 +11,7 @@ class ShapeBezier;
 class BezierControlPoint : public BezierElement, public QGraphicsRectItem
 {
 public:
-    BezierControlPoint(ShapeBezier* parent, const int index);
+    BezierControlPoint(ShapeBezier* parent, const int index = 0);
     ~BezierControlPoint();
 
     QPointF pos() const override;

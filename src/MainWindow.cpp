@@ -13,11 +13,10 @@
 #include "model/Page.h"
 #include "model/Canvas.h"
 #include "model/Shape.h"
-#include "model/ShapeRectangle.h"
-#include "model/ShapeEllipse.h"
 #include "model/BezierPoint.h"
 #include "model/BezierControlPoint.h"
 #include "model/ShapeModel.h"
+#include "model/ShapeFactory.h"
 
 using namespace blueprint;
 
@@ -44,20 +43,19 @@ MainWindow::MainWindow(QWidget* parent) :
 
     mCurrentBlueprint = new Blueprint();
 
-    Page* p1 = new Page();
+    Page* p1 = ShapeFactory::createPage();
     p1->setName("Page 1");
-
-    Canvas* c1 = new Canvas(p1, 0, 0);
-    c1->setName("Canvas 1");
-    mScene->addItem(c1->graphicsItem());
-
-    Canvas* c2 = new Canvas(p1, 450, 0);
-    c2->setName("Canvas 2");
-    mScene->addItem(c2->graphicsItem());
-
     model->setRootItem(p1);
-    model->addItem(c2, p1);
+    mScene->addItem(p1->graphicsItem());
+
+    Canvas* c1 = ShapeFactory::createCanvas(p1);
+    c1->setName("Canvas 1");
     model->addItem(c1, p1);
+
+    Canvas* c2 = ShapeFactory::createCanvas(p1);
+    c2->setPos(QPointF(450, 0));
+    c2->setName("Canvas 2");
+    model->addItem(c2, p1);
 
     initSignalSlots();
 }

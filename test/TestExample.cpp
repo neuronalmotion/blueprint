@@ -41,10 +41,7 @@ void TestExample::testString()
 
 void TestExample::testShape()
 {
-    Canvas canvas(nullptr, 0, 0);
-    Shape* shape = ShapeFactory::createShape(Shape::ShapeType::RECTANGLE,
-                                         canvas,
-                                         QPointF(0, 0));
+    Shape* shape = ShapeFactory::createShape(Shape::ShapeType::RECTANGLE);
     shape->setName("MyShape");
     QCOMPARE(shape->name(), QString("MyShape"));
 }

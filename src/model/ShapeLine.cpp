@@ -2,12 +2,12 @@
 
 using namespace blueprint;
 
-ShapeLine::ShapeLine(Shape* parentShape, const qreal& x, const qreal& y)
-    : ShapeBezier(parentShape, ShapeType::LINE, x, y)
+ShapeLine::ShapeLine(Shape* parentShape)
+    : ShapeBezier(parentShape, ShapeType::LINE, 0, 0)
 {
     addSegment(QPointF(10, 10));
     setBackgroundColor(QColor(0, 0, 0, 0));
-    mEditMode = Shape::EditMode::BEZIER;
+    mEditMode = Shape::EditMode::PATH;
 }
 
 ShapeLine::~ShapeLine()
@@ -20,11 +20,6 @@ void ShapeLine::setEditMode(const Shape::EditMode& /*mode*/)
     // no-op
 }
 
-void ShapeLine::collapse()
-{
-    // no-op
-}
-
 void ShapeLine::resizeOnCreation(const QPointF& delta)
 {
     mElements.last()->moveBy(delta);
@@ -32,7 +27,7 @@ void ShapeLine::resizeOnCreation(const QPointF& delta)
 
 void ShapeLine::updateBoundingBoxBezierVisibility()
 {
-    bool bezierVisibility = mIsSelected && mEditMode == EditMode::BEZIER;
+    bool bezierVisibility = mIsSelected && mEditMode == EditMode::PATH;
 
     for (auto e : mElements) {
         e->setVisible(bezierVisibility);

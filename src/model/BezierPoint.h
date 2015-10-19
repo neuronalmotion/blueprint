@@ -12,7 +12,7 @@ class ShapeBezier;
 class BezierPoint : public BezierElement, public QGraphicsEllipseItem
 {
 public:
-    BezierPoint(ShapeBezier* parent, const int index);
+    BezierPoint(ShapeBezier* parent, const int index = 0);
     ~BezierPoint();
 
     QPointF pos() const override;
