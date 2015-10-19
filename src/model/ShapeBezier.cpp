@@ -22,6 +22,24 @@ blueprint::ShapeBezier::ShapeBezier(Shape* parentShape,
       mBackgroundImage(nullptr),
       mBackgroundImageFileName()
 {
+    init(x, y);
+}
+
+ShapeBezier::ShapeBezier(Shape* parentShape)
+    : Shape(parentShape, ShapeType::BEZIER),
+      mPath(),
+      mElements(),
+      mIsPathClosed(false),
+      mGraphicsItem(new GraphicsItem(this)),
+      mBoundingBox(this), // Depends on mGraphicsItem, has to be after!!
+      mBackgroundImage(nullptr),
+      mBackgroundImageFileName()
+{
+    init(0, 0);
+}
+
+void ShapeBezier::init(qreal x, qreal y)
+{
     mBoundingBox.setVisible(false);
     setBorderColor(QColor(40, 40, 40));
 
@@ -141,7 +159,6 @@ QRectF ShapeBezier::bounds() const
     return bounds;
 }
 
-
 void ShapeBezier::setBackgroundImage(const QString& fileName)
 {
     mBackgroundImageFileName = fileName;
@@ -179,13 +196,12 @@ void ShapeBezier::updateBoundingBoxBezierVisibility()
     mBoundingBox.setVisible(boundingboxVisibility);
 
     // Update bezier points visibility
-    bool bezierVisibility = mIsSelected && mEditMode == EditMode::BEZIER;
+    bool bezierVisibility = mIsSelected && mEditMode == EditMode::PATH;
     qDebug() << "bezierVisibility : " << bezierVisibility;
     for (auto p : mElements) {
         p->setVisible(bezierVisibility);
     }
 }
-
 
 void ShapeBezier::addPath(const QPointF& c1, const QPointF& c2, const QPointF& endPos)
 {
@@ -251,7 +267,7 @@ void ShapeBezier::updateElement(BezierElement* bezierElement, const QPointF& pos
     // Move control points associated to the bezier point
     if (listIndex >= 0
             && bezierElement->elementType() == BezierElement::POINT
-            && mEditMode == EditMode::BEZIER) {
+            && mEditMode == EditMode::PATH) {
             if (bezierElement == mElements.first()) {
                 mElements[listIndex + 1]->moveBy(delta);
 
@@ -298,36 +314,41 @@ void GraphicsItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* opti
         QRectF target = boundingRect();
         QRectF source(backgroundImage->rect());
         painter->drawImage(target, *backgroundImage, source);
+
+        // Shape bounds
+        QRectF shapeBounds = boundingRect();
+
+        // Parent bounds (in shape coordinate!)
+        blueprint::Shape* parentShape = mShape->parentShape();
+        QRectF parentBounds;
+        if (parentShape) {
+                parentBounds = parentShape->graphicsItem()->boundingRect();
+                parentBounds.moveTo(-pos().x() - shapeBounds.x(), -pos().y() - shapeBounds.y());
+        }
+
+        // Temp buffer
+        QImage buffer = QImage(shapeBounds.width(), shapeBounds.height(), QImage::Format_ARGB32_Premultiplied);
+        buffer.fill(0);
+        QPainter p(&buffer);
+        p.setRenderHint(QPainter::Antialiasing);
+
+        //Draw base (parent bounds)
+        if (parentShape) {
+                p.setPen(Qt::NoPen);
+                p.setBrush(QColor(0, 0, 0, 255));
+                p.drawRect(parentBounds);
+        }
+
+        // Apply composition
+        p.setCompositionMode(QPainter::CompositionMode_SourceOut);
+
+        //Draw source (grey mask)
+        QRectF drawTargetRect(0, 0, buffer.width(), buffer.height());
+        p.setPen(Qt::NoPen);
+        p.setBrush(QColor(200,200,200,235));
+        p.drawRect(drawTargetRect);
+
+        // Draw final image
+        painter->drawImage(shapeBounds, buffer);
     }
-
-    // Shape bounds
-    QRectF shapeBounds = boundingRect();
-
-    // Parent bounds (in shape coordinate!)
-    blueprint::Shape* parentShape = mShape->parentShape();
-    QRectF parentBounds = parentShape->graphicsItem()->boundingRect();
-    parentBounds.moveTo(-pos().x() - shapeBounds.x(), -pos().y() - shapeBounds.y());
-
-    // Temp buffer
-    QImage buffer = QImage(shapeBounds.width(), shapeBounds.height(), QImage::Format_ARGB32_Premultiplied);
-    buffer.fill(0);
-    QPainter p(&buffer);
-    p.setRenderHint(QPainter::Antialiasing);
-
-    //Draw base (parent bounds)
-    p.setPen(Qt::NoPen);
-    p.setBrush(QColor(0, 0, 0, 255));
-    p.drawRect(parentBounds);
-
-    // Apply composition
-    p.setCompositionMode(QPainter::CompositionMode_SourceOut);
-
-    //Draw source (grey mask)
-    QRectF drawTargetRect(0, 0, buffer.width(), buffer.height());
-    p.setPen(Qt::NoPen);
-    p.setBrush(QColor(200,200,200,235));
-    p.drawRect(drawTargetRect);
-
-    // Draw final image
-    painter->drawImage(shapeBounds, buffer);
 }

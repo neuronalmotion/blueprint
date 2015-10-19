@@ -1,5 +1,7 @@
 #include "Blueprint.h"
 
+#include "ShapeFactory.h"
+
 using namespace blueprint;
 
 Blueprint::Blueprint()
@@ -30,7 +32,7 @@ void Blueprint::fromParcel(const Parcel& parcel)
     if (parcel.contains("children")) {
         Parcel* children = parcel.at("children");
         for(auto child : children->list()) {
-            Page* page = new Page();
+            Page* page = ShapeFactory::createPage();
             page->fromParcel(*child);
             addPage(page);
         }

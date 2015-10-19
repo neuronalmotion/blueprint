@@ -17,6 +17,7 @@ class ShapeBezier : public Shape
 {
 public:
     explicit ShapeBezier(Shape* parentShape, const ShapeType& shapeType, const qreal& x, const qreal& y);
+    explicit ShapeBezier(Shape* parentShape);
     ~ShapeBezier();
 
     QGraphicsItem* graphicsItem() override;
@@ -35,9 +36,9 @@ public:
     inline int elementCount() const { return mElements.length(); }
     inline const BezierElement* element(const int& index) const { return mElements[index]; }
     void updateElement(BezierElement* bezierElement, const QPointF& pos);
-    inline BoundingBox& boundingBox() { return mBoundingBox; }
+    inline virtual BoundingBox& boundingBox() override { return mBoundingBox; }
 
-    void setBackgroundImage(const QString& fileName);
+    void setBackgroundImage(const QString& fileNamei);
     inline QImage* backgroundImage() { return mBackgroundImage; }
     inline QString backgroundImageFileName() { return mBackgroundImageFileName; }
 
@@ -46,6 +47,9 @@ public:
 
 protected:
     void updateBoundingBoxBezierVisibility();
+
+private:
+    void init(qreal x, qreal y);
 
 protected:
     QPainterPath mPath;

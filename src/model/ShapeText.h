@@ -6,6 +6,8 @@
 #include <QString>
 #include <QFont>
 
+#include "BoundingBox.h"
+
 class QGraphicsTextItem;
 
 namespace blueprint {
@@ -13,11 +15,10 @@ namespace blueprint {
 class ShapeText : public Shape
 {
 public:
-    explicit ShapeText(Shape* parentShape, const qreal& x, const qreal& y);
+    explicit ShapeText(Shape* parentShape);
     ~ShapeText();
 
     QGraphicsItem* graphicsItem() override;
-    void collapse() override;
     QRectF bounds() const override;
     void resizeOnCreation(const QPointF& delta) override;
     void boundingBoxEvent(const BoundingBoxEvent& event) override;
@@ -26,6 +27,7 @@ public:
     void setBorderColor(const QColor& color) override;
     int borderWidth() const override;
     void setBorderWidth(int width) override;
+    inline virtual BoundingBox& boundingBox() override { return mBoundingBox; }
 
     QString text() const;
     void setText(const QString& text);
@@ -38,6 +40,7 @@ protected:
 
 private:
     QGraphicsTextItem* mGraphicsItem;
+    BoundingBox mBoundingBox;
 };
 }
 

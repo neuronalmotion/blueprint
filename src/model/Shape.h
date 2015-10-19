@@ -10,7 +10,7 @@
 class QPointF;
 
 namespace blueprint {
-class BezierPath;
+class BoundingBox;
 
 class Shape : public Parcelable
 {
@@ -22,12 +22,13 @@ public:
         ELLIPSE,
         LINE,
         RECTANGLE,
+        BEZIER,
         TEXT,
     };
 
     enum EditMode {
         BOUNDING_BOX,
-        BEZIER
+        PATH
     };
     static Shape* fromQGraphicsItem(const QGraphicsItem& item);
 
@@ -47,7 +48,6 @@ public:
 
     // drawing stuff
     virtual QGraphicsItem* graphicsItem() = 0;
-    virtual void collapse() = 0;
     virtual QRectF bounds() const = 0;
     virtual void resizeOnCreation(const QPointF& delta) = 0;
     virtual void boundingBoxEvent(const BoundingBoxEvent& event) = 0;
@@ -56,6 +56,7 @@ public:
     virtual void setBorderColor(const QColor& color) = 0;
     virtual int borderWidth() const = 0;
     virtual void setBorderWidth(int width) = 0;
+    virtual BoundingBox& boundingBox() = 0;
 
     inline ShapeType shapeType() const { return mShapeType; }
     void setSelected(bool selected);
@@ -63,6 +64,8 @@ public:
     void toggleEditMode();
     virtual void setEditMode(const EditMode& mode);
     QPointF posAbsolute();
+    void setPos(const QPointF& pos) { graphicsItem()->setPos(pos); }
+    void collapse();
 
     qreal zValue();
     void setZValue(qreal zValue);

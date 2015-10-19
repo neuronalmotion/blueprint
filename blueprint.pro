@@ -18,8 +18,6 @@ HEADERS  += src/MainWindow.h \
     src/model/BoundingBox.h \
     src/model/BoundingBoxPoint.h \
     src/model/Canvas.h \
-    src/model/ShapeEllipse.h \
-    src/model/ShapeRectangle.h \
     src/model/Shape.h \
     src/PropertiesWindow.h \
     src/model/ShapeLine.h \
@@ -44,8 +42,6 @@ SOURCES += src/main.cpp\
     src/model/BoundingBox.cpp \
     src/model/BoundingBoxPoint.cpp \
     src/model/Canvas.cpp \
-    src/model/ShapeEllipse.cpp \
-    src/model/ShapeRectangle.cpp \
     src/model/Shape.cpp \
     src/PropertiesWindow.cpp \
     src/model/ShapeLine.cpp \

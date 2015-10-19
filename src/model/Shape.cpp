@@ -6,6 +6,7 @@
 #include <QPointF>
 
 #include "ShapeFactory.h"
+#include "BoundingBoxPoint.h"
 
 using namespace blueprint;
 
@@ -99,9 +100,9 @@ void Shape::setSelected(bool selected)
 
 void Shape::toggleEditMode()
 {
-    EditMode nextEditMode = editMode() == EditMode::BEZIER ?
+    EditMode nextEditMode = editMode() == EditMode::PATH ?
                 EditMode::BOUNDING_BOX
-              : EditMode::BEZIER;
+              : EditMode::PATH;
     setEditMode(nextEditMode);
 }
 
@@ -118,12 +119,24 @@ QPointF Shape::posAbsolute()
     QPointF position = graphicsItem()->pos();
 
     // FIXME function name is a misnomer, position is not always absolute!
-    if (shapeType() != ShapeType::CANVAS) {
+    if (shapeType() != ShapeType::CANVAS && mParentShape) {
         blueprint::Shape* shapeParent = dynamic_cast<blueprint::Shape*>(mParentShape);
         position = position + shapeParent->posAbsolute();
     }
 
     return position;
+}
+
+void Shape::collapse()
+{
+    const BoundingBoxPoint* topLeft = boundingBox().boundingBoxPoint(BoundingBoxPoint::TOP_LEFT);
+    const BoundingBoxPoint* bottomRight = boundingBox().boundingBoxPoint(BoundingBoxPoint::BOTTOM_RIGHT);
+    QPointF delta = topLeft->pos() - bottomRight->pos();
+
+    // Add 1 to be able to move the bounding box
+    delta.setX(delta.x() + 1);
+    delta.setY(delta.y() + 1);
+    boundingBox().boundingBoxPointMoved(bottomRight->translationDirection(), delta);
 }
 
 qreal Shape::zValue()
@@ -163,7 +176,7 @@ void Shape::fromParcel(const Parcel& parcel)
         for(auto child : children->list()) {
             ShapeType childShapeType = static_cast<ShapeType>(child->propertyValue("type").toInt());
             // FIXME child coordinates should not be mandatory in Factory
-            Shape* childShape = ShapeFactory::createShape(childShapeType, *this, QPointF(0, 0));
+            Shape* childShape = ShapeFactory::createShape(childShapeType, this);
             childShape->fromParcel(*child);
             appendChild(childShape);
         }

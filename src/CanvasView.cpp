@@ -62,8 +62,12 @@ void CanvasView::mousePressEvent(QMouseEvent *event)
                      point.y() - shapeParent->posAbsolute().y());
 
     mCreatingShape = ShapeFactory::createShape(Tool::shapeType(mCurrentTool),
-                                               *shapeParent,
-                                               relPoint);
+                                               shapeParent);
+
+    mCreatingShape->setPos(relPoint);
+
+    // snap bounding box to mouse position
+    mCreatingShape->collapse();
     mCreatingLastPosition = point;
     ShapeModel* model = ShapeModel::instance();
     model->addItem(mCreatingShape, shapeParent);

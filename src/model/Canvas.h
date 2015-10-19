@@ -3,14 +3,14 @@
 
 #include <QList>
 
-#include "ShapeRectangle.h"
+#include "ShapeBezier.h"
 
 namespace blueprint {
 
-class Canvas : public ShapeRectangle
+class Canvas : public ShapeBezier
 {
 public:
-    Canvas(Shape* parentShape, const qreal& x, const qreal& y);
+    Canvas(Shape* parentShape = nullptr);
     ~Canvas();
 
     Parcel* toParcel() const override;

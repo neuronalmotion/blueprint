@@ -12,7 +12,6 @@
 #include "model/ShapeBezier.h"
 #include "model/BezierElement.h"
 #include "model/ShapeFactory.h"
-#include "model/ShapeRectangle.h"
 
 using namespace blueprint;
 
@@ -33,18 +32,18 @@ void TestSerialization::initTestCase()
 
     mBlueprint.setName("Test Project");
 
-    Page* page = new Page();
+    Page* page = ShapeFactory::createPage();
     page->setName("Page 1");
 
-    page->appendChild(ShapeFactory::createShape(Shape::ShapeType::CANVAS, *page));
-    page->appendChild(ShapeFactory::createShape(Shape::ShapeType::CANVAS, *page));
+    page->appendChild(ShapeFactory::createCanvas(page));
+    page->appendChild(ShapeFactory::createCanvas(page));
 
     Shape* canvas = page->child(0);
-    Shape* rectangle = ShapeFactory::createShape(Shape::ShapeType::RECTANGLE, *canvas);
+    Shape* rectangle = ShapeFactory::createRectangle(canvas);
     canvas->appendChild(rectangle);
     mBlueprint.addPage(page);
 
-    page = new Page();
+    page = ShapeFactory::createPage();
     page->setName("Page 2");
     mBlueprint.addPage(page);
 }
