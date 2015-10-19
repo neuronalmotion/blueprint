@@ -29,78 +29,84 @@ void ShapeFactory::updateGraphicsItemParenting(Shape* parent, Shape* child)
     }
 }
 
-Shape* ShapeFactory::createRectangle(Shape* shapeParent)
+Shape* ShapeFactory::createRectangle(Shape* shapeParent, bool addBezierPoints)
 {
     ShapeBezier* shape = new ShapeBezier(shapeParent);
-    addRectanglePoints(*shape);
     shape->setName("Rectangle");
-    shape->closePath();
-    shape->boundingBox().updateRect();
+    if (addBezierPoints) {
+        addRectanglePoints(*shape);
+        shape->closePath();
+        shape->boundingBox().updateRect();
+    }
     updateGraphicsItemParenting(shapeParent, shape);
     return shape;
 }
 
-Page* ShapeFactory::createPage()
+Page* ShapeFactory::createPage(bool addBezierPoints)
 {
     Page* shape = new Page();
     shape->setName("Page");
-    addRectanglePoints(*shape);
-    shape->closePath();
-    shape->boundingBox().updateRect();
-    shape->boundingBox().boundingBoxPointMoved(BoundingBoxPoint::BOTTOM_RIGHT, QPointF(10000.0, 10000.0));
+    if (addBezierPoints) {
+        addRectanglePoints(*shape);
+        shape->closePath();
+        shape->boundingBox().updateRect();
+        shape->boundingBox().boundingBoxPointMoved(BoundingBoxPoint::BOTTOM_RIGHT, QPointF(10000.0, 10000.0));
+    }
     return shape;
 }
 
-Canvas* ShapeFactory::createCanvas(Shape* shapeParent)
+Canvas* ShapeFactory::createCanvas(Shape* shapeParent, bool addBezierPoints)
 {
     Canvas* shape = new Canvas(shapeParent);
-    addRectanglePoints(*shape);
-    shape->closePath();
-    shape->boundingBox().updateRect();
-    shape->boundingBox().boundingBoxPointMoved(BoundingBoxPoint::BOTTOM_RIGHT, QPointF(300.0, 500.0));
+    if (addBezierPoints) {
+        addRectanglePoints(*shape);
+        shape->closePath();
+        shape->boundingBox().updateRect();
+        shape->boundingBox().boundingBoxPointMoved(BoundingBoxPoint::BOTTOM_RIGHT, QPointF(300.0, 500.0));
+    }
     updateGraphicsItemParenting(shapeParent, shape);
     return shape;
 }
 
-Shape* ShapeFactory::createEllipse(Shape* shapeParent)
+Shape* ShapeFactory::createEllipse(Shape* shapeParent, bool addBezierPoints)
 {
     ShapeBezier* shape = new ShapeBezier(shapeParent);
     shape->setName("Ellipse");
-    shape->addPath(QPointF(30, 0), QPointF(50, 20), QPointF(50, 50));
-    shape->addPath(QPointF(50, 80), QPointF(30, 100), QPointF(0, 100));
-    shape->addPath(QPointF(-40, 100), QPointF(-50, 80), QPointF(-50, 50));
-    shape->addPath(QPointF(-50, 20), QPointF(-30, 0), QPointF(0, 0));
-    shape->closePath();
-    shape->boundingBox().updateRect();
+    if (addBezierPoints) {
+        shape->addPath(QPointF(30, 0), QPointF(50, 20), QPointF(50, 50));
+        shape->addPath(QPointF(50, 80), QPointF(30, 100), QPointF(0, 100));
+        shape->addPath(QPointF(-40, 100), QPointF(-50, 80), QPointF(-50, 50));
+        shape->addPath(QPointF(-50, 20), QPointF(-30, 0), QPointF(0, 0));
+        shape->closePath();
+        shape->boundingBox().updateRect();
+    }
     updateGraphicsItemParenting(shapeParent, shape);
     return shape;
 }
 
 static uint id = 0;
-Shape* ShapeFactory::createShape(const Shape::ShapeType shapeType,
-                                 Shape* shapeParent)
+Shape* ShapeFactory::createShape(const Shape::ShapeType shapeType, Shape* shapeParent, bool addBezierPoints)
 {
-
     Shape* shape = nullptr;
     QString name;
     switch (shapeType) {
     case Shape::ShapeType::PAGE:
-        shape = ShapeFactory::createPage();
+        shape = ShapeFactory::createPage(addBezierPoints);
         name = "Page";
         break;
 
     case Shape::ShapeType::CANVAS:
-        shape = ShapeFactory::createCanvas(shapeParent);
+        shape = ShapeFactory::createCanvas(shapeParent, addBezierPoints);
         name = "Canvas";
         break;
 
     case Shape::ShapeType::RECTANGLE:
-        shape = ShapeFactory::createRectangle(shapeParent);
+        shape = ShapeFactory::createRectangle(shapeParent, addBezierPoints);
         name = "Rectangle";
         break;
 
     case Shape::ShapeType::ELLIPSE:
-        shape = ShapeFactory::createEllipse(shapeParent);
+        shape = ShapeFactory::createEllipse(shapeParent, addBezierPoints);
         name = "Ellipse";
         break;
 

@@ -15,7 +15,7 @@ Page::~Page()
 
 Parcel* Page::toParcel() const
 {
-    Parcel* parcel = Shape::toParcel();
+    Parcel* parcel = ShapeBezier::toParcel();
     parcel->setName("page");
     return parcel;
 }
