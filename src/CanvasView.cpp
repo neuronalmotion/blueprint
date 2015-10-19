@@ -11,8 +11,6 @@
 #include "model/Canvas.h"
 #include "model/Shape.h"
 #include "model/ShapeLine.h"
-#include "model/ShapeRectangle.h"
-#include "model/ShapeEllipse.h"
 #include "model/ShapeModel.h"
 #include "model/ShapeFactory.h"
 

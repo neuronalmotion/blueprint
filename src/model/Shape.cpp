@@ -175,8 +175,7 @@ void Shape::fromParcel(const Parcel& parcel)
 
         for(auto child : children->list()) {
             ShapeType childShapeType = static_cast<ShapeType>(child->propertyValue("type").toInt());
-            // FIXME child coordinates should not be mandatory in Factory
-            Shape* childShape = ShapeFactory::createShape(childShapeType, this);
+            Shape* childShape = ShapeFactory::createShape(childShapeType, this, false);
             childShape->fromParcel(*child);
             appendChild(childShape);
         }

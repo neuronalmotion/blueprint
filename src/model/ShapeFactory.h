@@ -15,13 +15,14 @@ class ShapeBezier;
 class ShapeFactory
 {
 public:
-    static Shape* createRectangle(Shape* shapeParent = nullptr);
-    static Page* createPage();
-    static Canvas* createCanvas(Shape* shapeParent = nullptr);
-    static Shape* createEllipse(Shape* shapeParent = nullptr);
+    static Shape* createRectangle(Shape* shapeParent = nullptr, bool addBezierPoints = true);
+    static Page* createPage(bool addBezierPoints = true);
+    static Canvas* createCanvas(Shape* shapeParent = nullptr, bool addBezierPoints = true);
+    static Shape* createEllipse(Shape* shapeParent = nullptr, bool addBezierPoints = true);
 
     static Shape* createShape(const Shape::ShapeType shapeType,
-                              Shape* shapeParent = nullptr);
+                              Shape* shapeParent = nullptr,
+                              bool addBezierPoints = true);
 
 private:
     ShapeFactory();

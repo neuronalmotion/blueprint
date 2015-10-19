@@ -32,7 +32,7 @@ void Blueprint::fromParcel(const Parcel& parcel)
     if (parcel.contains("children")) {
         Parcel* children = parcel.at("children");
         for(auto child : children->list()) {
-            Page* page = ShapeFactory::createPage();
+            Page* page = ShapeFactory::createPage(false);
             page->fromParcel(*child);
             addPage(page);
         }

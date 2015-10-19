@@ -5,7 +5,7 @@
 using namespace blueprint;
 
 Canvas::Canvas(Shape* parentShape)
-    : ShapeBezier(parentShape)
+    : ShapeBezier(parentShape, ShapeType::CANVAS)
 {
 
     //setFlag(QGraphicsItem::ItemClipsChildrenToShape);
@@ -19,7 +19,7 @@ Canvas::~Canvas()
 
 Parcel* Canvas::toParcel() const
 {
-    Parcel* parcel = Shape::toParcel();
+    Parcel* parcel = ShapeBezier::toParcel();
     parcel->setName("canvas");
     return parcel;
 }

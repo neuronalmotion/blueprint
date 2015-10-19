@@ -40,6 +40,9 @@ protected:
     ElementType mElementType;
     ShapeBezier* mParentShape;
     int mIndex;
+
+private:
+    bool mPropagateItemChange;
 };
 
 }

@@ -8,7 +8,7 @@
 
 using namespace blueprint;
 
-BezierElement*BezierElement::bezierElementFromParcel(const Parcel& parcel, ShapeBezier* parent)
+BezierElement* BezierElement::bezierElementFromParcel(const Parcel& parcel, ShapeBezier* parent)
 {
     ElementType type = static_cast<ElementType>(parcel.propertyValue("type").toInt());
     BezierElement* element;
@@ -32,7 +32,8 @@ BezierElement*BezierElement::bezierElementFromParcel(const Parcel& parcel, Shape
 BezierElement::BezierElement(ElementType elementType, ShapeBezier* parent, int index)
     : mElementType(elementType),
     mParentShape(parent),
-    mIndex(index)
+    mIndex(index),
+    mPropagateItemChange(true)
 {
 
 }
@@ -57,13 +58,18 @@ void BezierElement::fromParcel(const Parcel& parcel)
 {
     QPointF pos(parcel.propertyValue("posx").toFloat(),
                 parcel.propertyValue("posy").toFloat());
+    mPropagateItemChange = false;
     setPos(pos);
     mElementType = static_cast<ElementType>(parcel.propertyValue("type").toInt());
     mIndex = parcel.propertyValue("index").toInt();
+    mPropagateItemChange = true;
 }
 
 void BezierElement::propagateItemChange(QGraphicsItem::GraphicsItemChange change, const QVariant& value)
 {
+    if (!mPropagateItemChange) {
+        return;
+    }
     if (change == QGraphicsItem::ItemPositionChange) {
          mParentShape->updateElement(this, value.toPointF());
     }

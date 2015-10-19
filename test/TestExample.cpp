@@ -5,7 +5,6 @@
 
 #include "TestUtils.h"
 #include "model/ShapeFactory.h"
-#include "model/ShapeRectangle.h"
 #include "model/Canvas.h"
 
 using namespace blueprint;
