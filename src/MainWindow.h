@@ -34,6 +34,8 @@ private:
 private slots:
     void setTool(blueprint::Tool::Type toolType);
     void exportShapeToImage();
+    void saveFile();
+    void loadFile();
 
 private:
     Ui::MainWindow* mUi;

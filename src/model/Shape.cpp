@@ -7,6 +7,7 @@
 
 #include "ShapeFactory.h"
 #include "BoundingBoxPoint.h"
+#include "ShapeModel.h"
 
 using namespace blueprint;
 
@@ -177,7 +178,8 @@ void Shape::fromParcel(const Parcel& parcel)
             ShapeType childShapeType = static_cast<ShapeType>(child->propertyValue("type").toInt());
             Shape* childShape = ShapeFactory::createShape(childShapeType, this, false);
             childShape->fromParcel(*child);
-            appendChild(childShape);
+            ShapeModel::instance()->addItem(childShape, this);
+            //appendChild(childShape);
         }
     }
 }

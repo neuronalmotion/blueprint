@@ -17,6 +17,7 @@
 #include "model/BezierControlPoint.h"
 #include "model/ShapeModel.h"
 #include "model/ShapeFactory.h"
+#include "io/XmlInputOutput.h"
 
 using namespace blueprint;
 
@@ -41,12 +42,14 @@ MainWindow::MainWindow(QWidget* parent) :
     mUi->canvas->setScene(mScene);
     mUi->treeView->setModel(model);
 
+    // Init default Blueprint project
     mCurrentBlueprint = new Blueprint();
 
     Page* p1 = ShapeFactory::createPage();
     p1->setName("Page 1");
     model->setRootItem(p1);
     mScene->addItem(p1->graphicsItem());
+    mCurrentBlueprint->addPage(p1);
 
     Canvas* c1 = ShapeFactory::createCanvas(p1);
     c1->setName("Canvas 1");
@@ -94,6 +97,8 @@ void MainWindow::initSignalSlots()
     ShapeModel* model = ShapeModel::instance();
 
     connect(mUi->actionExport_Shape_to_Image, &QAction::triggered, this, &MainWindow::exportShapeToImage);
+    connect(mUi->actionSave_as, &QAction::triggered, this, &MainWindow::saveFile);
+    connect(mUi->actionLoad, &QAction::triggered, this, &MainWindow::loadFile);
 
     connect(model, &ShapeModel::shapeAdded,
             [this](Shape* shape) {
@@ -155,6 +160,46 @@ void MainWindow::exportShapeToImage()
         }
         saveShapeToImage(*shape, filepath);
     }
+}
+
+void MainWindow::saveFile()
+{
+    QString filepath = QFileDialog::getSaveFileName(this,
+                                 "Save as...",
+                                 QDir::homePath(),
+                                "Blueprint project (*.bpt);");
+
+    if (!filepath.isNull()) {
+         Parcel* parcel = mCurrentBlueprint->toParcel();
+
+         QFile output(filepath);
+         output.open(QIODevice::ReadWrite);
+         XmlInputOutput xml;
+         xml.write(output, *parcel);
+         output.close();
+    }
+}
+
+void MainWindow::loadFile()
+{
+    QString filepath = QFileDialog::getOpenFileName(this,
+                                 "Load...",
+                                 QDir::homePath(),
+                                "Blueprint project (*.bpt);");
+
+     if (!filepath.isNull()) {
+         QFile input(filepath);
+         input.open(QIODevice::ReadOnly);
+         XmlInputOutput xml;
+         Parcel* parcel = xml.read(input);
+         input.close();
+
+         mCurrentBlueprint->fromParcel(*parcel);
+
+         Page* firstPage = mCurrentBlueprint->page(0);
+         ShapeModel::instance()->setRootItem(firstPage);
+         mScene->addItem(firstPage->graphicsItem());
+     }
 }
 
 void MainWindow::saveShapeToImage(Shape& shape, const QString& filepath)

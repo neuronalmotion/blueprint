@@ -30,13 +30,16 @@
      <x>0</x>
      <y>0</y>
      <width>1200</width>
-     <height>33</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">
      <string>Fi&amp;le</string>
     </property>
+    <addaction name="actionLoad"/>
+    <addaction name="actionSave_as"/>
+    <addaction name="separator"/>
     <addaction name="actionExport_Shape_to_Image"/>
    </widget>
    <widget class="QMenu" name="menuTools">
@@ -153,6 +156,16 @@
    </property>
    <property name="text">
     <string>&amp;Text</string>
+   </property>
+  </action>
+  <action name="actionSave_as">
+   <property name="text">
+    <string>Save as...</string>
+   </property>
+  </action>
+  <action name="actionLoad">
+   <property name="text">
+    <string>Load...</string>
    </property>
   </action>
  </widget>

@@ -17,9 +17,9 @@ public:
     inline QString name() { return mName; }
     inline void setName(const QString& name) { mName = name; }
     inline Page* page(const int& index) { return mPages[index]; }
-    inline void addPage(Page* page) { mPages.append(page); }
-    int pageCount() const { return mPages.length(); }
+    inline int pageCount() const { return mPages.length(); }
 
+    void addPage(Page* page);
     Parcel* toParcel() const override;
     void fromParcel(const Parcel& parcel) override;
 
