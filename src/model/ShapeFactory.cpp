@@ -58,6 +58,7 @@ Page* ShapeFactory::createPage(bool addBezierPoints)
 Canvas* ShapeFactory::createCanvas(Shape* shapeParent, bool addBezierPoints)
 {
     Canvas* shape = new Canvas(shapeParent);
+    shape->setName("Canvas");
     if (addBezierPoints) {
         addRectanglePoints(*shape);
         shape->closePath();

@@ -17,7 +17,7 @@
 #include "model/BezierControlPoint.h"
 #include "model/ShapeModel.h"
 #include "model/ShapeFactory.h"
-#include "io/XmlInputOutput.h"
+#include "utils/FileUtils.h"
 
 using namespace blueprint;
 
@@ -167,39 +167,36 @@ void MainWindow::saveFile()
     QString filepath = QFileDialog::getSaveFileName(this,
                                  "Save as...",
                                  QDir::homePath(),
-                                "Blueprint project (*.bpt);");
+                                "Blueprint project (*.bpt)");
 
     if (!filepath.isNull()) {
-         Parcel* parcel = mCurrentBlueprint->toParcel();
-
-         QFile output(filepath);
-         output.open(QIODevice::ReadWrite);
-         XmlInputOutput xml;
-         xml.write(output, *parcel);
-         output.close();
+         FileUtils::saveBlueprintToFile(*mCurrentBlueprint, filepath);
     }
 }
 
 void MainWindow::loadFile()
 {
     QString filepath = QFileDialog::getOpenFileName(this,
-                                 "Load...",
-                                 QDir::homePath(),
-                                "Blueprint project (*.bpt);");
+                                                    "Load...",
+                                                    QDir::homePath(),
+                                                    "Blueprint project (*.bpt)");
 
-     if (!filepath.isNull()) {
-         QFile input(filepath);
-         input.open(QIODevice::ReadOnly);
-         XmlInputOutput xml;
-         Parcel* parcel = xml.read(input);
-         input.close();
+    if (!filepath.isNull()) {
+        Blueprint* blueprint = FileUtils::loadBlueprintFromFile(filepath);
 
-         mCurrentBlueprint->fromParcel(*parcel);
+        if (blueprint) {
+            for (auto item : mScene->items()) {
+                mScene->removeItem(item);
+            }
+            delete mCurrentBlueprint;
+            mCurrentBlueprint = blueprint;
 
-         Page* firstPage = mCurrentBlueprint->page(0);
-         ShapeModel::instance()->setRootItem(firstPage);
-         mScene->addItem(firstPage->graphicsItem());
-     }
+            Page* firstPage = mCurrentBlueprint->page(0);
+            mScene->addItem(firstPage->graphicsItem());
+            ShapeModel::instance()->setRootItem(firstPage);
+        }
+
+    }
 }
 
 void MainWindow::saveShapeToImage(Shape& shape, const QString& filepath)

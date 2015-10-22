@@ -34,7 +34,7 @@ ShapeModel* ShapeModel::instance()
     return sInstance;
 }
 
-void ShapeModel::addItem(Shape* item, Shape* parent)
+void ShapeModel::addItem(Shape* item, Shape* parent, AddMode addMode)
 {
     if (!parent) {
         parent = mRootItem;
@@ -42,15 +42,22 @@ void ShapeModel::addItem(Shape* item, Shape* parent)
     // 0 because it should be displayed first in the treeview list
     // to respect z-index ordering
     int childRow = 0;
+    if (addMode == PARCEL) {
+        childRow = parent->childCount();
+    }
     QModelIndex parentIndex = parent->modelIndex() ?
                 (QModelIndex)(*parent->modelIndex())
                 : QModelIndex();
-    beginInsertRows(parentIndex, childRow, childRow);
+    if (addMode == NORMAL) {
+        beginInsertRows(parentIndex, childRow, childRow);
+    }
     item->setZValue(parent->zValue() + parent->childCount());
     parent->insertChild(childRow, item);
     QModelIndex childIndex = index(childRow, 0, parentIndex);
     item->setModelIndex(childIndex);
-    endInsertRows();
+    if (addMode == NORMAL) {
+        endInsertRows();
+    }
 }
 
 void ShapeModel::removeItem(Shape* item)
@@ -180,7 +187,8 @@ int ShapeModel::rowCount(const QModelIndex& parent) const
     }
 
     parentItem = itemFromIndex(parent);
-    return parentItem->childCount();
+    int childCount = parentItem ? parentItem->childCount() : 0;
+    return childCount;
 }
 
 int ShapeModel::columnCount(const QModelIndex& /*parent*/) const
@@ -219,8 +227,13 @@ Qt::DropActions ShapeModel::supportedDropActions() const
 
 void ShapeModel::setRootItem(Shape* rootItem)
 {
+    beginResetModel();
     mRootItem = rootItem;
+    if (mRootItem->modelIndex()) {
+        delete mRootItem->modelIndex();
+    }
     mRootItem->setModelIndex(index(0, 0));
+    endResetModel();
 }
 
 Shape* ShapeModel::itemFromIndex(const QModelIndex& index) const

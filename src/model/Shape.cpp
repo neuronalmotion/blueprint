@@ -178,8 +178,7 @@ void Shape::fromParcel(const Parcel& parcel)
             ShapeType childShapeType = static_cast<ShapeType>(child->propertyValue("type").toInt());
             Shape* childShape = ShapeFactory::createShape(childShapeType, this, false);
             childShape->fromParcel(*child);
-            ShapeModel::instance()->addItem(childShape, this);
-            //appendChild(childShape);
+            ShapeModel::instance()->addItem(childShape, this, ShapeModel::PARCEL);
         }
     }
 }

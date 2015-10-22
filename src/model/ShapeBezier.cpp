@@ -268,16 +268,16 @@ void ShapeBezier::updateElement(BezierElement* bezierElement, const QPointF& pos
     if (listIndex >= 0
             && bezierElement->elementType() == BezierElement::POINT
             && mEditMode == EditMode::PATH) {
-            if (bezierElement == mElements.first()) {
-                mElements[listIndex + 1]->moveBy(delta);
+        if (bezierElement == mElements.first()) {
+            mElements[listIndex + 1]->moveBy(delta);
 
-            } else if (bezierElement == mElements.last()) {
-                mElements[listIndex - 1]->moveBy(delta);
+        } else if (bezierElement == mElements.last()) {
+            mElements[listIndex - 1]->moveBy(delta);
 
-            } else {
-                mElements[listIndex - 1]->moveBy(delta);
-                mElements[listIndex + 1]->moveBy(delta);
-            }
+        } else {
+            mElements[listIndex - 1]->moveBy(delta);
+            mElements[listIndex + 1]->moveBy(delta);
+        }
     }
 
     // Update path
@@ -322,8 +322,8 @@ void GraphicsItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* opti
         blueprint::Shape* parentShape = mShape->parentShape();
         QRectF parentBounds;
         if (parentShape) {
-                parentBounds = parentShape->graphicsItem()->boundingRect();
-                parentBounds.moveTo(-pos().x() - shapeBounds.x(), -pos().y() - shapeBounds.y());
+            parentBounds = parentShape->graphicsItem()->boundingRect();
+            parentBounds.moveTo(-pos().x() - shapeBounds.x(), -pos().y() - shapeBounds.y());
         }
 
         // Temp buffer
@@ -334,9 +334,9 @@ void GraphicsItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* opti
 
         //Draw base (parent bounds)
         if (parentShape) {
-                p.setPen(Qt::NoPen);
-                p.setBrush(QColor(0, 0, 0, 255));
-                p.drawRect(parentBounds);
+            p.setPen(Qt::NoPen);
+            p.setBrush(QColor(0, 0, 0, 255));
+            p.drawRect(parentBounds);
         }
 
         // Apply composition

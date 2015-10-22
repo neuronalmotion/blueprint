@@ -28,7 +28,8 @@ HEADERS  += src/MainWindow.h \
     src/model/ShapeText.h \
     src/io/XmlInputOutput.h \
     src/io/Parcelable.h \
-    src/io/Parcel.h
+    src/io/Parcel.h \
+    src/utils/FileUtils.h
 
 SOURCES += src/main.cpp\
         src/MainWindow.cpp \
@@ -51,7 +52,8 @@ SOURCES += src/main.cpp\
     src/model/ShapeFactory.cpp \
     src/model/ShapeText.cpp \
     src/io/XmlInputOutput.cpp \
-    src/io/Parcel.cpp
+    src/io/Parcel.cpp \
+    src/utils/FileUtils.cpp
 
 FORMS    += src/MainWindow.ui \
     src/PropertiesWindow.ui

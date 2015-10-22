@@ -1,5 +1,7 @@
 #include "Page.h"
 
+#include "ShapeModel.h"
+
 using namespace blueprint;
 
 Page::Page(Shape* parentShape)
@@ -7,6 +9,7 @@ Page::Page(Shape* parentShape)
 {
     setBorderColor(QColor(10, 10, 10));
     setBackgroundColor(QColor(100, 100, 100));
+    setModelIndex(ShapeModel::instance()->index(0, 0));
 }
 
 Page::~Page()

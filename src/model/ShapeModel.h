@@ -11,12 +11,18 @@ class ShapeModel : public QAbstractItemModel
 {
     Q_OBJECT
 public:
+
+    enum AddMode {
+        NORMAL, // insert at child at 0 and notify
+        PARCEL, // appends child and do *not* send any signal
+    };
+
     static ShapeModel* instance();
 
     explicit ShapeModel();
     ~ShapeModel();
 
-    void addItem(Shape* item, Shape* parent = 0);
+    void addItem(Shape* item, Shape* parent = 0, AddMode addMode = NORMAL);
     void removeItem(Shape* item);
     void selectShape(Shape* shape);
     void clearSelectedShape();

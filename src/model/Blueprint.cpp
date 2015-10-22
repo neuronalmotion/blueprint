@@ -19,11 +19,6 @@ Blueprint::~Blueprint()
 void Blueprint::addPage(Page* page)
 {
     mPages.append(page);
-
-    if (mPages.count() == 1)
-    {
-
-    }
 }
 
 Parcel* Blueprint::toParcel() const
@@ -38,7 +33,6 @@ Parcel* Blueprint::toParcel() const
 
 void Blueprint::fromParcel(const Parcel& parcel)
 {
-    qDeleteAll(mPages);
     mName = parcel.propertyValue("name").toString();
     if (parcel.contains("children")) {
         Parcel* children = parcel.at("children");
@@ -49,6 +43,3 @@ void Blueprint::fromParcel(const Parcel& parcel)
         }
     }
 }
-
-//void Blueprint::addPage(Page* page) { mPages.append(page); }
-
