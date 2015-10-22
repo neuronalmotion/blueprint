@@ -20,6 +20,12 @@
       <property name="styleSheet">
        <string notr="true">background-color: rgb(200, 200, 200);</string>
       </property>
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
      </widget>
     </item>
    </layout>
@@ -160,12 +166,12 @@
   </action>
   <action name="actionSave_as">
    <property name="text">
-    <string>Save as...</string>
+    <string>&amp;Save as...</string>
    </property>
   </action>
   <action name="actionLoad">
    <property name="text">
-    <string>Load...</string>
+    <string>&amp;Load...</string>
    </property>
   </action>
  </widget>
