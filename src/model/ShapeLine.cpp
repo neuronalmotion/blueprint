@@ -6,7 +6,7 @@ ShapeLine::ShapeLine(Shape* parentShape)
     : ShapeBezier(parentShape, ShapeType::LINE, 0, 0)
 {
     addSegment(QPointF(10, 10));
-    setBackgroundColor(QColor(0, 0, 0, 0));
+    setForegroundColor(QColor(0, 0, 0, 0));
     mEditMode = Shape::EditMode::PATH;
 }
 

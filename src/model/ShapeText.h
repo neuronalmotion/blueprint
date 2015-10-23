@@ -22,8 +22,8 @@ public:
     QRectF bounds() const override;
     void resizeOnCreation(const QPointF& delta) override;
     void boundingBoxEvent(const BoundingBoxEvent& event) override;
-    void setBackgroundColor(const QColor& color) override;
-    QColor backgroundColor() const override;
+    void setForegroundColor(const QColor& color) override;
+    QColor foregroundColor() const override;
     void setBorderColor(const QColor& color) override;
     int borderWidth() const override;
     void setBorderWidth(int width) override;

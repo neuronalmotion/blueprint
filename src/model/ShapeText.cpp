@@ -12,7 +12,7 @@ ShapeText::ShapeText(Shape* parentShape)
 {
     mGraphicsItem->setPlainText(name());
     mGraphicsItem->adjustSize();
-    setBackgroundColor(QColor(0, 0, 0));
+    setForegroundColor(QColor(0, 0, 0));
 }
 
 ShapeText::~ShapeText()
@@ -41,12 +41,12 @@ void ShapeText::boundingBoxEvent(const BoundingBoxEvent& event)
 
 }
 
-void ShapeText::setBackgroundColor(const QColor& color)
+void ShapeText::setForegroundColor(const QColor& color)
 {
     mGraphicsItem->setDefaultTextColor(color);
 }
 
-QColor ShapeText::backgroundColor() const
+QColor ShapeText::foregroundColor() const
 {
     return mGraphicsItem->defaultTextColor();
 }

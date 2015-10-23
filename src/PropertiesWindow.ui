@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>236</width>
+    <width>345</width>
     <height>433</height>
    </rect>
   </property>
@@ -33,14 +33,14 @@ color: rgb(86, 86, 86);</string>
     </widget>
    </item>
    <item row="1" column="0">
-    <widget class="QLabel" name="labelBackground">
+    <widget class="QLabel" name="labelForegroundColor">
      <property name="text">
-      <string>Background</string>
+      <string>Foreground</string>
      </property>
     </widget>
    </item>
    <item row="1" column="1">
-    <widget class="QPushButton" name="backgroundColor">
+    <widget class="QPushButton" name="foregroundColor">
      <property name="autoFillBackground">
       <bool>false</bool>
      </property>
@@ -56,14 +56,14 @@ color: rgb(86, 86, 86);</string>
     </widget>
    </item>
    <item row="2" column="0">
-    <widget class="QLabel" name="labelThickness">
+    <widget class="QLabel" name="labelBorderWidth">
      <property name="text">
-      <string>Thickness</string>
+      <string>Border width</string>
      </property>
     </widget>
    </item>
    <item row="2" column="1">
-    <widget class="QSpinBox" name="thickness">
+    <widget class="QSpinBox" name="borderWidth">
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>

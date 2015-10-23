@@ -3,14 +3,15 @@
 
 #include <QColor>
 #include <QPersistentModelIndex>
+#include <QGraphicsItem>
 
 #include "io/Parcelable.h"
-#include "BoundingBox.h"
 
 class QPointF;
 
 namespace blueprint {
 class BoundingBox;
+class BoundingBoxEvent;
 
 class Shape : public Parcelable
 {
@@ -51,8 +52,8 @@ public:
     virtual QRectF bounds() const = 0;
     virtual void resizeOnCreation(const QPointF& delta) = 0;
     virtual void boundingBoxEvent(const BoundingBoxEvent& event) = 0;
-    virtual void setBackgroundColor(const QColor& color) = 0;
-    virtual QColor backgroundColor() const = 0;
+    virtual void setForegroundColor(const QColor& color) = 0;
+    virtual QColor foregroundColor() const = 0;
     virtual void setBorderColor(const QColor& color) = 0;
     virtual int borderWidth() const = 0;
     virtual void setBorderWidth(int width) = 0;

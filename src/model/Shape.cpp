@@ -1,12 +1,12 @@
 #include "Shape.h"
 
 #include <QDebug>
-#include <QPainterPath>
 #include <QPen>
 #include <QPointF>
 
-#include "ShapeFactory.h"
+#include "BoundingBox.h"
 #include "BoundingBoxPoint.h"
+#include "ShapeFactory.h"
 #include "ShapeModel.h"
 
 using namespace blueprint;
@@ -162,6 +162,7 @@ Parcel* Shape::toParcel() const
     parcel->putProperty("type", mShapeType);
     parcel->putProperty("posx", pos().x());
     parcel->putProperty("posy", pos().y());
+    parcel->putProperty("foregroundColor", foregroundColor());
 
     for(auto child : mChildItems) {
         parcel->addPropertyToKey("children", child->toParcel());
@@ -173,9 +174,9 @@ void Shape::fromParcel(const Parcel& parcel)
 {
     mName = parcel.propertyValue("name").toString();
     mShapeType = static_cast<ShapeType>(parcel.propertyValue("type").toInt());
-    QPointF pos = QPointF(parcel.propertyValue("posx").toFloat(),
-                          parcel.propertyValue("posy").toFloat());
-    setPos(pos);
+    setPos(QPointF(parcel.propertyValue("posx").toFloat(),
+                          parcel.propertyValue("posy").toFloat()));
+    setForegroundColor(parcel.propertyValue("foregroundColor").value<QColor>());
     if (parcel.contains("children")) {
         Parcel* children = parcel.at("children");
 

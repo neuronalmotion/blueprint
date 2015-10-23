@@ -20,8 +20,8 @@ PropertiesWindow::PropertiesWindow(QWidget *parent) :
     mCurrentItem(nullptr)
 {
     mUi->setupUi(this);
-    mUi->backgroundColor->setAutoFillBackground(true);
-    mUi->backgroundColor->setFocusPolicy(Qt::NoFocus);
+    mUi->foregroundColor->setAutoFillBackground(true);
+    mUi->foregroundColor->setFocusPolicy(Qt::NoFocus);
 
     initSignalSlot();
 }
@@ -34,11 +34,11 @@ PropertiesWindow::~PropertiesWindow()
 void PropertiesWindow::initSignalSlot()
 {
     // Shape (common)
-    connect(mUi->backgroundColor, &QPushButton::clicked, this, &PropertiesWindow::onBackgroundColorClicked);
+    connect(mUi->foregroundColor, &QPushButton::clicked, this, &PropertiesWindow::onBackgroundColorClicked);
 
     // ShapeBezier
     connect(mUi->backgroundImage, &QPushButton::clicked, this, &PropertiesWindow::onBackgroundImageClicked);
-    connect(mUi->thickness, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &PropertiesWindow::onThicknessValueChanged);
+    connect(mUi->borderWidth, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &PropertiesWindow::onThicknessValueChanged);
 
     // ShapeText
     connect(mUi->lineEditText, &QLineEdit::textChanged, this, &PropertiesWindow::onTextChanged);
@@ -65,9 +65,9 @@ void PropertiesWindow::shapeSelected(blueprint::Shape* shape)
     mUi->name->setText(mCurrentItem->name());
 
     // Background color
-    QColor backColor = mCurrentItem->backgroundColor();
-    mUi->backgroundColor->setEnabled(true);
-    mUi->backgroundColor->setStyleSheet(QString("background-color: rgb(%1, %2, %3);")
+    QColor backColor = mCurrentItem->foregroundColor();
+    mUi->foregroundColor->setEnabled(true);
+    mUi->foregroundColor->setStyleSheet(QString("background-color: rgb(%1, %2, %3);")
                                         .arg(backColor.red())
                                         .arg(backColor.green())
                                         .arg(backColor.blue()));
@@ -85,16 +85,16 @@ void PropertiesWindow::shapeSelected(blueprint::Shape* shape)
     }
 
     // Border width
-    mUi->thickness->setValue(mCurrentItem->borderWidth());
+    mUi->borderWidth->setValue(mCurrentItem->borderWidth());
 }
 
 void PropertiesWindow::onBackgroundColorClicked()
 {
-    QColor color = QColorDialog::getColor(mCurrentItem->backgroundColor(),
+    QColor color = QColorDialog::getColor(mCurrentItem->foregroundColor(),
                                           this,
                                           "Background color",
                                           QColorDialog::ShowAlphaChannel);
-    mCurrentItem->setBackgroundColor(color);
+    mCurrentItem->setForegroundColor(color);
     ShapeModel::instance()->shapePropertiesChanged(mCurrentItem);
 }
 
@@ -149,13 +149,13 @@ void PropertiesWindow::displayFontDialog()
 void PropertiesWindow::reset()
 {
     mUi->name->clear();
-    mUi->backgroundColor->setEnabled(false);
+    mUi->foregroundColor->setEnabled(false);
     mUi->backgroundImageText->clear();
-    mUi->backgroundColor->setStyleSheet(QString("background-color: rgb(%1, %2, %3);")
+    mUi->foregroundColor->setStyleSheet(QString("background-color: rgb(%1, %2, %3);")
                                         .arg(0)
                                         .arg(0)
                                         .arg(0));
-    mUi->thickness->clear();
+    mUi->borderWidth->clear();
 }
 
 void PropertiesWindow::updateTextProperties()

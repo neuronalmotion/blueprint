@@ -101,7 +101,7 @@ void TestSerialization::compareShapes(const Shape& lhs, const Shape& rhs)
     QCOMPARE(lhs.name(), rhs.name());
     QCOMPARE(lhs.childCount(), rhs.childCount());
     QCOMPARE(lhs.shapeType(), rhs.shapeType());
-    QCOMPARE(lhs.backgroundColor(), rhs.backgroundColor());
+    QCOMPARE(lhs.foregroundColor(), rhs.foregroundColor());
     QCOMPARE(lhs.borderWidth(), rhs.borderWidth());
 }
 

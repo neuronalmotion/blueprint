@@ -44,7 +44,7 @@ void ShapeBezier::init(qreal x, qreal y)
     setBorderColor(QColor(40, 40, 40));
 
     // fast random color
-    setBackgroundColor(QColor(qrand() % 255, qrand() % 255, qrand() % 255));
+    setForegroundColor(QColor(qrand() % 255, qrand() % 255, qrand() % 255));
 
     mGraphicsItem->setFlag(QGraphicsItem::ItemIsMovable);
     mGraphicsItem->setFlag(QGraphicsItem::ItemSendsGeometryChanges);
@@ -89,12 +89,12 @@ void ShapeBezier::resizeOnCreation(const QPointF& delta)
     mBoundingBox.boundingBoxPointMoved(BoundingBoxPoint::TranslationDirection::BOTTOM_RIGHT, delta);
 }
 
-void ShapeBezier::setBackgroundColor(const QColor& color)
+void ShapeBezier::setForegroundColor(const QColor& color)
 {
     mGraphicsItem->setBrush(QBrush(color));
 }
 
-QColor ShapeBezier::backgroundColor() const
+QColor ShapeBezier::foregroundColor() const
 {
     return mGraphicsItem->brush().color();
 }
