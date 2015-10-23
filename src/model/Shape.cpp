@@ -160,6 +160,8 @@ Parcel* Shape::toParcel() const
     Parcel* parcel = new Parcel("shape");
     parcel->putProperty("name", mName);
     parcel->putProperty("type", mShapeType);
+    parcel->putProperty("posx", pos().x());
+    parcel->putProperty("posy", pos().y());
 
     for(auto child : mChildItems) {
         parcel->addPropertyToKey("children", child->toParcel());
@@ -171,6 +173,9 @@ void Shape::fromParcel(const Parcel& parcel)
 {
     mName = parcel.propertyValue("name").toString();
     mShapeType = static_cast<ShapeType>(parcel.propertyValue("type").toInt());
+    QPointF pos = QPointF(parcel.propertyValue("posx").toFloat(),
+                          parcel.propertyValue("posy").toFloat());
+    setPos(pos);
     if (parcel.contains("children")) {
         Parcel* children = parcel.at("children");
 

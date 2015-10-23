@@ -21,7 +21,7 @@ ShapeText::~ShapeText()
 }
 
 
-QGraphicsItem* ShapeText::graphicsItem()
+QGraphicsItem* ShapeText::graphicsItem() const
 {
     return mGraphicsItem;
 }

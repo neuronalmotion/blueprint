@@ -20,7 +20,7 @@ public:
     explicit ShapeBezier(Shape* parentShape);
     ~ShapeBezier();
 
-    QGraphicsItem* graphicsItem() override;
+    QGraphicsItem* graphicsItem() const override;
     void boundingBoxEvent(const BoundingBoxEvent& event);
     QRectF bounds() const override;
     void resizeOnCreation(const QPointF& delta) override;
@@ -44,6 +44,7 @@ public:
 
     Parcel* toParcel() const override;
     void fromParcel(const Parcel& parcel) override;
+    void bezierElementsFromParcel(const Parcel& parcel);
 
 protected:
     void updateBoundingBoxBezierVisibility();

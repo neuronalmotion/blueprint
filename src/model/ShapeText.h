@@ -18,7 +18,7 @@ public:
     explicit ShapeText(Shape* parentShape);
     ~ShapeText();
 
-    QGraphicsItem* graphicsItem() override;
+    QGraphicsItem* graphicsItem() const override;
     QRectF bounds() const override;
     void resizeOnCreation(const QPointF& delta) override;
     void boundingBoxEvent(const BoundingBoxEvent& event) override;

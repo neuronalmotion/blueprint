@@ -60,7 +60,7 @@ blueprint::ShapeBezier::~ShapeBezier()
     qDeleteAll(mElements);
 }
 
-QGraphicsItem* ShapeBezier::graphicsItem()
+QGraphicsItem* ShapeBezier::graphicsItem() const
 {
     return mGraphicsItem;
 }
@@ -171,6 +171,7 @@ void ShapeBezier::setBackgroundImage(const QString& fileName)
 Parcel* ShapeBezier::toParcel() const
 {
     Parcel* parcel = Shape::toParcel();
+    parcel->putProperty("closed", mIsPathClosed);
     for (auto element : mElements) {
         parcel->addPropertyToKey("elements", element->toParcel());
     }
@@ -180,11 +181,30 @@ Parcel* ShapeBezier::toParcel() const
 void ShapeBezier::fromParcel(const Parcel& parcel)
 {
     Shape::fromParcel(parcel);
-    if (parcel.contains("elements")) {
-        Parcel* children = parcel.at("elements");
-        for (auto child : children->list()) {
-            mElements.append(BezierElement::bezierElementFromParcel(*child, this));
+    mIsPathClosed = parcel.propertyValue("closed").toBool();
+    bezierElementsFromParcel(parcel);
+}
+
+void ShapeBezier::bezierElementsFromParcel(const Parcel& parcel)
+{
+    if (!parcel.contains("elements")) {
+        return;
+    }
+    const QList<Parcel*> elements = parcel.at("elements")->list();
+    int elementsSize = elements.size();
+    const int pathLength = 3;
+    BezierElement* path[pathLength] = {};
+    for (int i = 1; i < elementsSize; i += pathLength) {
+        for(int j = 0; j < pathLength; ++j) {
+            path[j] =  BezierElement::bezierElementFromParcel(*elements[i + j], this);
         }
+        addPath(path[0]->pos(), path[1]->pos(), path[2]->pos());
+        for(int j = 0; j < pathLength; ++j) {
+            delete path[j];
+        }
+    }
+    if (mIsPathClosed) {
+        closePath();
     }
 }
 

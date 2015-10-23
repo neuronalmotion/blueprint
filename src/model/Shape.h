@@ -47,7 +47,7 @@ public:
     int row() const;
 
     // drawing stuff
-    virtual QGraphicsItem* graphicsItem() = 0;
+    virtual QGraphicsItem* graphicsItem() const = 0;
     virtual QRectF bounds() const = 0;
     virtual void resizeOnCreation(const QPointF& delta) = 0;
     virtual void boundingBoxEvent(const BoundingBoxEvent& event) = 0;
@@ -64,6 +64,7 @@ public:
     void toggleEditMode();
     virtual void setEditMode(const EditMode& mode);
     QPointF posAbsolute();
+    QPointF pos() const { return graphicsItem()->pos(); }
     void setPos(const QPointF& pos) { graphicsItem()->setPos(pos); }
     void collapse();
 
