@@ -4,6 +4,7 @@
 #include <QMouseEvent>
 #include <QGraphicsScene>
 #include <QTransform>
+#include <QtMath>
 
 #include "Tool.h"
 #include "model/BezierControlPoint.h"
@@ -24,6 +25,12 @@ CanvasView::CanvasView(QWidget* parent)
     mZoomFactor(1.0f)
 {
     connect(ShapeModel::instance(), &ShapeModel::shapePropertiesChanged, this, &CanvasView::shapePropertiesChanged);
+
+    setRenderHint(QPainter::Antialiasing, true);
+    setDragMode(QGraphicsView::RubberBandDrag);
+    setOptimizationFlags(QGraphicsView::DontSavePainterState);
+    setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
+    setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
 }
 
 CanvasView::~CanvasView()
@@ -43,10 +50,9 @@ void CanvasView::setTool(Tool::Type toolType)
 
 void CanvasView::mousePressEvent(QMouseEvent *event)
 {
-    // ::: Selection tool actions :::
-    if (mCurrentTool == Tool::Type::SELECTION) {
-
-        // Only selection require to call QGraphicsView implementation
+    // Only selection and drag mode
+    // require to call QGraphicsView implementation
+    if (mCurrentTool == Tool::Type::SELECTION || dragMode() == QGraphicsView::ScrollHandDrag) {
         QGraphicsView::mousePressEvent(event);
         return;
     }
@@ -70,11 +76,17 @@ void CanvasView::mousePressEvent(QMouseEvent *event)
     ShapeModel* model = ShapeModel::instance();
     model->addItem(mCreatingShape, shapeParent);
     model->selectShape(mCreatingShape);
+
+    event->accept();
 }
 
 void CanvasView::mouseMoveEvent(QMouseEvent *event)
 {
     QGraphicsView::mouseMoveEvent(event);
+
+    if (dragMode() == QGraphicsView::ScrollHandDrag) {
+        return;
+    }
 
     QPointF point = QGraphicsView::mapToScene(event->pos());
     if (mCreatingShape) {
@@ -82,13 +94,22 @@ void CanvasView::mouseMoveEvent(QMouseEvent *event)
         mCreatingLastPosition = point;
         mCreatingShape->resizeOnCreation(delta);
     }
+
+    event->accept();
 }
 
 void CanvasView::mouseReleaseEvent(QMouseEvent *event)
 {
     QGraphicsView::mouseReleaseEvent(event);
+
+    if (dragMode() == QGraphicsView::ScrollHandDrag) {
+        return;
+    }
+
     mCreatingShape = nullptr;
     mCreatingLastPosition = QPointF(0.0f, 0.0f);
+
+    event->accept();
 }
 
 void CanvasView::mouseDoubleClickEvent(QMouseEvent* /*event*/)
@@ -102,23 +123,22 @@ void CanvasView::mouseDoubleClickEvent(QMouseEvent* /*event*/)
 void CanvasView::wheelEvent(QWheelEvent *event)
 {
     mZoomFactor +=  0.1f * (event->delta() / abs(event->delta()));
-    mZoomFactor = qBound(0.2f, mZoomFactor, 2.0f);
-    fitView();
-}
+    mZoomFactor = qBound(0.2f, mZoomFactor, 5.0f);
 
-void CanvasView::resizeEvent(QResizeEvent* /*event*/)
-{
-    fitView();
-}
+    QMatrix matrix;
+    matrix.scale(mZoomFactor, mZoomFactor);
+    setMatrix(matrix);
 
-void CanvasView::showEvent(QShowEvent* /*event*/)
-{
-    fitView();
 }
 
 void CanvasView::keyPressEvent(QKeyEvent *event)
 {
     QGraphicsView::keyPressEvent(event);
+
+    if (event->key() == Qt::Key_Space) {
+        setDragMode(ScrollHandDrag);
+        setInteractive(false);
+    }
 }
 
 void CanvasView::keyReleaseEvent(QKeyEvent *event)
@@ -126,21 +146,25 @@ void CanvasView::keyReleaseEvent(QKeyEvent *event)
     ShapeModel* model = ShapeModel::instance();
     if (!event->isAutoRepeat()) {
         switch (event->key()) {
-        case Qt::Key_Enter:
-        case Qt::Key_Return:
-            if (model->selectedShape()){
-                model->selectedShape()->toggleEditMode();
-            }
-        break;
+            case Qt::Key_Enter:
+            case Qt::Key_Return:
+                if (model->selectedShape()){
+                    model->selectedShape()->toggleEditMode();
+                }
+            break;
 
-        case Qt::Key_Delete:
-        case Qt::Key_Backspace:
-            if (model->selectedShape()){
-                model->removeItem(model->selectedShape());
-            }
-        break;
-        default:
-        break;
+            case Qt::Key_Delete:
+            case Qt::Key_Backspace:
+                if (model->selectedShape()){
+                    model->removeItem(model->selectedShape());
+                }
+            break;
+            case Qt::Key_Space:
+                setDragMode(NoDrag);
+                setInteractive(true);
+            break;
+            default:
+            break;
         }
     }
     QGraphicsView::keyReleaseEvent(event);
@@ -170,17 +194,3 @@ void CanvasView::setScene(QGraphicsScene* scene)
     QGraphicsView::setScene(scene);
     connect(scene, &QGraphicsScene::focusItemChanged, this, &CanvasView::onFocusItemChanged);
 }
-
-void CanvasView::fitView()
-{
-    float viewWidth = this->width() * mZoomFactor;
-    float viewHeight = this->height() * mZoomFactor;
-    const QRectF rect = QRectF((this->width() - viewWidth) / 2.0f,
-                               (this->height() - viewHeight) / 2.0f,
-                               viewWidth,
-                               viewHeight);
-    fitInView(rect, Qt::KeepAspectRatio);
-    setSceneRect(rect);
-}
-
-
