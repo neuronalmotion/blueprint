@@ -26,6 +26,7 @@ public:
 
     void deleteBlueprint(QGraphicsScene* scene);
     Blueprint* createBlueprint(QGraphicsScene* scene);
+    void loadBlueprint(QGraphicsScene* scene, Blueprint* blueprint);
 
     void addItem(Shape* item, Shape* parent = 0, AddMode addMode = NORMAL);
     void removeItem(Shape* item);

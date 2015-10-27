@@ -26,6 +26,11 @@ public:
     explicit MainWindow(QWidget* parent = 0);
     ~MainWindow();
 
+    enum SaveAction {
+        SAVE_IF_POSSIBLE,
+        FORCE_SAVE_AS,
+    };
+
 private:
     void initToolbar();
     void initSignalSlots();
@@ -35,7 +40,7 @@ private slots:
     void setTool(blueprint::Tool::Type toolType);
     void exportShapeToImage();
     void newBlueprint();
-    void saveBlueprint();
+    void saveBlueprint(SaveAction saveAction);
     void loadBlueprint();
 
 private:

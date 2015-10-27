@@ -24,7 +24,7 @@ using namespace blueprint;
 MainWindow::MainWindow(QWidget* parent) :
     QMainWindow(parent),
     mUi(new Ui::MainWindow),
-    mCurrentBlueprint(nullptr)
+    mBlueprint(nullptr)
 {
     mUi->setupUi(this);
     mUi->canvas->setRenderHints(QPainter::Antialiasing
@@ -44,9 +44,9 @@ MainWindow::MainWindow(QWidget* parent) :
 
 
     // Init default Blueprint project
-    mCurrentBlueprint = model->createBlueprint(mScene);
+    mBlueprint = model->createBlueprint(mScene);
 
-    Page* p1 = mCurrentBlueprint->activePage();
+    Page* p1 = mBlueprint->activePage();
     Canvas* c2 = ShapeFactory::createCanvas(p1);
     c2->setPos(QPointF(450, 0));
     c2->setName("Canvas 2");
@@ -86,8 +86,9 @@ void MainWindow::initSignalSlots()
     ShapeModel* model = ShapeModel::instance();
 
     connect(mUi->actionNew_Project, &QAction::triggered, this, &MainWindow::newBlueprint);
-    connect(mUi->actionLoad, &QAction::triggered, this, &MainWindow::loadFile);
-    connect(mUi->actionSave_as, &QAction::triggered, this, &MainWindow::saveFile);
+    connect(mUi->actionLoad, &QAction::triggered, this, &MainWindow::loadBlueprint);
+    connect(mUi->actionSave, &QAction::triggered, [=](){ this->saveBlueprint(SAVE_IF_POSSIBLE); });
+    connect(mUi->actionSave_as, &QAction::triggered, [=](){ this->saveBlueprint(FORCE_SAVE_AS); });
     connect(mUi->actionExport_Shape_to_Image, &QAction::triggered, this, &MainWindow::exportShapeToImage);
 
     connect(model, &ShapeModel::shapeAdded,
@@ -155,22 +156,30 @@ void MainWindow::exportShapeToImage()
 void MainWindow::newBlueprint()
 {
     // TODO detect if current project is modified, if yes, display a save pop up
-    mCurrentBlueprint = ShapeModel::instance()->createBlueprint(mScene);
+    mBlueprint = ShapeModel::instance()->createBlueprint(mScene);
 }
 
-void MainWindow::saveFile()
+void MainWindow::saveBlueprint(SaveAction saveAction)
 {
-    QString filepath = QFileDialog::getSaveFileName(this,
-                                 "Save as...",
-                                 QDir::homePath(),
-                                "Blueprint project (*.bpt)");
+    QString filepath;
+    if (saveAction == FORCE_SAVE_AS || !mBlueprint->hasFile()) {
+        filepath = QFileDialog::getSaveFileName(this,
+                                                "Save as...",
+                                                QDir::homePath(),
+                                                "Blueprint project (*.bpt)");
 
+
+    } else {
+        filepath = mBlueprint->file()->fileName();
+    }
     if (!filepath.isNull()) {
-         FileUtils::saveBlueprintToFile(*mCurrentBlueprint, filepath);
+         FileUtils::saveBlueprintToFile(*mBlueprint, filepath);
+        mUi->statusBar->showMessage(QString("Project saved to ") + filepath);
+         mBlueprint->setFile(filepath);
     }
 }
 
-void MainWindow::loadFile()
+void MainWindow::loadBlueprint()
 {
     QString filepath = QFileDialog::getOpenFileName(this,
                                                     "Load...",
@@ -179,19 +188,10 @@ void MainWindow::loadFile()
 
     if (!filepath.isNull()) {
         Blueprint* blueprint = FileUtils::loadBlueprintFromFile(filepath);
-
         if (blueprint) {
-            for (auto item : mScene->items()) {
-                mScene->removeItem(item);
-            }
-            delete mCurrentBlueprint;
-            mCurrentBlueprint = blueprint;
-
-            Page* firstPage = mCurrentBlueprint->page(0);
-            mScene->addItem(firstPage->graphicsItem());
-            ShapeModel::instance()->setRootItem(firstPage);
+            ShapeModel::instance()->loadBlueprint(mScene, blueprint);
+            mBlueprint = blueprint;
         }
-
     }
 }
 

@@ -45,6 +45,7 @@
     </property>
     <addaction name="actionNew_Project"/>
     <addaction name="actionLoad"/>
+    <addaction name="actionSave"/>
     <addaction name="actionSave_as"/>
     <addaction name="separator"/>
     <addaction name="actionExport_Shape_to_Image"/>
@@ -167,7 +168,7 @@
   </action>
   <action name="actionSave_as">
    <property name="text">
-    <string>&amp;Save as...</string>
+    <string>&amp;Save Project as...</string>
    </property>
   </action>
   <action name="actionLoad">
@@ -177,7 +178,12 @@
   </action>
   <action name="actionNew_Project">
    <property name="text">
-    <string>New Project...</string>
+    <string>&amp;New Project...</string>
+   </property>
+  </action>
+  <action name="actionSave">
+   <property name="text">
+    <string>&amp;Save Project</string>
    </property>
   </action>
  </widget>

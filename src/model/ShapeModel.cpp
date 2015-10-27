@@ -34,6 +34,9 @@ ShapeModel::~ShapeModel()
 
 void ShapeModel::deleteBlueprint(QGraphicsScene* scene)
 {
+    if (!mBlueprint) {
+        return;
+    }
     for (auto item : scene->items()) {
         scene->removeItem(item);
     }
@@ -46,9 +49,6 @@ void ShapeModel::deleteBlueprint(QGraphicsScene* scene)
 
 Blueprint* ShapeModel::createBlueprint(QGraphicsScene* scene)
 {
-    if (mBlueprint) {
-        deleteBlueprint(scene);
-    }
     Blueprint* blueprint = new Blueprint();
     mBlueprint = blueprint;
 
@@ -56,14 +56,22 @@ Blueprint* ShapeModel::createBlueprint(QGraphicsScene* scene)
     page->setName("Page 1");
     blueprint->addPage(page);
     blueprint->setActivePage(page);
-    setRootItem(page);
-    scene->addItem(page->graphicsItem());
+    loadBlueprint(scene, blueprint);
 
     Canvas* canvas = ShapeFactory::createCanvas(page);
     canvas->setName("Canvas 1");
     addItem(canvas, page);
 
     return blueprint;
+}
+
+void ShapeModel::loadBlueprint(QGraphicsScene* scene, Blueprint* blueprint)
+{
+    Page* activePage = blueprint->activePage();
+    Q_ASSERT(activePage);
+
+    setRootItem(activePage);
+    scene->addItem(activePage->graphicsItem());
 }
 
 ShapeModel* ShapeModel::instance()
