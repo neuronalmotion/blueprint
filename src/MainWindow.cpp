@@ -85,9 +85,10 @@ void MainWindow::initSignalSlots()
 {
     ShapeModel* model = ShapeModel::instance();
 
-    connect(mUi->actionExport_Shape_to_Image, &QAction::triggered, this, &MainWindow::exportShapeToImage);
-    connect(mUi->actionSave_as, &QAction::triggered, this, &MainWindow::saveFile);
+    connect(mUi->actionNew_Project, &QAction::triggered, this, &MainWindow::newBlueprint);
     connect(mUi->actionLoad, &QAction::triggered, this, &MainWindow::loadFile);
+    connect(mUi->actionSave_as, &QAction::triggered, this, &MainWindow::saveFile);
+    connect(mUi->actionExport_Shape_to_Image, &QAction::triggered, this, &MainWindow::exportShapeToImage);
 
     connect(model, &ShapeModel::shapeAdded,
             [this](Shape* shape) {
@@ -149,6 +150,12 @@ void MainWindow::exportShapeToImage()
         }
         saveShapeToImage(*shape, filepath);
     }
+}
+
+void MainWindow::newBlueprint()
+{
+    // TODO detect if current project is modified, if yes, display a save pop up
+    mCurrentBlueprint = ShapeModel::instance()->createBlueprint(mScene);
 }
 
 void MainWindow::saveFile()

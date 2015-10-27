@@ -34,13 +34,14 @@ private:
 private slots:
     void setTool(blueprint::Tool::Type toolType);
     void exportShapeToImage();
-    void saveFile();
-    void loadFile();
+    void newBlueprint();
+    void saveBlueprint();
+    void loadBlueprint();
 
 private:
     Ui::MainWindow* mUi;
     QGraphicsScene* mScene;
-    blueprint::Blueprint* mCurrentBlueprint;
+    blueprint::Blueprint* mBlueprint;
     QList<blueprint::Tool*> mTools;
 };
 
