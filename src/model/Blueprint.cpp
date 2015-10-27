@@ -6,6 +6,7 @@ using namespace blueprint;
 
 Blueprint::Blueprint()
     : mName("Blueprint project"),
+      mActivePage(nullptr),
       mPages()
 {
 

@@ -42,19 +42,11 @@ MainWindow::MainWindow(QWidget* parent) :
     mUi->canvas->setScene(mScene);
     mUi->treeView->setModel(model);
 
+
     // Init default Blueprint project
-    mCurrentBlueprint = new Blueprint();
+    mCurrentBlueprint = model->createBlueprint(mScene);
 
-    Page* p1 = ShapeFactory::createPage();
-    p1->setName("Page 1");
-    model->setRootItem(p1);
-    mScene->addItem(p1->graphicsItem());
-    mCurrentBlueprint->addPage(p1);
-
-    Canvas* c1 = ShapeFactory::createCanvas(p1);
-    c1->setName("Canvas 1");
-    model->addItem(c1, p1);
-
+    Page* p1 = mCurrentBlueprint->activePage();
     Canvas* c2 = ShapeFactory::createCanvas(p1);
     c2->setPos(QPointF(450, 0));
     c2->setName("Canvas 2");
@@ -65,11 +57,8 @@ MainWindow::MainWindow(QWidget* parent) :
 
 MainWindow::~MainWindow()
 {
-    // remove items *before* cleaning treeitem
-    for (auto item : mScene->items()) {
-        mScene->removeItem(item);
-    }
-    delete mCurrentBlueprint;
+    ShapeModel* model = ShapeModel::instance();
+    model->deleteBlueprint(mScene);
     delete ShapeModel::instance();
     delete mUi;
     qDeleteAll(mTools);

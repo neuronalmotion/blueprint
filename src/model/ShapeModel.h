@@ -1,11 +1,13 @@
 #ifndef TREEMODEL_H
 #define TREEMODEL_H
 
+#include <QGraphicsScene>
 #include <QAbstractItemModel>
 #include <QPointF>
 
 namespace blueprint {
 class Shape;
+class Blueprint;
 
 class ShapeModel : public QAbstractItemModel
 {
@@ -21,6 +23,9 @@ public:
 
     explicit ShapeModel();
     ~ShapeModel();
+
+    void deleteBlueprint(QGraphicsScene* scene);
+    Blueprint* createBlueprint(QGraphicsScene* scene);
 
     void addItem(Shape* item, Shape* parent = 0, AddMode addMode = NORMAL);
     void removeItem(Shape* item);
@@ -54,9 +59,11 @@ signals:
     void shapePropertiesChanged(Shape* shape);
 
 private:
+    static ShapeModel* sInstance;
+
+    Blueprint* mBlueprint;
     Shape* mRootItem;
     Shape* mSelectedShape;
-    static ShapeModel* sInstance;
 };
 }
 
