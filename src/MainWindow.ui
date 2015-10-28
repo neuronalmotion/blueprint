@@ -36,14 +36,16 @@
      <x>0</x>
      <y>0</y>
      <width>1200</width>
-     <height>23</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">
      <string>Fi&amp;le</string>
     </property>
+    <addaction name="actionNew_Project"/>
     <addaction name="actionLoad"/>
+    <addaction name="actionSave"/>
     <addaction name="actionSave_as"/>
     <addaction name="separator"/>
     <addaction name="actionExport_Shape_to_Image"/>
@@ -166,12 +168,22 @@
   </action>
   <action name="actionSave_as">
    <property name="text">
-    <string>&amp;Save as...</string>
+    <string>&amp;Save Project as...</string>
    </property>
   </action>
   <action name="actionLoad">
    <property name="text">
     <string>&amp;Load...</string>
+   </property>
+  </action>
+  <action name="actionNew_Project">
+   <property name="text">
+    <string>&amp;New Project...</string>
+   </property>
+  </action>
+  <action name="actionSave">
+   <property name="text">
+    <string>&amp;Save Project</string>
    </property>
   </action>
  </widget>

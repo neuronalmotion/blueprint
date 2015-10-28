@@ -3,7 +3,11 @@
 #include <QDebug>
 #include <algorithm>
 
+#include "Blueprint.h"
+#include "Canvas.h"
 #include "Shape.h"
+#include "ShapeFactory.h"
+#include "Page.h"
 
 using namespace blueprint;
 
@@ -11,7 +15,9 @@ ShapeModel* ShapeModel::sInstance = nullptr;
 
 ShapeModel::ShapeModel()
     : QAbstractItemModel(),
-    mRootItem(nullptr)
+    mBlueprint(nullptr),
+    mRootItem(nullptr),
+    mSelectedShape(nullptr)
 {
     connect(this, &QAbstractItemModel::rowsInserted, this,
             [this](const QModelIndex& parent, int first, int /*last*/) {
@@ -24,6 +30,48 @@ ShapeModel::ShapeModel()
 
 ShapeModel::~ShapeModel()
 {
+}
+
+void ShapeModel::deleteBlueprint(QGraphicsScene* scene)
+{
+    if (!mBlueprint) {
+        return;
+    }
+    for (auto item : scene->items()) {
+        scene->removeItem(item);
+    }
+    beginResetModel();
+    mRootItem = nullptr;
+    mSelectedShape = nullptr;
+    delete mBlueprint;
+    endResetModel();
+}
+
+Blueprint* ShapeModel::createBlueprint(QGraphicsScene* scene)
+{
+    Blueprint* blueprint = new Blueprint();
+    mBlueprint = blueprint;
+
+    Page* page = ShapeFactory::createPage();
+    page->setName("Page 1");
+    blueprint->addPage(page);
+    blueprint->setActivePage(page);
+    loadBlueprint(scene, blueprint);
+
+    Canvas* canvas = ShapeFactory::createCanvas(page);
+    canvas->setName("Canvas 1");
+    addItem(canvas, page);
+
+    return blueprint;
+}
+
+void ShapeModel::loadBlueprint(QGraphicsScene* scene, Blueprint* blueprint)
+{
+    Page* activePage = blueprint->activePage();
+    Q_ASSERT(activePage);
+
+    setRootItem(activePage);
+    scene->addItem(activePage->graphicsItem());
 }
 
 ShapeModel* ShapeModel::instance()

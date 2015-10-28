@@ -6,19 +6,35 @@ using namespace blueprint;
 
 Blueprint::Blueprint()
     : mName("Blueprint project"),
-      mPages()
+      mActivePage(nullptr),
+      mPages(),
+      mFile(nullptr)
 {
 
 }
 
 Blueprint::~Blueprint()
 {
+    delete mFile;
     qDeleteAll(mPages);
 }
 
 void Blueprint::addPage(Page* page)
 {
     mPages.append(page);
+}
+
+bool Blueprint::hasFile() const
+{
+    return mFile && mFile->exists();
+}
+
+void Blueprint::setFile(const QString& filepath)
+{
+    if (!mFile) {
+        mFile = new QFile(filepath);
+    }
+    mFile->setFileName(filepath);
 }
 
 Parcel* Blueprint::toParcel() const
@@ -40,6 +56,9 @@ void Blueprint::fromParcel(const Parcel& parcel)
             Page* page = ShapeFactory::createPage(false);
             page->fromParcel(*child);
             addPage(page);
+            if (!activePage()) {
+                setActivePage(page);
+            }
         }
     }
 }
