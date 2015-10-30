@@ -128,6 +128,25 @@ QPointF Shape::posAbsolute()
     return position;
 }
 
+void Shape::setWidth(const qreal& width)
+{
+    const BoundingBoxPoint* bottomRight = boundingBox().boundingBoxPoint(BoundingBoxPoint::BOTTOM_RIGHT);
+    QPointF delta = bottomRight->pos();
+    delta.setX(delta.x() - width);
+    delta.setY(0);
+    boundingBox().boundingBoxPointMoved(bottomRight->translationDirection(), delta);
+}
+
+qreal Shape::width() const
+{
+    return bounds().width();
+}
+
+qreal Shape::height() const
+{
+    return bounds().height();
+}
+
 void Shape::collapse()
 {
     const BoundingBoxPoint* topLeft = boundingBox().boundingBoxPoint(BoundingBoxPoint::TOP_LEFT);

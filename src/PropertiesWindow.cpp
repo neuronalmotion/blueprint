@@ -35,6 +35,19 @@ void PropertiesWindow::initSignalSlot()
 {
     // Shape (common)
     connect(mUi->foregroundColor, &QPushButton::clicked, this, &PropertiesWindow::onBackgroundColorClicked);
+    connect(mUi->spinBox_positionX, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged), [=](int value) {
+        QPointF pos = mCurrentItem->pos();
+        pos.setX(value);
+        mCurrentItem->setPos(pos);
+    });
+    connect(mUi->spinBox_positionY, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged), [=](int value) {
+        QPointF pos = mCurrentItem->pos();
+        pos.setY(value);
+        mCurrentItem->setPos(pos);
+    });
+    connect(mUi->spinBox_width, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged), [=](int value) {
+        mCurrentItem->setWidth(value);
+    });
 
     // ShapeBezier
     connect(mUi->backgroundImage, &QPushButton::clicked, this, &PropertiesWindow::onBackgroundImageClicked);
@@ -71,6 +84,12 @@ void PropertiesWindow::shapeSelected(blueprint::Shape* shape)
                                         .arg(backColor.red())
                                         .arg(backColor.green())
                                         .arg(backColor.blue()));
+
+
+    mUi->spinBox_positionX->setValue(mCurrentItem->posAbsolute().x());
+    mUi->spinBox_positionY->setValue(mCurrentItem->posAbsolute().y());
+    mUi->spinBox_width->setValue(mCurrentItem->width());
+    mUi->spinBox_height->setValue(mCurrentItem->height());
 
     // Background image
     // TODO rather than relying on ugly casts
