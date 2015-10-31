@@ -15,6 +15,7 @@ namespace blueprint {
 class ShapeText : public Shape
 {
 public:
+    explicit ShapeText(Shape* parentShape, const ShapeType& shapeType, const qreal& x = 0, const qreal& y = 0);
     explicit ShapeText(Shape* parentShape);
     ~ShapeText();
 
@@ -39,6 +40,8 @@ protected:
     void updateBoundingBoxBezierVisibility() override;
 
 private:
+    void init(qreal x, qreal y);
+
     QGraphicsTextItem* mGraphicsItem;
     BoundingBox mBoundingBox;
 };
