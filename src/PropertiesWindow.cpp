@@ -133,8 +133,7 @@ void PropertiesWindow::onTextChanged(const QString& text)
 
 void PropertiesWindow::displayFontDialog()
 {
-
-    if (!mCurrentItem->shapeType() == Shape::ShapeType::TEXT) {
+    if (mCurrentItem->shapeType() != Shape::ShapeType::TEXT) {
         return;
     }
     ShapeText* shape = static_cast<ShapeText*>(mCurrentItem);
@@ -142,6 +141,7 @@ void PropertiesWindow::displayFontDialog()
     QFont font = QFontDialog::getFont(&ok, shape->font(), this);
     if (ok) {
         mUi->buttonTextFont->setText(font.family());
+        shape->setFont(font);
         updateShapeTextFromProperties();
     }
 }
