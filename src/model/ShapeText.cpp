@@ -81,7 +81,6 @@ void ShapeText::setText(const QString& text)
 {
     mGraphicsItem->setPlainText(text);
     mGraphicsItem->adjustSize();
-    mBoundingBox.updateRect();
 }
 
 QFont ShapeText::font() const
@@ -93,7 +92,23 @@ void ShapeText::setFont(const QFont& font)
 {
     mGraphicsItem->setFont(font);
     mGraphicsItem->adjustSize();
-    mBoundingBox.updateRect();
+}
+
+Parcel*ShapeText::toParcel() const
+{
+    Parcel* parcel = Shape::toParcel();
+    parcel->putProperty("text", text());
+    parcel->putProperty("font", font().toString());
+    return parcel;
+}
+
+void ShapeText::fromParcel(const Parcel& parcel)
+{
+    Shape::fromParcel(parcel);
+    setText(parcel.propertyValue("text").toString());
+    QFont font;
+    font.fromString(parcel.propertyValue("font").toString());
+    setFont(font);
 }
 
 void ShapeText::updateBoundingBoxBezierVisibility()

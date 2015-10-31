@@ -36,6 +36,9 @@ public:
     QFont font() const;
     void setFont(const QFont& font);
 
+    Parcel* toParcel() const override;
+    void fromParcel(const Parcel& parcel) override;
+
 protected:
     void updateBoundingBoxBezierVisibility() override;
 
