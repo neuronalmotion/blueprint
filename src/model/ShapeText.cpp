@@ -12,6 +12,10 @@ ShapeText::ShapeText(Shape* parentShape)
 {
     mGraphicsItem->setPlainText(name());
     mGraphicsItem->adjustSize();
+    mGraphicsItem->setFlag(QGraphicsItem::ItemIsMovable);
+    mGraphicsItem->setFlag(QGraphicsItem::ItemSendsGeometryChanges);
+    mGraphicsItem->setFlag(QGraphicsItem::ItemIsSelectable);
+    mGraphicsItem->setFlag(QGraphicsItem::ItemIsFocusable);
     setForegroundColor(QColor(0, 0, 0));
 }
 
