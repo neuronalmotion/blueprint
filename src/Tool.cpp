@@ -32,6 +32,11 @@ Shape::ShapeType Tool::shapeType(const Type& toolType)
     case Tool::Type::TEXT:
         shapeType = Shape::ShapeType::TEXT;
         break;
+
+    case Tool::Type::BEZIER_CURVE:
+        shapeType = Shape::ShapeType::BEZIER_CURVE;
+        break;
+
     default:
         qFatal("Trying to convert invalid source tool: %d", toolType);
         break;

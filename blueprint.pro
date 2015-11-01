@@ -21,6 +21,7 @@ HEADERS  += src/MainWindow.h \
     src/model/Shape.h \
     src/PropertiesWindow.h \
     src/model/ShapeLine.h \
+    src/model/ShapeBezierCurve.h \
     src/model/ShapeBezier.h \
     src/model/ShapeModel.h \
     src/TreeView.h \
@@ -46,6 +47,7 @@ SOURCES += src/main.cpp\
     src/model/Shape.cpp \
     src/PropertiesWindow.cpp \
     src/model/ShapeLine.cpp \
+    src/model/ShapeBezierCurve.cpp \
     src/model/ShapeBezier.cpp \
     src/model/ShapeModel.cpp \
     src/TreeView.cpp \

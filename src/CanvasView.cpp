@@ -14,6 +14,7 @@
 #include "model/ShapeLine.h"
 #include "model/ShapeModel.h"
 #include "model/ShapeFactory.h"
+#include "model/ShapeBezierCurve.h"
 
 using namespace blueprint;
 
@@ -59,24 +60,55 @@ void CanvasView::mousePressEvent(QMouseEvent *event)
 
     // Search the parent item
     QPointF point = QGraphicsView::mapToScene(event->pos());
+    qDebug() << "point = " << point;
     blueprint::Shape* shapeParent = shapeFromScenePoint(point);
+    Q_ASSERT(shapeParent != nullptr);
 
     // Position is always relative to direct parent
     QPointF relPoint(point.x() - shapeParent->posAbsolute().x(),
                      point.y() - shapeParent->posAbsolute().y());
 
-    mCreatingShape = ShapeFactory::createShape(Tool::shapeType(mCurrentTool),
-                                               shapeParent);
+    qDebug() << "REL point = " << relPoint;
 
-    mCreatingShape->setPos(relPoint);
+    // Create shape and set initial position
+    if (mCurrentTool != Tool::BEZIER_CURVE) {
+        mCreatingShape = ShapeFactory::createShape(Tool::shapeType(mCurrentTool), shapeParent);
+        mCreatingShape->setPos(relPoint);
 
-    // snap bounding box to mouse position
-    mCreatingShape->collapse();
-    mCreatingLastPosition = point;
-    ShapeModel* model = ShapeModel::instance();
-    model->addItem(mCreatingShape, shapeParent);
-    model->selectShape(mCreatingShape);
+        // Snap bounding box to mouse position
+        mCreatingShape->collapse();
+        mCreatingLastPosition = point;
+        qDebug() << "mCreatingLastPosition = " << mCreatingLastPosition;
+        ShapeModel* model = ShapeModel::instance();
+        model->addItem(mCreatingShape, shapeParent);
+        model->selectShape(mCreatingShape);
+    }else{
+        if (mCreatingShape == nullptr) {
+            mCreatingShape = ShapeFactory::createShape(Tool::shapeType(mCurrentTool), shapeParent);
+            mCreatingShape->setPos(relPoint);
 
+            // Snap bounding box to mouse position
+            mCreatingShape->collapse();
+            mCreatingLastPosition = point;
+            qDebug() << "mCreatingLastPosition = " << mCreatingLastPosition;
+            ShapeModel* model = ShapeModel::instance();
+            model->addItem(mCreatingShape, shapeParent);
+            model->selectShape(mCreatingShape);
+        }else{
+            ShapeBezierCurve* shapeBezierCurve = static_cast<ShapeBezierCurve*>(mCreatingShape);
+
+            QPointF delta = point - mCreatingLastPosition;
+            shapeBezierCurve->addPath(delta , delta, delta);
+            //shapeBezierCurve->addSegment(delta);
+            ShapeModel* model = ShapeModel::instance();
+            model->selectShape(shapeBezierCurve);
+            mCreatingLastPosition = point - delta;
+            qDebug() << "mCreatingLastPosition = " << mCreatingLastPosition;
+
+        }
+    }
+
+    qDebug() << " ";
     event->accept();
 }
 
@@ -85,6 +117,10 @@ void CanvasView::mouseMoveEvent(QMouseEvent *event)
     QGraphicsView::mouseMoveEvent(event);
 
     if (dragMode() == QGraphicsView::ScrollHandDrag) {
+        return;
+    }
+
+    if (mCurrentTool == Tool::BEZIER_CURVE) {
         return;
     }
 
@@ -106,8 +142,10 @@ void CanvasView::mouseReleaseEvent(QMouseEvent *event)
         return;
     }
 
-    mCreatingShape = nullptr;
-    mCreatingLastPosition = QPointF(0.0f, 0.0f);
+    if (mCurrentTool != Tool::BEZIER_CURVE) {
+        mCreatingShape = nullptr;
+        mCreatingLastPosition = QPointF(0.0f, 0.0f);
+    }
 
     event->accept();
 }

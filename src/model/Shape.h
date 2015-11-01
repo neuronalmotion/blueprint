@@ -25,6 +25,7 @@ public:
         RECTANGLE,
         BEZIER,
         TEXT,
+        BEZIER_CURVE
     };
 
     enum EditMode {

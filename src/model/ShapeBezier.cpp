@@ -254,6 +254,7 @@ void ShapeBezier::addPath(const QPointF& c1, const QPointF& c2, const QPointF& e
     }
 
     mGraphicsItem->setPath(mPath);
+    updateBoundingBoxBezierVisibility();
 }
 
 void ShapeBezier::addSegment(const QPointF& point)

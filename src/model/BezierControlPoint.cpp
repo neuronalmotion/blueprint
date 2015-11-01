@@ -21,6 +21,7 @@ BezierControlPoint::BezierControlPoint(ShapeBezier* parent, int index)
     int rectSize = 10;
     setRect(-rectSize/2, -rectSize/2, rectSize, rectSize);
     setVisible(false);
+    setData(0, qVariantFromValue(static_cast<void *>(parent)));
 }
 
 BezierControlPoint::~BezierControlPoint()

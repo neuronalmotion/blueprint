@@ -6,6 +6,7 @@
 #include "ShapeBezier.h"
 #include "ShapeLine.h"
 #include "ShapeText.h"
+#include "ShapeBezierCurve.h"
 
 using namespace blueprint;
 
@@ -118,6 +119,10 @@ Shape* ShapeFactory::createShape(const Shape::ShapeType shapeType, Shape* shapeP
     case Shape::ShapeType::TEXT:
         shape = new ShapeText(shapeParent);
         name = "Text";
+        break;
+    case Shape::ShapeType::BEZIER_CURVE:
+        shape = new ShapeBezierCurve(shapeParent);
+        name = "Bezier curve";
         break;
     default:
         shape = new ShapeBezier(shapeParent);
