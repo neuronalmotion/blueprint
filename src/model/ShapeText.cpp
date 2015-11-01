@@ -3,11 +3,13 @@
 #include <QGraphicsTextItem>
 #include <QTextDocument>
 
+#include "ShapeModel.h"
+
 using namespace blueprint;
 
 ShapeText::ShapeText(Shape* parentShape, const Shape::ShapeType& shapeType, const qreal& x, const qreal& y)
     : Shape(parentShape, shapeType),
-      mGraphicsItem(new QGraphicsTextItem(parentShape->graphicsItem())),
+      mGraphicsItem(new TextGraphicsItem(this)),
       mBoundingBox(this)
 {
     init(x, y);
@@ -15,7 +17,7 @@ ShapeText::ShapeText(Shape* parentShape, const Shape::ShapeType& shapeType, cons
 
 ShapeText::ShapeText(Shape* parentShape)
     : Shape(parentShape, Shape::ShapeType::TEXT),
-      mGraphicsItem(new QGraphicsTextItem(parentShape->graphicsItem())),
+      mGraphicsItem(new TextGraphicsItem(this)),
       mBoundingBox(this)
 {
     init(0, 0);
@@ -131,4 +133,22 @@ void ShapeText::init(qreal x, qreal y)
 
     mGraphicsItem->setData(0, qVariantFromValue(static_cast<void *>(this)));
     mGraphicsItem->setPos(x, y);
+}
+
+TextGraphicsItem::TextGraphicsItem(ShapeText* shape, QGraphicsItem* parent)
+    : QGraphicsTextItem(parent),
+      mShape(shape)
+{
+
+}
+
+TextGraphicsItem::~TextGraphicsItem()
+{
+
+}
+
+void TextGraphicsItem::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
+{
+     QGraphicsItem::mouseMoveEvent(event);
+     ShapeModel::instance()->shapeGeometryChanged(mShape);
 }

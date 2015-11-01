@@ -21,7 +21,7 @@ public:
     ~ShapeBezier();
 
     QGraphicsItem* graphicsItem() const override;
-    void boundingBoxEvent(const BoundingBoxEvent& event);
+    void boundingBoxEvent(const BoundingBoxEvent& event) override;
     QRectF bounds() const override;
     void resizeOnCreation(const QPointF& delta) override;
     void setForegroundColor(const QColor& color) override;
@@ -68,6 +68,9 @@ public:
     GraphicsItem(ShapeBezier* shape, QGraphicsItem* parent = 0);
     ~GraphicsItem();
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0) override;
+
+protected:
+    void mouseMoveEvent(QGraphicsSceneMouseEvent* event) override;
 
 private:
     ShapeBezier* mShape;

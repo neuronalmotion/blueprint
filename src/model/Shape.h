@@ -66,7 +66,7 @@ public:
     virtual void setEditMode(const EditMode& mode);
     QPointF posAbsolute();
     QPointF pos() const { return graphicsItem()->pos(); }
-    void setPos(const QPointF& pos) { graphicsItem()->setPos(pos); }
+    inline void setPos(const QPointF& pos) { graphicsItem()->setPos(pos); }
     qreal width() const;
     void setWidth(const qreal& width);
     qreal height() const;

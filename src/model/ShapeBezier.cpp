@@ -7,6 +7,7 @@
 
 #include "BezierControlPoint.h"
 #include "BezierPoint.h"
+#include "ShapeModel.h"
 
 using namespace blueprint;
 
@@ -82,6 +83,7 @@ void ShapeBezier::boundingBoxEvent(const BoundingBoxEvent& event)
 
         element->setPos(p1);
     }
+    ShapeModel::instance()->shapeGeometryChanged(this);
 }
 
 void ShapeBezier::resizeOnCreation(const QPointF& delta)
@@ -371,4 +373,10 @@ void GraphicsItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* opti
         // Draw final image
         painter->drawImage(shapeBounds, buffer);
     }
+}
+
+void GraphicsItem::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
+{
+     QGraphicsItem::mouseMoveEvent(event);
+     ShapeModel::instance()->shapeGeometryChanged(mShape);
 }

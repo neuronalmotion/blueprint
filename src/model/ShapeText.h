@@ -48,6 +48,21 @@ private:
     QGraphicsTextItem* mGraphicsItem;
     BoundingBox mBoundingBox;
 };
+
+class TextGraphicsItem : public QGraphicsTextItem
+{
+public:
+    TextGraphicsItem(ShapeText* shape, QGraphicsItem* parent = 0);
+    ~TextGraphicsItem();
+
+protected:
+    void mouseMoveEvent(QGraphicsSceneMouseEvent* event) override;
+
+private:
+    ShapeText* mShape;
+
+};
+
 }
 
 #endif // SHAPETEXT_H

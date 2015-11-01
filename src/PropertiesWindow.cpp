@@ -1,6 +1,7 @@
 #include "PropertiesWindow.h"
 #include "ui_PropertiesWindow.h"
 
+#include <QDebug>
 #include <QColorDialog>
 #include <QFileDialog>
 #include <QFont>
@@ -17,7 +18,8 @@ using namespace blueprint;
 PropertiesWindow::PropertiesWindow(QWidget *parent) :
     QWidget(parent),
     mUi(new Ui::PropertiesWindow),
-    mCurrentItem(nullptr)
+    mCurrentItem(nullptr),
+    mState(CLEAR)
 {
     mUi->setupUi(this);
     mUi->foregroundColor->setAutoFillBackground(true);
@@ -66,40 +68,40 @@ void PropertiesWindow::initSignalSlot()
     // ShapeModel
     connect(ShapeModel::instance(), &ShapeModel::shapeSelected, this, &PropertiesWindow::shapeSelected);
     connect(ShapeModel::instance(), &ShapeModel::shapePropertiesChanged, this, &PropertiesWindow::shapeSelected);
+    connect(ShapeModel::instance(), &ShapeModel::shapeGeometryChanged, this, &PropertiesWindow::shapeGeometryChanged);
 }
 
 
 void PropertiesWindow::shapeSelected(blueprint::Shape* shape)
 {
-    mCurrentItem = shape;
-    if (!mCurrentItem) {
-        reset();
+    if (!shape) {
+        clear();
         return;
     }
 
+    mState = SHAPE_SELECTED;
+    mCurrentItem = shape;
+    qDebug() << "Shape selected";
+
     // Name
-    mUi->name->setText(mCurrentItem->name());
+    mUi->name->setEnabled(true);
+    mUi->name->setText(shape->name());
+    shapeGeometryChanged(shape);
 
     // Background color
-    QColor backColor = mCurrentItem->foregroundColor();
+    QColor backColor = shape->foregroundColor();
     mUi->foregroundColor->setEnabled(true);
     mUi->foregroundColor->setStyleSheet(QString("background-color: rgb(%1, %2, %3);")
                                         .arg(backColor.red())
                                         .arg(backColor.green())
                                         .arg(backColor.blue()));
 
-
-    mUi->spinBox_positionX->setValue(mCurrentItem->posAbsolute().x());
-    mUi->spinBox_positionY->setValue(mCurrentItem->posAbsolute().y());
-    mUi->spinBox_width->setValue(mCurrentItem->width());
-    mUi->spinBox_height->setValue(mCurrentItem->height());
-
     // Background image
     // TODO rather than relying on ugly casts
     // we should display a "modified" PropertiesWindow
     // based on the shape type / attributes
-    if (mCurrentItem->shapeType() != Shape::ShapeType::TEXT) {
-        ShapeBezier* shapeBezier = static_cast<ShapeBezier*>(mCurrentItem);
+    if (shape->shapeType() != Shape::ShapeType::TEXT) {
+        ShapeBezier* shapeBezier = static_cast<ShapeBezier*>(shape);
         QString backImage = shapeBezier->backgroundImageFileName();
         mUi->backgroundImageText->setText(backImage);
     } else {
@@ -107,8 +109,23 @@ void PropertiesWindow::shapeSelected(blueprint::Shape* shape)
     }
 
     // Border width
-    mUi->borderWidth->setValue(mCurrentItem->borderWidth());
+    mUi->borderWidth->setValue(shape->borderWidth());
 }
+
+void PropertiesWindow::shapeGeometryChanged(Shape* shape)
+{
+    if (shape != mCurrentItem) {
+        return;
+    }
+    toggleSignalBlocks(true);
+    mUi->spinBox_positionX->setValue(shape->posAbsolute().x());
+    mUi->spinBox_positionY->setValue(shape->posAbsolute().y());
+    mUi->spinBox_width->setValue(shape->width());
+    mUi->spinBox_height->setValue(shape->height());
+    toggleSignalBlocks(false);
+}
+
+
 
 void PropertiesWindow::onBackgroundColorClicked()
 {
@@ -168,9 +185,15 @@ void PropertiesWindow::displayFontDialog()
     }
 }
 
-void PropertiesWindow::reset()
+void PropertiesWindow::clear()
 {
+    if (mState == CLEAR) {
+        return;
+    }
+    mState = CLEAR;
+    mCurrentItem = nullptr;
     mUi->name->clear();
+    mUi->lineEditText->clear();
     mUi->foregroundColor->setEnabled(false);
     mUi->backgroundImageText->clear();
     mUi->foregroundColor->setStyleSheet(QString("background-color: rgb(%1, %2, %3);")
@@ -182,7 +205,7 @@ void PropertiesWindow::reset()
 
 void PropertiesWindow::updateTextProperties()
 {
-    if (!mCurrentItem->shapeType() == Shape::ShapeType::TEXT) {
+    if (mCurrentItem->shapeType() != Shape::ShapeType::TEXT) {
         return;
     }
     ShapeText* shape = static_cast<ShapeText*>(mCurrentItem);
@@ -196,7 +219,7 @@ void PropertiesWindow::updateTextProperties()
 
 void PropertiesWindow::updateShapeTextFromProperties()
 {
-    if (!mCurrentItem->shapeType() == Shape::ShapeType::TEXT) {
+    if (mCurrentItem->shapeType() != Shape::ShapeType::TEXT) {
         return;
     }
     ShapeText* shape = static_cast<ShapeText*>(mCurrentItem);
@@ -206,4 +229,13 @@ void PropertiesWindow::updateShapeTextFromProperties()
     font.setItalic(mUi->buttonTextItalic->isChecked());
     font.setUnderline(mUi->buttonTextUnderline->isChecked());
     shape->setFont(font);
+}
+
+void PropertiesWindow::toggleSignalBlocks(bool block)
+{
+
+    mUi->spinBox_positionX->blockSignals(block);
+    mUi->spinBox_positionY->blockSignals(block);
+    mUi->spinBox_width->blockSignals(block);
+    mUi->spinBox_height->blockSignals(block);
 }
