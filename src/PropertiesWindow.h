@@ -14,12 +14,19 @@ class PropertiesWindow : public QWidget
     Q_OBJECT
 
 public:
+
+    enum PropertiesState {
+        CLEAR,
+        SHAPE_SELECTED,
+    };
+
     explicit PropertiesWindow(QWidget *parent = 0);
     ~PropertiesWindow();
     void initSignalSlot();
 
 public slots:
     void shapeSelected(blueprint::Shape* shape);
+    void shapeGeometryChanged(blueprint::Shape* shape);
     void onBackgroundColorClicked();
     void onBackgroundImageClicked();
     void onThicknessValueChanged(int val);
@@ -29,13 +36,15 @@ public slots:
     void displayFontDialog();
 
 private:
-    void reset();
+    void clear();
     void updateTextProperties();
     void updateShapeTextFromProperties();
+    void toggleSignalBlocks(bool block);
 
 private:
     Ui::PropertiesWindow *mUi;
     blueprint::Shape* mCurrentItem;
+    PropertiesState mState;
 };
 
 #endif // PROPERTIESWINDOW_H

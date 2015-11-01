@@ -26,7 +26,8 @@ Shape::Shape(Shape* parentShape, const ShapeType& shapeType)
       mEditMode(EditMode::BOUNDING_BOX),
       mChildItems(),
       mModelIndex(nullptr),
-      mIsSelected(false)
+      mIsSelected(false),
+      mOpacity(1.0f)
 {
 }
 
@@ -128,6 +129,35 @@ QPointF Shape::posAbsolute()
     return position;
 }
 
+void Shape::setWidth(const qreal& width)
+{
+    const BoundingBoxPoint* bottomRight = boundingBox().boundingBoxPoint(BoundingBoxPoint::BOTTOM_RIGHT);
+    QPointF delta = bottomRight->pos();
+    delta.setX(width - delta.x());
+    delta.setY(0);
+    boundingBox().boundingBoxPointMoved(bottomRight->translationDirection(), delta);
+}
+
+qreal Shape::width() const
+{
+    return bounds().width();
+}
+
+qreal Shape::height() const
+{
+    return bounds().height();
+}
+
+void Shape::setHeight(const qreal& height)
+{
+    const BoundingBoxPoint* bottomRight = boundingBox().boundingBoxPoint(BoundingBoxPoint::BOTTOM_RIGHT);
+    QPointF delta = bottomRight->pos();
+    delta.setX(0);
+    delta.setY(height - delta.y());
+    boundingBox().boundingBoxPointMoved(bottomRight->translationDirection(), delta);
+
+}
+
 void Shape::collapse()
 {
     const BoundingBoxPoint* topLeft = boundingBox().boundingBoxPoint(BoundingBoxPoint::TOP_LEFT);
@@ -138,6 +168,12 @@ void Shape::collapse()
     delta.setX(delta.x() + 1);
     delta.setY(delta.y() + 1);
     boundingBox().boundingBoxPointMoved(bottomRight->translationDirection(), delta);
+}
+
+void Shape::setOpacity(qreal opacity)
+{
+    mOpacity = opacity;
+    graphicsItem()->update();
 }
 
 qreal Shape::zValue()

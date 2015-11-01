@@ -57,6 +57,7 @@ signals:
     void shapeAdded(Shape* shape);
     void shapeRemoved(Shape* shape);
     void shapeSelected(Shape* shape);
+    void shapeGeometryChanged(Shape* shape);
     void shapePropertiesChanged(Shape* shape);
 
 private:

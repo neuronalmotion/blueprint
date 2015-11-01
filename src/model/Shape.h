@@ -66,8 +66,14 @@ public:
     virtual void setEditMode(const EditMode& mode);
     QPointF posAbsolute();
     QPointF pos() const { return graphicsItem()->pos(); }
-    void setPos(const QPointF& pos) { graphicsItem()->setPos(pos); }
+    inline void setPos(const QPointF& pos) { graphicsItem()->setPos(pos); }
+    qreal width() const;
+    void setWidth(const qreal& width);
+    qreal height() const;
+    void setHeight(const qreal& height);
     void collapse();
+    inline qreal opacity() const { return mOpacity; }
+    void setOpacity(qreal opacity);
 
     qreal zValue();
     void setZValue(qreal zValue);
@@ -92,6 +98,7 @@ protected:
     QList<Shape*> mChildItems;
     QPersistentModelIndex* mModelIndex;
     bool mIsSelected;
+    qreal mOpacity;
 };
 }
 
