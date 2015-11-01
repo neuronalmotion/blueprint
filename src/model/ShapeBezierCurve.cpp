@@ -32,8 +32,4 @@ void ShapeBezierCurve::updateBoundingBoxBezierVisibility()
     for (auto e : mElements) {
         e->setVisible(bezierVisibility);
     }
-
-    // hide control points
-    //mElements[1]->setVisible(false);
-    //mElements[mElements.length() - 2]->setVisible(false);
 }

@@ -71,44 +71,25 @@ void CanvasView::mousePressEvent(QMouseEvent *event)
     qDebug() << "REL point = " << relPoint;
 
     // Create shape and set initial position
-    if (mCurrentTool != Tool::BEZIER_CURVE) {
+    if (mCurrentTool != Tool::BEZIER_CURVE || mCreatingShape == nullptr) {
         mCreatingShape = ShapeFactory::createShape(Tool::shapeType(mCurrentTool), shapeParent);
         mCreatingShape->setPos(relPoint);
 
         // Snap bounding box to mouse position
         mCreatingShape->collapse();
         mCreatingLastPosition = point;
-        qDebug() << "mCreatingLastPosition = " << mCreatingLastPosition;
         ShapeModel* model = ShapeModel::instance();
         model->addItem(mCreatingShape, shapeParent);
         model->selectShape(mCreatingShape);
     }else{
-        if (mCreatingShape == nullptr) {
-            mCreatingShape = ShapeFactory::createShape(Tool::shapeType(mCurrentTool), shapeParent);
-            mCreatingShape->setPos(relPoint);
 
-            // Snap bounding box to mouse position
-            mCreatingShape->collapse();
-            mCreatingLastPosition = point;
-            qDebug() << "mCreatingLastPosition = " << mCreatingLastPosition;
-            ShapeModel* model = ShapeModel::instance();
-            model->addItem(mCreatingShape, shapeParent);
-            model->selectShape(mCreatingShape);
-        }else{
-            ShapeBezierCurve* shapeBezierCurve = static_cast<ShapeBezierCurve*>(mCreatingShape);
-
-            QPointF delta = point - mCreatingLastPosition;
-            shapeBezierCurve->addPath(delta , delta, delta);
-            //shapeBezierCurve->addSegment(delta);
-            ShapeModel* model = ShapeModel::instance();
-            model->selectShape(shapeBezierCurve);
-            mCreatingLastPosition = point - delta;
-            qDebug() << "mCreatingLastPosition = " << mCreatingLastPosition;
-
-        }
+        // Add another point on Bezier curve
+        ShapeBezierCurve* shapeBezierCurve = static_cast<ShapeBezierCurve*>(mCreatingShape);
+        QPointF delta = point - mCreatingLastPosition;
+        shapeBezierCurve->addPath(delta , delta, delta);
+        mCreatingLastPosition = point - delta;
     }
 
-    qDebug() << " ";
     event->accept();
 }
 
@@ -120,6 +101,8 @@ void CanvasView::mouseMoveEvent(QMouseEvent *event)
         return;
     }
 
+    // Bezier curve must not update mCreatingLastPosition on mouse move
+    // and currently don't handle resizeOnCreation callback
     if (mCurrentTool == Tool::BEZIER_CURVE) {
         return;
     }
