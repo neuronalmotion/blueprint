@@ -67,9 +67,10 @@ public:
     QPointF posAbsolute();
     QPointF pos() const { return graphicsItem()->pos(); }
     void setPos(const QPointF& pos) { graphicsItem()->setPos(pos); }
-    void setWidth(const qreal& width);
     qreal width() const;
+    void setWidth(const qreal& width);
     qreal height() const;
+    void setHeight(const qreal& height);
     void collapse();
 
     qreal zValue();

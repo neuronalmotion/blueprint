@@ -48,6 +48,9 @@ void PropertiesWindow::initSignalSlot()
     connect(mUi->spinBox_width, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged), [=](int value) {
         mCurrentItem->setWidth(value);
     });
+    connect(mUi->spinBox_height, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged), [=](int value) {
+        mCurrentItem->setHeight(value);
+    });
 
     // ShapeBezier
     connect(mUi->backgroundImage, &QPushButton::clicked, this, &PropertiesWindow::onBackgroundImageClicked);

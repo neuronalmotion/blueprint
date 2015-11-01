@@ -132,7 +132,7 @@ void Shape::setWidth(const qreal& width)
 {
     const BoundingBoxPoint* bottomRight = boundingBox().boundingBoxPoint(BoundingBoxPoint::BOTTOM_RIGHT);
     QPointF delta = bottomRight->pos();
-    delta.setX(delta.x() - width);
+    delta.setX(width - delta.x());
     delta.setY(0);
     boundingBox().boundingBoxPointMoved(bottomRight->translationDirection(), delta);
 }
@@ -145,6 +145,16 @@ qreal Shape::width() const
 qreal Shape::height() const
 {
     return bounds().height();
+}
+
+void Shape::setHeight(const qreal& height)
+{
+    const BoundingBoxPoint* bottomRight = boundingBox().boundingBoxPoint(BoundingBoxPoint::BOTTOM_RIGHT);
+    QPointF delta = bottomRight->pos();
+    delta.setX(0);
+    delta.setY(height - delta.y());
+    boundingBox().boundingBoxPointMoved(bottomRight->translationDirection(), delta);
+
 }
 
 void Shape::collapse()
