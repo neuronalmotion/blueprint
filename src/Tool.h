@@ -17,6 +17,7 @@ public:
         LINE,
         RECTANGLE,
         TEXT,
+        BEZIER_CURVE
     };
 
     Tool(const Type& type, QAction* action);

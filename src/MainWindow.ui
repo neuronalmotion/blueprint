@@ -36,7 +36,7 @@
      <x>0</x>
      <y>0</y>
      <width>1200</width>
-     <height>20</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -59,6 +59,7 @@
     <addaction name="actionCircle"/>
     <addaction name="actionRectangle"/>
     <addaction name="actionText"/>
+    <addaction name="actionBezierCurve"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuTools"/>
@@ -168,7 +169,7 @@
   </action>
   <action name="actionSave_as">
    <property name="text">
-    <string>&amp;Save Project as...</string>
+    <string>Save &amp;Project as...</string>
    </property>
   </action>
   <action name="actionLoad">
@@ -184,6 +185,14 @@
   <action name="actionSave">
    <property name="text">
     <string>&amp;Save Project</string>
+   </property>
+  </action>
+  <action name="actionBezierCurve">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Bezier curve</string>
    </property>
   </action>
  </widget>
