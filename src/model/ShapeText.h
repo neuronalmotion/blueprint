@@ -54,6 +54,7 @@ class TextGraphicsItem : public QGraphicsTextItem
 public:
     TextGraphicsItem(ShapeText* shape, QGraphicsItem* parent = 0);
     ~TextGraphicsItem();
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0) override;
 
 protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent* event) override;

@@ -328,6 +328,7 @@ GraphicsItem::~GraphicsItem()
 void GraphicsItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
     // Draw original shape
+    painter->setOpacity(mShape->opacity());
     QGraphicsPathItem::paint(painter, option, widget);
 
     // Draw background image

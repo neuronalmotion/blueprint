@@ -26,7 +26,8 @@ Shape::Shape(Shape* parentShape, const ShapeType& shapeType)
       mEditMode(EditMode::BOUNDING_BOX),
       mChildItems(),
       mModelIndex(nullptr),
-      mIsSelected(false)
+      mIsSelected(false),
+      mOpacity(1.0f)
 {
 }
 
@@ -167,6 +168,12 @@ void Shape::collapse()
     delta.setX(delta.x() + 1);
     delta.setY(delta.y() + 1);
     boundingBox().boundingBoxPointMoved(bottomRight->translationDirection(), delta);
+}
+
+void Shape::setOpacity(qreal opacity)
+{
+    mOpacity = opacity;
+    graphicsItem()->update();
 }
 
 qreal Shape::zValue()

@@ -72,6 +72,8 @@ public:
     qreal height() const;
     void setHeight(const qreal& height);
     void collapse();
+    inline qreal opacity() const { return mOpacity; }
+    void setOpacity(qreal opacity);
 
     qreal zValue();
     void setZValue(qreal zValue);
@@ -96,6 +98,7 @@ protected:
     QList<Shape*> mChildItems;
     QPersistentModelIndex* mModelIndex;
     bool mIsSelected;
+    qreal mOpacity;
 };
 }
 

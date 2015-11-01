@@ -53,6 +53,10 @@ void PropertiesWindow::initSignalSlot()
     connect(mUi->spinBox_height, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged), [=](int value) {
         mCurrentItem->setHeight(value);
     });
+    connect(mUi->spinBox_opacity, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged), [=](int value) {
+        mCurrentItem->setOpacity((qreal)(value / 100.0f));
+    });
+
 
     // ShapeBezier
     connect(mUi->backgroundImage, &QPushButton::clicked, this, &PropertiesWindow::onBackgroundImageClicked);
@@ -87,6 +91,9 @@ void PropertiesWindow::shapeSelected(blueprint::Shape* shape)
     mUi->name->setEnabled(true);
     mUi->name->setText(shape->name());
     shapeGeometryChanged(shape);
+    mUi->spinBox_opacity->blockSignals(true);
+    mUi->spinBox_opacity->setValue(shape->opacity() * 100);
+    mUi->spinBox_opacity->blockSignals(false);
 
     // Background color
     QColor backColor = shape->foregroundColor();

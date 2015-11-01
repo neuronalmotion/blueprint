@@ -1,6 +1,7 @@
 #include "ShapeText.h"
 
 #include <QGraphicsTextItem>
+#include <QPainter>
 #include <QTextDocument>
 
 #include "ShapeModel.h"
@@ -147,8 +148,14 @@ TextGraphicsItem::~TextGraphicsItem()
 
 }
 
+void TextGraphicsItem::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
+{
+    painter->setOpacity(mShape->opacity());
+    QGraphicsTextItem::paint(painter, option, widget);
+}
+
 void TextGraphicsItem::mouseMoveEvent(QGraphicsSceneMouseEvent* event)
 {
-     QGraphicsItem::mouseMoveEvent(event);
+     QGraphicsTextItem::mouseMoveEvent(event);
      ShapeModel::instance()->shapeGeometryChanged(mShape);
 }
