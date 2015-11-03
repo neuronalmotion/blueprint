@@ -6,8 +6,6 @@
 #include <QString>
 #include <QFont>
 
-#include "BoundingBox.h"
-
 class QGraphicsTextItem;
 
 namespace blueprint {
@@ -28,7 +26,6 @@ public:
     void setBorderColor(const QColor& color) override;
     int borderWidth() const override;
     void setBorderWidth(int width) override;
-    inline virtual BoundingBox& boundingBox() override { return mBoundingBox; }
 
     QString text() const;
     void setText(const QString& text);
@@ -46,7 +43,6 @@ private:
     void init(qreal x, qreal y);
 
     QGraphicsTextItem* mGraphicsItem;
-    BoundingBox mBoundingBox;
 };
 
 class TextGraphicsItem : public QGraphicsTextItem

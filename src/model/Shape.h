@@ -6,11 +6,11 @@
 #include <QGraphicsItem>
 
 #include "io/Parcelable.h"
+#include "BoundingBox.h"
 
 class QPointF;
 
 namespace blueprint {
-class BoundingBox;
 class BoundingBoxEvent;
 
 class Shape : public Parcelable
@@ -58,7 +58,7 @@ public:
     virtual void setBorderColor(const QColor& color) = 0;
     virtual int borderWidth() const = 0;
     virtual void setBorderWidth(int width) = 0;
-    virtual BoundingBox& boundingBox() = 0;
+    inline BoundingBox* boundingBox() const { return mBoundingBox; }
 
     inline ShapeType shapeType() const { return mShapeType; }
     void setSelected(bool selected);
@@ -66,8 +66,8 @@ public:
     void toggleEditMode();
     virtual void setEditMode(const EditMode& mode);
     QPointF posAbsolute();
-    QPointF pos() const { return graphicsItem()->pos(); }
-    inline void setPos(const QPointF& pos) { graphicsItem()->setPos(pos); }
+    QPointF pos() const;
+    void setPos(const QPointF& pos);
     qreal width() const;
     void setWidth(const qreal& width);
     qreal height() const;
@@ -95,6 +95,7 @@ protected:
     Shape* mParentShape;
     ShapeType mShapeType;
     QString mName;
+    BoundingBox* mBoundingBox;
     EditMode mEditMode;
     QList<Shape*> mChildItems;
     QPersistentModelIndex* mModelIndex;

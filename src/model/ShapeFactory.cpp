@@ -37,7 +37,7 @@ Shape* ShapeFactory::createRectangle(Shape* shapeParent, bool addBezierPoints)
     if (addBezierPoints) {
         addRectanglePoints(*shape);
         shape->closePath();
-        shape->boundingBox().updateRect();
+        shape->boundingBox()->updateRect();
     }
     updateGraphicsItemParenting(shapeParent, shape);
     return shape;
@@ -50,8 +50,8 @@ Page* ShapeFactory::createPage(bool addBezierPoints)
     if (addBezierPoints) {
         addRectanglePoints(*shape);
         shape->closePath();
-        shape->boundingBox().updateRect();
-        shape->boundingBox().boundingBoxPointMoved(BoundingBoxPoint::BOTTOM_RIGHT, QPointF(10000.0, 10000.0));
+        shape->boundingBox()->updateRect();
+        shape->boundingBox()->boundingBoxPointMoved(BoundingBoxPoint::BOTTOM_RIGHT, QPointF(10000.0, 10000.0));
     }
     return shape;
 }
@@ -63,8 +63,8 @@ Canvas* ShapeFactory::createCanvas(Shape* shapeParent, bool addBezierPoints)
     if (addBezierPoints) {
         addRectanglePoints(*shape);
         shape->closePath();
-        shape->boundingBox().updateRect();
-        shape->boundingBox().boundingBoxPointMoved(BoundingBoxPoint::BOTTOM_RIGHT, QPointF(300.0, 500.0));
+        shape->boundingBox()->updateRect();
+        shape->boundingBox()->boundingBoxPointMoved(BoundingBoxPoint::BOTTOM_RIGHT, QPointF(300.0, 500.0));
     }
     updateGraphicsItemParenting(shapeParent, shape);
     return shape;
@@ -80,7 +80,7 @@ Shape* ShapeFactory::createEllipse(Shape* shapeParent, bool addBezierPoints)
         shape->addPath(QPointF(-40, 100), QPointF(-50, 80), QPointF(-50, 50));
         shape->addPath(QPointF(-50, 20), QPointF(-30, 0), QPointF(0, 0));
         shape->closePath();
-        shape->boundingBox().updateRect();
+        shape->boundingBox()->updateRect();
     }
     updateGraphicsItemParenting(shapeParent, shape);
     return shape;

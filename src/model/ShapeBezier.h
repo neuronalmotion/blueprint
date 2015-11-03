@@ -6,7 +6,6 @@
 #include <QImage>
 
 #include "Shape.h"
-#include "BoundingBox.h"
 #include "BezierElement.h"
 
 namespace blueprint {
@@ -36,7 +35,6 @@ public:
     inline int elementCount() const { return mElements.length(); }
     inline const BezierElement* element(const int& index) const { return mElements[index]; }
     void updateElement(BezierElement* bezierElement, const QPointF& pos);
-    inline virtual BoundingBox& boundingBox() override { return mBoundingBox; }
 
     void setBackgroundImage(const QString& fileNamei);
     inline QImage* backgroundImage() { return mBackgroundImage; }
@@ -57,7 +55,6 @@ protected:
     QList<BezierElement*> mElements;
     bool mIsPathClosed;
     GraphicsItem* mGraphicsItem;
-    BoundingBox mBoundingBox;
     QImage* mBackgroundImage;
     QString mBackgroundImageFileName;
 };

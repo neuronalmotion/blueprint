@@ -10,16 +10,14 @@ using namespace blueprint;
 
 ShapeText::ShapeText(Shape* parentShape, const Shape::ShapeType& shapeType, const qreal& x, const qreal& y)
     : Shape(parentShape, shapeType),
-      mGraphicsItem(new TextGraphicsItem(this)),
-      mBoundingBox(this)
+      mGraphicsItem(new TextGraphicsItem(this))
 {
     init(x, y);
 }
 
 ShapeText::ShapeText(Shape* parentShape)
     : Shape(parentShape, Shape::ShapeType::TEXT),
-      mGraphicsItem(new TextGraphicsItem(this)),
-      mBoundingBox(this)
+      mGraphicsItem(new TextGraphicsItem(this))
 {
     init(0, 0);
 }
@@ -121,7 +119,6 @@ void ShapeText::updateBoundingBoxBezierVisibility()
 
 void ShapeText::init(qreal x, qreal y)
 {
-    mBoundingBox.setVisible(false);
     setForegroundColor(QColor(0, 0, 0));
 
     mGraphicsItem->setPlainText(name());
@@ -134,6 +131,8 @@ void ShapeText::init(qreal x, qreal y)
 
     mGraphicsItem->setData(0, qVariantFromValue(static_cast<void *>(this)));
     mGraphicsItem->setPos(x, y);
+    mBoundingBox->updateParentGraphicsItem();
+    mBoundingBox->setVisible(false);
 }
 
 TextGraphicsItem::TextGraphicsItem(ShapeText* shape, QGraphicsItem* parent)
