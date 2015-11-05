@@ -117,27 +117,19 @@ void Shape::setEditMode(const EditMode& mode)
     updateBoundingBoxBezierVisibility();
 }
 
-QPointF Shape::posAbsolute()
+QPointF Shape::scenePos() const
 {
-    QPointF position = graphicsItem()->pos();
-
-    // FIXME function name is a misnomer, position is not always absolute!
-    if (shapeType() != ShapeType::CANVAS && mParentShape) {
-        blueprint::Shape* shapeParent = dynamic_cast<blueprint::Shape*>(mParentShape);
-        position = position + shapeParent->posAbsolute();
-    }
-
-    return position;
+    return graphicsItem()->scenePos();
 }
 
 QPointF Shape::pos() const
 {
-    return graphicsItem()->pos();
+    return graphicsItem()->mapToParent(bounds().topLeft());
 }
 
 void Shape::setPos(const QPointF& pos)
 {
-    graphicsItem()->setPos(pos);
+    graphicsItem()->setPos(pos - bounds().topLeft());
 }
 
 void Shape::setWidth(const qreal& width)

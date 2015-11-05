@@ -148,6 +148,10 @@ void ShapeBezier::fromParcel(const Parcel& parcel)
     Shape::fromParcel(parcel);
     mIsPathClosed = parcel.propertyValue("closed").toBool();
     bezierElementsFromParcel(parcel);
+
+    // Set shape position once that the bounding box is valid
+    // bounding box is valid only after bezier elements parsing
+    setPos(QPointF(parcel.propertyValue("posx").toFloat(), parcel.propertyValue("posy").toFloat()));
 }
 
 void ShapeBezier::bezierElementsFromParcel(const Parcel& parcel)

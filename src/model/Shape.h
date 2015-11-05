@@ -65,7 +65,7 @@ public:
     inline EditMode editMode() const { return mEditMode; }
     void toggleEditMode();
     virtual void setEditMode(const EditMode& mode);
-    QPointF posAbsolute();
+    QPointF scenePos() const;
     QPointF pos() const;
     void setPos(const QPointF& pos);
     qreal width() const;

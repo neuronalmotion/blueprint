@@ -125,8 +125,8 @@ void PropertiesWindow::shapeGeometryChanged(Shape* shape)
         return;
     }
     toggleSignalBlocks(true);
-    mUi->spinBox_positionX->setValue(shape->posAbsolute().x());
-    mUi->spinBox_positionY->setValue(shape->posAbsolute().y());
+    mUi->spinBox_positionX->setValue(shape->pos().x());
+    mUi->spinBox_positionY->setValue(shape->pos().y());
     mUi->spinBox_width->setValue(shape->width());
     mUi->spinBox_height->setValue(shape->height());
     toggleSignalBlocks(false);

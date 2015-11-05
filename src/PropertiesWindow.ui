@@ -201,6 +201,9 @@ color: rgb(86, 86, 86);</string>
      </property>
      <item row="0" column="3">
       <widget class="QSpinBox" name="spinBox_positionX">
+       <property name="minimum">
+        <number>-99999</number>
+       </property>
        <property name="maximum">
         <number>99999</number>
        </property>
@@ -229,6 +232,9 @@ color: rgb(86, 86, 86);</string>
      </item>
      <item row="0" column="6">
       <widget class="QSpinBox" name="spinBox_positionY">
+       <property name="minimum">
+        <number>-99999</number>
+       </property>
        <property name="maximum">
         <number>99999</number>
        </property>
@@ -243,6 +249,9 @@ color: rgb(86, 86, 86);</string>
      </item>
      <item row="1" column="3">
       <widget class="QSpinBox" name="spinBox_width">
+       <property name="minimum">
+        <number>1</number>
+       </property>
        <property name="maximum">
         <number>99999</number>
        </property>
@@ -250,6 +259,9 @@ color: rgb(86, 86, 86);</string>
      </item>
      <item row="1" column="6">
       <widget class="QSpinBox" name="spinBox_height">
+       <property name="minimum">
+        <number>1</number>
+       </property>
        <property name="maximum">
         <number>99999</number>
        </property>
