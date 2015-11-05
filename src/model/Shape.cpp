@@ -4,7 +4,6 @@
 #include <QPen>
 #include <QPointF>
 
-#include "BoundingBox.h"
 #include "BoundingBoxPoint.h"
 #include "ShapeFactory.h"
 #include "ShapeModel.h"
@@ -23,6 +22,7 @@ Shape::Shape(Shape* parentShape, const ShapeType& shapeType)
       mParentShape(parentShape),
       mShapeType(shapeType),
       mName(QString("GraphicalItem #%1").arg(id++)),
+      mBoundingBox(new BoundingBox(this)),
       mEditMode(EditMode::BOUNDING_BOX),
       mChildItems(),
       mModelIndex(nullptr),
@@ -34,6 +34,7 @@ Shape::Shape(Shape* parentShape, const ShapeType& shapeType)
 Shape::~Shape()
 {
     delete mModelIndex;
+    delete mBoundingBox;
     qDeleteAll(mChildItems);
 }
 
@@ -116,26 +117,25 @@ void Shape::setEditMode(const EditMode& mode)
     updateBoundingBoxBezierVisibility();
 }
 
-QPointF Shape::posAbsolute()
+QPointF Shape::scenePos() const
 {
-    QPointF position = graphicsItem()->pos();
+    return graphicsItem()->scenePos();
+}
 
-    // FIXME function name is a misnomer, position is not always absolute!
-    if (shapeType() != ShapeType::CANVAS && mParentShape) {
-        blueprint::Shape* shapeParent = dynamic_cast<blueprint::Shape*>(mParentShape);
-        position = position + shapeParent->posAbsolute();
-    }
+QPointF Shape::pos() const
+{
+    return graphicsItem()->mapToParent(bounds().topLeft());
+}
 
-    return position;
+void Shape::setPos(const QPointF& pos)
+{
+    graphicsItem()->setPos(pos - bounds().topLeft());
 }
 
 void Shape::setWidth(const qreal& width)
 {
-    const BoundingBoxPoint* bottomRight = boundingBox().boundingBoxPoint(BoundingBoxPoint::BOTTOM_RIGHT);
-    QPointF delta = bottomRight->pos();
-    delta.setX(width - delta.x());
-    delta.setY(0);
-    boundingBox().boundingBoxPointMoved(bottomRight->translationDirection(), delta);
+    QPointF delta(width - this->width(), 0);
+    mBoundingBox->boundingBoxPointMoved(BoundingBoxPoint::TOP_RIGHT, delta);
 }
 
 qreal Shape::width() const
@@ -150,24 +150,20 @@ qreal Shape::height() const
 
 void Shape::setHeight(const qreal& height)
 {
-    const BoundingBoxPoint* bottomRight = boundingBox().boundingBoxPoint(BoundingBoxPoint::BOTTOM_RIGHT);
-    QPointF delta = bottomRight->pos();
-    delta.setX(0);
-    delta.setY(height - delta.y());
-    boundingBox().boundingBoxPointMoved(bottomRight->translationDirection(), delta);
-
+    QPointF delta(0, height - this->height());
+    mBoundingBox->boundingBoxPointMoved(BoundingBoxPoint::BOTTOM_RIGHT, delta);
 }
 
 void Shape::collapse()
 {
-    const BoundingBoxPoint* topLeft = boundingBox().boundingBoxPoint(BoundingBoxPoint::TOP_LEFT);
-    const BoundingBoxPoint* bottomRight = boundingBox().boundingBoxPoint(BoundingBoxPoint::BOTTOM_RIGHT);
+    const BoundingBoxPoint* topLeft = mBoundingBox->boundingBoxPoint(BoundingBoxPoint::TOP_LEFT);
+    const BoundingBoxPoint* bottomRight = mBoundingBox->boundingBoxPoint(BoundingBoxPoint::BOTTOM_RIGHT);
     QPointF delta = topLeft->pos() - bottomRight->pos();
 
     // Add 1 to be able to move the bounding box
     delta.setX(delta.x() + 1);
     delta.setY(delta.y() + 1);
-    boundingBox().boundingBoxPointMoved(bottomRight->translationDirection(), delta);
+    mBoundingBox->boundingBoxPointMoved(bottomRight->translationDirection(), delta);
 }
 
 void Shape::setOpacity(qreal opacity)

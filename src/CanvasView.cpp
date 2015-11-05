@@ -60,20 +60,17 @@ void CanvasView::mousePressEvent(QMouseEvent *event)
 
     // Search the parent item
     QPointF point = QGraphicsView::mapToScene(event->pos());
-    qDebug() << "point = " << point;
     blueprint::Shape* shapeParent = shapeFromScenePoint(point);
     Q_ASSERT(shapeParent != nullptr);
 
     // Position is always relative to direct parent
-    QPointF relPoint(point.x() - shapeParent->posAbsolute().x(),
-                     point.y() - shapeParent->posAbsolute().y());
-
-    qDebug() << "REL point = " << relPoint;
+    QPointF creationPointInParent(point.x() - shapeParent->scenePos().x(),
+                     point.y() - shapeParent->scenePos().y());
 
     // Create shape and set initial position
     if (mCurrentTool != Tool::BEZIER_CURVE || mCreatingShape == nullptr) {
         mCreatingShape = ShapeFactory::createShape(Tool::shapeType(mCurrentTool), shapeParent);
-        mCreatingShape->setPos(relPoint);
+        mCreatingShape->setPos(creationPointInParent);
 
         // Snap bounding box to mouse position
         mCreatingShape->collapse();

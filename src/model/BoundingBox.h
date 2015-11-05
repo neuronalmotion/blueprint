@@ -28,6 +28,8 @@ public:
     Shape* parentShape() const { return mParentShape; }
     const BoundingBoxPoint* boundingBoxPoint(BoundingBoxPoint::TranslationDirection direction) const;
 
+    void updateParentGraphicsItem();
+
 private:
     Shape* mParentShape;
     BoundingBoxEvent mBoundingBoxEvent;

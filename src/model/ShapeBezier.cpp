@@ -19,7 +19,6 @@ blueprint::ShapeBezier::ShapeBezier(Shape* parentShape,
       mElements(),
       mIsPathClosed(false),
       mGraphicsItem(new GraphicsItem(this)),
-      mBoundingBox(this), // Depends on mGraphicsItem, has to be after!!
       mBackgroundImage(nullptr),
       mBackgroundImageFileName()
 {
@@ -32,7 +31,6 @@ ShapeBezier::ShapeBezier(Shape* parentShape)
       mElements(),
       mIsPathClosed(false),
       mGraphicsItem(new GraphicsItem(this)),
-      mBoundingBox(this), // Depends on mGraphicsItem, has to be after!!
       mBackgroundImage(nullptr),
       mBackgroundImageFileName()
 {
@@ -41,7 +39,7 @@ ShapeBezier::ShapeBezier(Shape* parentShape)
 
 void ShapeBezier::init(qreal x, qreal y)
 {
-    mBoundingBox.setVisible(false);
+    mBoundingBox->setVisible(false);
     setBorderColor(QColor(40, 40, 40));
 
     // fast random color
@@ -54,6 +52,7 @@ void ShapeBezier::init(qreal x, qreal y)
 
     mGraphicsItem->setData(0, qVariantFromValue(static_cast<void *>(this)));
     mGraphicsItem->setPos(x, y);
+    mBoundingBox->updateParentGraphicsItem();
 }
 
 blueprint::ShapeBezier::~ShapeBezier()
@@ -88,7 +87,7 @@ void ShapeBezier::boundingBoxEvent(const BoundingBoxEvent& event)
 
 void ShapeBezier::resizeOnCreation(const QPointF& delta)
 {
-    mBoundingBox.boundingBoxPointMoved(BoundingBoxPoint::TranslationDirection::BOTTOM_RIGHT, delta);
+    mBoundingBox->boundingBoxPointMoved(BoundingBoxPoint::TranslationDirection::BOTTOM_RIGHT, delta);
 }
 
 void ShapeBezier::setForegroundColor(const QColor& color)
@@ -122,43 +121,7 @@ void ShapeBezier::setBorderWidth(int width)
 
 QRectF ShapeBezier::bounds() const
 {
-    QRectF bounds(0.0, 0.0, 0.0, 0.0);
-
-    if (mElements.length() <= 0) {
-        return bounds;
-    }
-
-    QPointF initValue = mElements[0]->pos();
-    QPointF lower(initValue);
-    QPointF higher(initValue);
-
-    for (int i = 1; i < mElements.length(); i++) {
-        BezierElement* element = mElements[i];
-        QPointF position = element->pos();
-
-        if (position.x() < lower.x()) {
-            lower.setX(position.x());
-        }
-
-        if (position.y() < lower.y()) {
-            lower.setY(position.y());
-        }
-
-        if (position.x() > higher.x()) {
-            higher.setX(position.x());
-        }
-
-        if (position.y() > higher.y()) {
-            higher.setY(position.y());
-        }
-    }
-
-    bounds.setX(lower.x());
-    bounds.setY(lower.y());
-    bounds.setWidth(higher.x() - lower.x());
-    bounds.setHeight(higher.y() - lower.y());
-
-    return bounds;
+    return mPath.controlPointRect();
 }
 
 void ShapeBezier::setBackgroundImage(const QString& fileName)
@@ -185,6 +148,10 @@ void ShapeBezier::fromParcel(const Parcel& parcel)
     Shape::fromParcel(parcel);
     mIsPathClosed = parcel.propertyValue("closed").toBool();
     bezierElementsFromParcel(parcel);
+
+    // Set shape position once that the bounding box is valid
+    // bounding box is valid only after bezier elements parsing
+    setPos(QPointF(parcel.propertyValue("posx").toFloat(), parcel.propertyValue("posy").toFloat()));
 }
 
 void ShapeBezier::bezierElementsFromParcel(const Parcel& parcel)
@@ -215,7 +182,7 @@ void ShapeBezier::updateBoundingBoxBezierVisibility()
     // Update bounding box visibility
     bool boundingboxVisibility = mIsSelected && mEditMode == EditMode::BOUNDING_BOX;
     qDebug() << "boundingboxVisibility : " << boundingboxVisibility;
-    mBoundingBox.setVisible(boundingboxVisibility);
+    mBoundingBox->setVisible(boundingboxVisibility);
 
     // Update bezier points visibility
     bool bezierVisibility = mIsSelected && mEditMode == EditMode::PATH;
@@ -307,7 +274,7 @@ void ShapeBezier::updateElement(BezierElement* bezierElement, const QPointF& pos
     mGraphicsItem->setPath(mPath);
 
     // Update bounding box and handles positions
-    mBoundingBox.updateRect();
+    mBoundingBox->updateRect();
 }
 
 // ----------------------------------------------------------------------------

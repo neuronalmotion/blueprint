@@ -7,7 +7,7 @@
 using namespace blueprint;
 
 BoundingBox::BoundingBox(Shape* parent)
-    : QGraphicsRectItem(parent->graphicsItem()),
+    : QGraphicsRectItem(),
       mParentShape(parent),
     mBoundingBoxEvent({QPointF(), QPointF(), QPointF()}),
     mHashBoundingBoxPoints()
@@ -183,5 +183,10 @@ void BoundingBox::boundingBoxPointMoved(BoundingBoxPoint::TranslationDirection d
 const BoundingBoxPoint*BoundingBox::boundingBoxPoint(BoundingBoxPoint::TranslationDirection direction) const
 {
     return mHashBoundingBoxPoints[direction];
+}
+
+void BoundingBox::updateParentGraphicsItem()
+{
+    this->setParentItem(mParentShape->graphicsItem());
 }
 
